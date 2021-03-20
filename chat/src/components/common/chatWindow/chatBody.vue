@@ -30,7 +30,9 @@ export default {
       let arr = []
        if (this.$store.state.msgInfo !== null) {
         this.$store.state.msgInfo.forEach((item) => {
-          if (
+         if(item.to === '群聊' && item.to === this.$route.query.userName){
+           arr.push(item)
+         }else if(
             item.from === JSON.parse(localStorage.myInfo).username &&
             item.to === this.$route.query.userName 
             || item.from === this.$route.query.userName
@@ -39,6 +41,7 @@ export default {
             arr.push(item)
           }
         })
+        console.log(arr);
         return arr
       }
     },

@@ -3,6 +3,7 @@
     <div class="messageWarpper">
       <!-- <img :src="sendmsg.from.imgSrc" alt="" /> -->
       <img src="~assets/logo.png" alt=""/>
+      <span class="nick">{{sendmsg.from}}</span>
       <span class="msgCard">
         {{ sendmsg.msg }}
       </span>
@@ -37,6 +38,14 @@ export default {
   margin: 10px 0;
   /* background-color: red; */
 }
+.nick{
+  font-size: 10px;
+  position: absolute;
+  top: 0px;
+  left: 84px;
+  font-weight: bold;
+  color: blue;
+}
 .messageWarpper img {
   width: 45px;
 }
@@ -44,7 +53,7 @@ export default {
   /* display: inline-block; */
   position: relative;
   left: 10px;
-  top: 8px;
+  top: 18px;
   padding: 10px;
   font-size: 16px;
   background-color: #fff;

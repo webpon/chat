@@ -30,7 +30,11 @@ export default {
           msg: '欢迎反馈bug',
           imgSrc: require('../../../../assets/avater/1.jpg'),
         },
-       
+        {
+          username: '群聊',
+          msg: '在这里可以收到所有人的信息',
+          imgSrc: require('../../../../assets/avater/4.jpg'),
+        },
       ],
     }
   },
