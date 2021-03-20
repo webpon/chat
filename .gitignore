@@ -1,0 +1,9 @@
+# dependencies  npm包文件
+/chat/node_modules/
+/server/node_modules/
+# production  打包文件
+
+# misc 
+.DS_Store
+
+npm-debug.log*
