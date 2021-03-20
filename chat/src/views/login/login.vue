@@ -147,7 +147,6 @@ export default {
       // alert('../../assets/avater/'+index+'.jpg')
     },
     async avaterRegister() {
-      console.log('2344433')
       console.log(this.formName)
       // 如果form表格里面的数据通过检验，valid则为true，否则为false
       this.$refs[this.formName].validate(async (valid) => {
@@ -203,9 +202,13 @@ export default {
   height: 100vh;
 }
 .card {
-  margin: 130px auto;
+  /* margin: 130px auto; */
   width: 600px;
   height: 350px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
 }
 .card .cardForm {
   margin: 0 auto;

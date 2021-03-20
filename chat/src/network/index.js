@@ -1,6 +1,6 @@
 import axios from 'axios'
 const http = axios.create({
-  baseURL: 'http://localhost:5000/api/admin', //这个按实际情况填写
+  baseURL: 'http://106.52.44.186:5000/api/admin', //这个按实际情况填写
 })
 //axios请求拦截器
 http.interceptors.request.use(
