@@ -2,7 +2,7 @@
   <div>
     <div class="messageWarpper">
       <!-- <img :src="sendmsg.from.imgSrc" alt="" /> -->
-      <img src="~assets/logo.png" alt=""/>
+      <img :src="imgSrc" alt=""/>
       <span class="nick">{{sendmsg.from}}</span>
       <span class="msgCard">
         {{ sendmsg.msg }}
@@ -26,6 +26,19 @@ export default {
       default: {},
     },
   },
+  computed:{
+    imgSrc(){
+      let imgSrc
+      this.$store.state.contacts.forEach(item => {
+          console.log(item);
+          if (item.username === this.sendmsg.from) {
+            console.log(item);
+            imgSrc = item.imgSrc
+          }
+        });
+      return imgSrc || require('../../../assets/logo.png')
+    }
+  }
 }
 </script>
 

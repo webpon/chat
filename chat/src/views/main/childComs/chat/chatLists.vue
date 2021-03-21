@@ -47,9 +47,7 @@ export default {
     },
   },
   created(){
-    console.log('created');
     this.bus.$on('chatUser',(data)=>{
-      console.log('232323');
       let flag = true
       this.userInfo.forEach(item => {
         console.log(item);
@@ -63,7 +61,14 @@ export default {
       }
       
     })
-  }
+  },
+   beforeDestroy(){
+    //移除监听事件"aMsg"
+    this.bus.$off('chatUser')
+     //移除监听事件,避免重复监听
+    console.log('beforeDestroy');
+    this.$socket.off('emitEvent');
+  },
 }
 </script>
 

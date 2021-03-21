@@ -21,7 +21,7 @@ try {
     console.log('websocket连接成功')
     //向服务器注册个人信息
     socket.emit('set', localStorage.myInfo)
-
+    console.log('重新注册');
   })
   //监听websocket断开
   socket.on('disconnect', () => {

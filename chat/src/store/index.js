@@ -7,7 +7,8 @@ export default new Vuex.Store({
   state: {
     username:'webpon',
     msgInfo: JSON.parse(localStorage.msgInfo || 'null') || null,
-    myInfo: JSON.parse(localStorage.getItem('myInfo'))
+    myInfo: JSON.parse(localStorage.getItem('myInfo')),
+    contacts:[]
   },
   mutations: {
     addMsg(state,item){
@@ -20,6 +21,9 @@ export default new Vuex.Store({
     updateMyInfo(state,myInfo){
       console.log(myInfo);
       state.myInfo =myInfo
+    },
+    updateContacts(state,contacts){
+      state.contacts = contacts
     }
   },
   actions: {

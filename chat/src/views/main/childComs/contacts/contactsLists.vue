@@ -22,9 +22,21 @@ export default {
   created() {
        //获取在线用户列表
       this.$socket.on('sendList', (data)=> {
-        console.log(data);
         this.contacts = data
+        console.log(data);
+        this.$store.commit('updateContacts',data)
+        console.log(this.$store.state.contacts);
       })
+  },
+  watch:{
+    contacts(newData,oldData){
+      
+    }
+  },
+  destroyed() {
+     //移除监听事件,避免重复监听
+    console.log('beforeDestroy');
+    this.$socket.off('sendList');
   },
 }
 </script>
