@@ -5,6 +5,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    //当前用户名
     username:'webpon',
     msgInfo: JSON.parse(localStorage.msgInfo || 'null') || null,
     myInfo: JSON.parse(localStorage.getItem('myInfo')),

@@ -21,31 +21,39 @@ let onlineUser = new hashTable()
 let userInfos = new hashTable()
 //username_data
 let id_name = new hashTable()
+//加密函数
+function encryption (Plaintext) {
+  let PlaintextArr = Plaintext.split('').map(char => char.charCodeAt())
+  let PlaintextCharCode = PlaintextArr.join('')
+  return Math.sin(PlaintextCharCode).toString().split('.')[1].slice(0, 16)
+}
 setInterval(() => {
+  console.log(Date())
   console.log(onlineUser);
 }, 5000);
 //连接成功
 io.on('connect', function (socket) {
-  
   console.log('websocket连接成功')
   connections.push(socket)
-  console.log(socket.id+'登录了');
+  console.log(socket.id + '登录了');
   socket.on("disconnect", (reason) => {
-    console.log(id_name.get(socket.id)+'退出登录');
+    console.log(id_name.get(socket.id) + '退出登录');
     console.log(reason);
     onlineUser.remove(id_name.get(socket.id))
     userInfos.remove(id_name.get(socket.id))
     id_name.remove(socket.id)
+    socket.broadcast.emit('sendList', userInfos.getAllElement())
+    console.log('在线用户列表信息发送成功');
   });
   socket.on('sendEvent', function (data) {
-    if(data.to === '智能客服'){
+    if (data.to === '智能客服') {
       let str = data.msg
-      str = str.replace('吗','')
+      str = str.replace('吗', '')
       str = str.replace(/[?|？]/g, '!')
       str = str.replace('不', '很')
       str = str.replace('你们', '我们')
       str = str.replace('有', '没有')
-      str = str.replace('差','好')
+      str = str.replace('差', '好')
       setTimeout(() => {
         socket.emit('emitEvent', {
           from: '智能客服',
@@ -54,6 +62,8 @@ io.on('connect', function (socket) {
         })
       }, 500);
       return
+    } else if (data.to === '群聊') {
+      socket.broadcast.emit('emitEvent', data)
     }
     let toUser = onlineUser.get(data.to)
     console.log(data);
@@ -62,11 +72,10 @@ io.on('connect', function (socket) {
       toUser.emit('emitEvent', data)
       console.log('聊天信息发送成功');
     }
-
   })
   socket.on('getOnlineUserInfo', function (data) {
     socket.emit('sendList', userInfos.getAllElement())
-      console.log('在线用户列表信息发送成功');
+    console.log('在线用户列表信息发送成功');
 
   })
   socket.on('set', function (data) {
@@ -98,6 +107,8 @@ require('./plugins/mongoose')
 //中间件，如果没有token或者token错误则阻止请求
 
 app.use((req, res, next) => {
+  console.log(req.headers.origin);
+  console.log(req.path);
   console.log(req.body);
   if (req.url === '/api/admin/login' || req.url === '/api/admin/create') {
     return next()
@@ -128,9 +139,11 @@ app.post('/api/admin/create', async (req, res) => {
       message: '该用户名称已被注册',
     })
   } else {
+    console.log('进行密码加密' + req.body.password);
+    req.body.password = encryption(req.body.password)
     console.log(req.body);
     const model = await require('./models/Users').create(req.body)
-    
+
     res.send(model)
   }
 })
@@ -149,7 +162,7 @@ app.use('/api/admin/login', async (req, res, next) => {
     })
   }
   // 2、校验密码
-  if (password != user.password) {
+  if (encryption(password) != user.password) {
     console.log('密码错误');
     return res.status(400).send({
       message: '密码错误',
@@ -160,7 +173,7 @@ app.use('/api/admin/login', async (req, res, next) => {
   //参数一，记录的信息，第二个令牌，第三个设置过期时间
   console.log(user);
   const token = jwt.sign({ id: user._id }, 'random', { expiresIn: '7d' })
-  return res.send({ token ,userInfo:user})
+  return res.send({ token, userInfo: user })
 })
 //监听端口
 http.listen(5000, function () {

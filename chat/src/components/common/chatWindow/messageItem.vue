@@ -36,7 +36,7 @@ export default {
             imgSrc = item.imgSrc
           }
         });
-      return imgSrc || require('../../../assets/logo.png')
+      return imgSrc || require('../../../assets/offline.jpg')
     }
   }
 }

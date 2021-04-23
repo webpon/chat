@@ -5,7 +5,7 @@ let socket = null
 
 // if(!localStorage.myInfo){
   // 106.52.44.186
-socket = io('http://106.52.44.186:5000',
+socket = io('http://localhost:5000',
   {
     //禁止默认自动断开重连
     reconnection: false,

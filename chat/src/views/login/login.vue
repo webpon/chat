@@ -38,7 +38,8 @@
           :src="item"
           alt=""
           class="imgItem"
-          @click.once="selectAvater(index)"
+          :class="imgIndex === index?'imgItemBorder':''"
+          @click="selectAvater(index)"
           ref="avater"
         />
       </div>
@@ -98,6 +99,7 @@ export default {
       },
       formName: null,
       imgUrl: '../../assets/avater/0.jpg',
+      imgIndex: ''
     }
   },
   computed: {
@@ -143,8 +145,7 @@ export default {
         'https://gitee.com/gitopenchina/gallery/raw/master/avater/' +
         index +
         '.jpg'
-      this.$refs.avater[index].style.border = '1px solid red'
-      // alert('../../assets/avater/'+index+'.jpg')
+      this.imgIndex = index
     },
     async avaterRegister() {
       console.log(this.formName)
@@ -253,6 +254,9 @@ export default {
 .imgItem {
   width: 75px;
   height: 75px;
+}
+.imgItemBorder{
+  border: 1px solid red;
 }
 </style>
 <style>

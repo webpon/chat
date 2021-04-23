@@ -11,4 +11,18 @@ module.exports = {
     },
   },
   publicPath: "./",
+  //解决跨域问题
+  // devServer: {
+  //   open: true,
+  //     proxy: {
+  //       '/api': {
+  //         target: 'http://localhost:5000',
+  //         changeOrigin: true,
+  //         pathRewrite: {
+  //           // '^/api':''
+  //         }
+  //       }
+  //     },
+  // },
+  
 }
