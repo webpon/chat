@@ -7,14 +7,15 @@ export default () => {
   //设置io连接配置，并且连接
   // if(!localStorage.myInfo){
   // 39.103.233.82
-  socket = io('http://39.103.233.82:5000',
-  // socket = io('http://localhost:5000',
+  // socket = io('http://39.103.233.82:5000',
+  socket = io('http://localhost:5000',
     {
       //禁止默认自动断开重连
       reconnection: false,
       autoConnect: false,
       query: {
-        "token": localStorage.token
+        "token": localStorage.token,
+        "userInfo": localStorage.myInfo
       }
     },
   );
@@ -25,10 +26,7 @@ export default () => {
     //监听websocket连接成功
     socket.on('connect', () => {
       console.log('websocket连接成功')
-      //向服务器注册个人信息
-      socket.emit('set', localStorage.myInfo)
       socket.emit('getOnlineUserInfo')
-      console.log('向服务器注册个人信息');
     })
     socket.io.on("error", () => {
       console.log('websocket连接失败')
@@ -80,7 +78,7 @@ export default () => {
       const { onlineUser = [], changeUser = false } = data || {}
       console.log(changeUser);
       store.commit('updateContacts', onlineUser)
-      if(!changeUser) return
+      if (!changeUser) return
       if (changeUser && changeUser.isOnline) {
         Vue.prototype.$message.info(`${changeUser.username}登陆了`)
       } else {
