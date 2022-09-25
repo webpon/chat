@@ -124,7 +124,6 @@ export default {
     margin-left: 15px;
   }
 }
-
 .sendBtn {
   position: fixed;
   right: 10px;
