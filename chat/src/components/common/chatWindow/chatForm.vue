@@ -29,28 +29,28 @@ export default {
   methods: {
     //向发送请求的客户端添加聊天记录
     sendmsg() {
-      if (this.message.content.trim() === '') {
+      if (this.message.content === '') {
         return
-      } else {
-        //本地添加
-        this.$store.commit('addMsg', {
-          from: JSON.parse(localStorage.myInfo).username,
-          from_avater: JSON.parse(localStorage.myInfo).imgSrc,
-          to: this.$route.query.userName,
-          msg: this.message.content,
-          type: this.message.type
-        })
-        //向要发送的客户端添加
-        this.$socket.emit('sendEvent', {
-          from: JSON.parse(localStorage.myInfo).username,
-          from_avater: JSON.parse(localStorage.myInfo).imgSrc,
-          to: this.$route.query.userName,
-          msg: this.message.content,
-          type: this.message.type,
-        })
-        this.message.content = ''
-        this.message.type = 'string'
       }
+      //本地添加
+      this.$store.commit('addMsg', {
+        from: JSON.parse(localStorage.myInfo).username,
+        from_avater: JSON.parse(localStorage.myInfo).imgSrc,
+        to: this.$route.query.userName,
+        msg: this.message.content,
+        type: this.message.type
+      })
+      //向要发送的客户端添加
+      this.$socket.emit('sendEvent', {
+        from: JSON.parse(localStorage.myInfo).username,
+        from_avater: JSON.parse(localStorage.myInfo).imgSrc,
+        to: this.$route.query.userName,
+        msg: this.message.content,
+        type: this.message.type,
+      })
+      this.message.content = ''
+      this.message.type = 'string'
+
     },
     areaInput() {
       this.message.type = "string"
@@ -69,7 +69,7 @@ export default {
         this.$message.error('最高支持20MB大小')
         return
       }
-      var form = new FormData(); // FormData 对象
+      let form = new FormData(); // FormData 对象
       form.append("file", file); // 文件对象
       const config = {
         onUploadProgress: progressEvent => {
