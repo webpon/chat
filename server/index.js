@@ -12,7 +12,7 @@ var io = require('socket.io')(http, {
     jwt.verify(req._query.token, secretKey, (err) => {
       if (err) {
         callback(null, false);
-      } else {
+      } else if(req._query.userInfo){
         callback(null, true);
       }
     })
@@ -26,9 +26,24 @@ let onlineUser = new Map()
 //socketId_data哈希表
 let userInfos = new Map()
 
-const secretKey = 'falanter abc sdfjnklsdjfkljsdfkjsdklfjsdkljfklsdjfklj'
+const secretKey = 'falanter abc sdfjnklsdjfkljsdfkjsdklfjsdkljfklsdjfklj33123123'
 //连接成功
 io.on('connect', function (socket) {
+  const { userInfo = '' } = socket.handshake.query || {}
+  const userInfoData = JSON.parse(userInfo)
+  if (userInfoData) {
+    onlineUser.set(userInfoData.username, socket)
+    userInfos.set(socket.id, userInfoData)
+    //发送在线用户信息
+    socket.broadcast.emit('sendList', {
+      onlineUser: [...userInfos.values()],
+      changeUser: {
+        username: userInfos.get(socket.id) && userInfos.get(socket.id).username,
+        isOnline: true
+      }
+    })
+    console.log(userInfos.get(socket.id) && userInfos.get(socket.id).username + '登录了');
+  }
   console.log('websocket连接成功')
   socket.on("disconnect", (reason) => {
     console.log(userInfos.get(socket.id) && userInfos.get(socket.id).username + '退出登录');
@@ -46,7 +61,7 @@ io.on('connect', function (socket) {
   socket.on('sendEvent', function (data) {
     const toSocket = onlineUser.get(data.to)
     const fromSocket = onlineUser.get(data.from)
-    if(!userInfos.get(socket.id) || userInfos.get(socket.id).username !== data.from) return
+    if (!userInfos.get(socket.id) || userInfos.get(socket.id).username !== data.from) return
     if (data.to === '智能客服' && fromSocket) {
       console.log('智能客服');
       let str = data.msg
@@ -72,23 +87,8 @@ io.on('connect', function (socket) {
   })
   socket.on('getOnlineUserInfo', function () {
     socket.emit('sendList', {
-      onlineUser: [...userInfos.values()]
+      onlineUser: [...userInfos.values()],
     })
-  })
-  socket.on('set', function (data) {
-    if (data) {
-      onlineUser.set(JSON.parse(data).username, socket)
-      userInfos.set(socket.id, JSON.parse(data))
-      //发送在线用户信息
-      socket.broadcast.emit('sendList', {
-        onlineUser: [...userInfos.values()],
-        changeUser: {
-          username: userInfos.get(socket.id) && userInfos.get(socket.id).username,
-          isOnline: true
-        }
-      })
-      console.log(userInfos.get(socket.id) && userInfos.get(socket.id).username + '登录了');
-    }
   })
 })
 

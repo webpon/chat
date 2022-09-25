@@ -58,7 +58,6 @@ export default () => {
         Vue.prototype.$message.info(data.from + '向群聊发送了一条消息')
       } else {
         Vue.prototype.$message.info(data.from + '向你发来一条消息')
-        console.log(store.state.contacts);
         store.state.contacts.forEach(item => {
           if (item.username === data.from) {
             imgSrc = item.imgSrc
@@ -78,12 +77,6 @@ export default () => {
       const { onlineUser = [], changeUser = false } = data || {}
       console.log(changeUser);
       store.commit('updateContacts', onlineUser)
-      if (!changeUser) return
-      if (changeUser && changeUser.isOnline) {
-        Vue.prototype.$message.info(`${changeUser.username}登陆了`)
-      } else {
-        Vue.prototype.$message.info(`${changeUser.username}退出了`)
-      }
     })
     console.log('APPmounted');
   } catch (error) {

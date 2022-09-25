@@ -25,6 +25,7 @@ export default {
       return this.$store.state.msgInfo
     },
     currentMsgInfo() {
+      console.log('___________________________________');
       let arr = []
       if (this.$store.state.msgInfo !== null && this.$route.path === '/chat/toChat') {
         this.$store.state.msgInfo.forEach((item) => {

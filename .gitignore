@@ -2,6 +2,7 @@
 /chat/node_modules/
 /server/node_modules/
 # production  打包文件
+/chat/dist/
 
 # misc 
 .DS_Store
