@@ -29,6 +29,7 @@ let userInfos = new Map()
 const secretKey = 'falanter abc sdfjnklsdjfkljsdfkjsdklfjsdkljfklsdjfklj33123123'
 //连接成功
 io.on('connect', function (socket) {
+  console.log('_+_+_+_+_+_');
   const { userInfo = '' } = socket.handshake.query || {}
   const userInfoData = JSON.parse(userInfo)
   if (userInfoData) {
@@ -59,6 +60,7 @@ io.on('connect', function (socket) {
     userInfos.delete(socket.id)
   });
   socket.on('sendEvent', function (data) {
+    console.log(data);
     const toSocket = onlineUser.get(data.to)
     const fromSocket = onlineUser.get(data.from)
     if (!userInfos.get(socket.id) || userInfos.get(socket.id).username !== data.from) return
