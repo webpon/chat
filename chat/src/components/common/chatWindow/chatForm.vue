@@ -1,7 +1,10 @@
 <template>
   <div class="chatForm">
-    <a-textarea placeholder="请输入内容" @input="areaInput" :rows="4" v-model.trim="message.content"
+    <a-textarea :maxLength="200" placeholder="请输入内容" @input="areaInput" :rows="4" v-model.trim="message.content"
       @pressEnter.prevent="sendmsg" />
+    <span class="length-info">
+      {{ message.content.length }} / 200
+    </span>
     <div class="upload">
       <a-icon type="picture" @click="uploadImg" :style="{ fontSize: '20px', color: '#08c' }" />
       <a-icon type="play-square" @click="uploadVideo"
@@ -89,12 +92,38 @@ export default {
 }
 </script>
 <style scoped lang="scss">
+@media screen and (min-width: 750px) {
+  .sendBtn {
+    right: 120px;
+    bottom: 30px;
+  }
+  .length-info {
+    right: 50px;
+  }
+}
+
+@media screen and (max-width: 750px) {
+  .sendBtn {
+    right: 20px;
+    bottom: 20px;
+  }
+  .length-info {
+    right: 22px;
+  }
+}
+
 .chatForm {
   position: fixed;
   bottom: 0;
   height: 170px;
   width: 100%;
 
+  .length-info {
+    color: darkblue;
+    position: fixed;
+    bottom: 136px;
+    background-color: #fff;
+  }
   .upload {
     position: absolute;
     bottom: 25px;
@@ -104,8 +133,6 @@ export default {
 
 .sendBtn {
   position: fixed;
-  right: 40px;
-  bottom: 20px;
 }
 </style>
 <style>

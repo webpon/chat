@@ -22,17 +22,18 @@ export default {
 </script>
 
 <style scoped>
-  @media screen and (min-width: 750px) {
+@media screen and (min-width: 750px) {
   .chatCom {
-     left: 310px;
+    left: 310px;
   }
 }
 
 @media screen and (max-width: 750px) {
   .chatCom {
-     left: 60px;
+    left: 60px;
   }
 }
+
 .chatCom {
   position: fixed;
   top: 0;
