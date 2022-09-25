@@ -130,8 +130,6 @@ export default {
   right: 10px;
   bottom: 10px;
 }
-</style>
-<style>
 .chatForm .sendAndLength {
   height: 40px !important;
   background-color: #fff !important;
