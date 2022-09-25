@@ -1,10 +1,5 @@
 <template>
   <div class="chatForm">
-    <a-textarea :maxLength="200" placeholder="请输入内容" @input="areaInput" :rows="4" v-model.trim="message.content"
-      @pressEnter.prevent="sendmsg" />
-    <span class="length-info">
-      {{ message.content.length }} / 200
-    </span>
     <div class="upload">
       <a-icon type="picture" @click="uploadImg" :style="{ fontSize: '20px', color: '#08c' }" />
       <a-icon type="play-square" @click="uploadVideo"
@@ -16,7 +11,14 @@
       <input v-show="false" accept="video/*" ref="fileInputVideo" type="file"
         @change="uploadProgress($event, 'video')" />
     </div>
-    <a-button @click="sendmsg" class="sendBtn">发送</a-button>
+    <a-textarea :maxLength="200" placeholder="请输入内容" @input="areaInput" :rows="4" v-model.trim="message.content"
+      @pressEnter.prevent="sendmsg" />
+    <div class="sendAndLength">
+      <span class="length-info">
+        {{ message.content.length }} / 200
+      </span>
+      <a-button @click="sendmsg" class="sendBtn">发送</a-button>
+    </div>
   </div>
 </template>
 <script>
@@ -34,7 +36,7 @@ export default {
   methods: {
     //向发送请求的客户端添加聊天记录
     sendmsg() {
-      if (this.message.content === '') {
+      if (this.message.content.trim() === '') {
         return
       } else {
         //本地添加
@@ -114,32 +116,33 @@ export default {
 
 .chatForm {
   position: fixed;
+  background-color: #fff !important;
+  padding: 10px 0 ;
   bottom: 0;
-  height: 170px;
+  height: 190px;
   width: 100%;
+  border: 1px rgb(217,217,217) solid;
 
   .length-info {
     color: darkblue;
-    position: fixed;
-    bottom: 136px;
-    background-color: #fff;
   }
   .upload {
-    position: absolute;
-    bottom: 25px;
-    left: 15px;
+    margin-left: 15px;
   }
 }
 
 .sendBtn {
   position: fixed;
+  right: 10px;
+  bottom: 10px;
 }
 </style>
 <style>
-.chatForm .ant-input {
-  height: 170px !important;
+.chatForm .sendAndLength {
+  height: 40px !important;
   background-color: #fff !important;
   padding: 10px;
+  border: none;
   margin: 0;
 }
 </style>
