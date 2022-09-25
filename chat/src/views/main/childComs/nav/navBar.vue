@@ -61,10 +61,7 @@ export default {
     },
     //获取在线用户信息
     getOnlineUserInfo() {
-      this.$socket.emit(
-        'getOnlineUserInfo',
-        JSON.parse(localStorage.myInfo).username
-      )
+      this.$socket.emit('getOnlineUserInfo')
     },
     showMyInfo(){
       alert('You are '+ JSON.parse(localStorage.myInfo).username)

@@ -3,75 +3,53 @@
     <keep-alive>
       <router-view />
     </keep-alive>
+    <!-- <easy-ring :open="true" :ring="ring" src="https://webpon-img.oss-cn-guangzhou.aliyuncs.com/music/14289.mp3" /> -->
+    <!-- <audio controls>
+    <source src="horse.ogg" type="audio/ogg">
+    <source src="horse.mp3" type="audio/mpeg">
+  您的浏览器不支持 audio 元素。
+  </audio> -->
   </div>
 </template>
 <script>
 import Layout from './views/main/layout'
-import { message } from 'ant-design-vue';
+import websocket from '@/network/websocket'
 export default {
   name: 'App',
-  components: { Layout },
   data() {
-    return {}
+    return {
+      ring: false
+    }
   },
+  components: { Layout },
   computed: {
-    path: function() {
+    path: function () {
       return this.$route.path
     },
   },
+  beforeRouteEnter(to, from, next) {
+    console.log(to);
+    console.log(from);
+  },
   mounted() {
-    console.log('APPmounted');
-    //如果token存在且部为login页面就进行websocket连接，这是为了防止刷新断开连接
-    if (localStorage.token && this.path !== '/login' && this.$socket.disconnected) {
-      this.$socket.open()
-       //获取在线用户列表
-      this.$socket.on('sendList', (data)=> {
-        this.contacts = data
-        console.log(data);
-        this.$store.commit('updateContacts',data)
-        console.log(this.$store.state.contacts);
-      })
+    setTimeout(() => {
+      this.ring = true
+    }, 500)
+    this.updateDeviceInfo()
+    window.addEventListener("resize", () => {
+      if (this.updateTimer) {
+        clearTimeout(this.updateTimer)
+      }
+      this.updateTimer = setTimeout(() => {
+        this.updateDeviceInfo()
+      }, 300)
+    });
+  },
+  methods: {
+    updateDeviceInfo() {
+      this.$store.commit('checkDevice', /Mobi|Android|iPhone/i.test(navigator.userAgent))
     }
-     //监听消息
-    this.$socket.on('emitEvent', (data) => {
-      console.log(data)
-      let imgSrc
-      if(data.to === '群聊'){
-        message.info(data.from+'向群聊发送了一条消息')
-      }else{
-        message.info(data.from+'向你发来一条消息')
-        console.log(this.$store.state.contacts);
-        this.$store.state.contacts.forEach(item => {
-          console.log(item);
-          if (item.username === data.from) {
-            console.log(item);
-            imgSrc = item.imgSrc
-          }
-        });
-        this.bus.$emit('chatUser',{
-          username:data.from,
-          imgSrc:imgSrc
-          })
-          console.log({
-          username:data.from,
-          imgSrc:imgSrc
-          });
-      }
-      this.$store.commit('addMsg', data)
-    })
-  },
-  beforeDestroy(){
-    //移除监听事件,避免重复监听
-    console.log('beforeDestroy');
-    this.$socket.off('emitEvent');
-  },
-  watch: {
-    path(newName, oldName) {
-      if (this.path !== '/login') {
-        this.$socket.open()
-      }
-    },
-  },
+  }
 }
 </script>
 <style>
@@ -84,14 +62,14 @@ export default {
 
 #nav {
   padding: 30px;
-}
 
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
+  a {
+    font-weight: bold;
+    color: #2c3e50;
 
-#nav a.router-link-exact-active {
-  color: #42b983;
+    &router-link-exact-active {
+      color: #42b983;
+    }
+  }
 }
 </style>

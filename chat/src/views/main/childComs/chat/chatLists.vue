@@ -11,7 +11,7 @@
       </div>
     </div>
     <div class="listContainer">
-      <div v-for="(item, index) in userInfo" :key="index">
+      <div v-for="(item, index) in $store.state.chatList" :key="index">
         <listItem :userInfo="item" />
       </div>
     </div>
@@ -22,52 +22,20 @@
 import listItem from '@/components/common/list/listItem'
 export default {
   name: '',
-  data() {
-    return {
-      userInfo: [
-        {
-          username: '智能客服',
-          msg: '欢迎反馈bug',
-          imgSrc: require('../../../../assets/avater/1.jpg'),
-        },
-        {
-          username: '群聊',
-          msg: '在这里可以收到所有人的信息',
-          imgSrc: require('../../../../assets/avater/4.jpg'),
-        },
-      ],
-    }
-  },
   components: {
     listItem,
   },
   methods: {
     active() {
-      console.log(1221)
+      console.log(this.$store.state.isMobile)
     },
-  },
-  created(){
-    this.bus.$on('chatUser',(data)=>{
-      let flag = true
-      this.userInfo.forEach(item => {
-        console.log(item);
-        if(item.username === data.username){
-          flag = false
-          return 
-        }
-      });
-      if(flag){
-        this.userInfo.push(data)
-      }
-      
-    })
   },
    beforeDestroy(){
     //移除监听事件"aMsg"
     this.bus.$off('chatUser')
      //移除监听事件,避免重复监听
     console.log('beforeDestroy');
-    this.$socket.off('emitEvent');
+    // this.$socket.off('emitEvent');
   },
 }
 </script>

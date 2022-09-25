@@ -1,7 +1,7 @@
 <template>
   <div>
     <contactsList />
-    <chatBackground />
+    <chatBackground v-if="!$store.state.isMobile"/>
   </div>
 </template>
 

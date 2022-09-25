@@ -6,25 +6,54 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     //当前用户名
-    username:'webpon',
+    username: 'webpon',
     msgInfo: JSON.parse(localStorage.msgInfo || 'null') || null,
     myInfo: JSON.parse(localStorage.getItem('myInfo')),
-    contacts:[]
+    contacts: [],
+    chatList: [
+      {
+        username: '智能客服',
+        msg: '欢迎反馈bug',
+        imgSrc: require('@/assets/avater/1.jpg'),
+      },
+      {
+        username: '群聊',
+        msg: '在这里可以收到所有人的信息',
+        imgSrc: require('@/assets/avater/4.jpg'),
+      },
+    ],
+    isMobile: false
   },
   mutations: {
-    addMsg(state,item){
-      if (state.msgInfo === null) {
-        state.msgInfo = [item]
+    addMsg(state, data) {
+      if (state.msgInfo === null || !Array.isArray(state.msgInfo)) {
+        state.msgInfo = [data]
+      } else if (state.msgInfo.length > 1000) {
+        state.msgInfo = state.msgInfo.slice(state.msgInfo.length - 490)
+        state.msgInfo.push(data)
+      } else if (state.msgInfo.length > 500) {
+        state.msgInfo.shift()
+        state.msgInfo.push(data)
       } else {
-        state.msgInfo.push(item)
+        state.msgInfo.push(data)
+      }
+      localStorage.setItem('msgInfo', JSON.stringify(state.msgInfo))
+    },
+    updateMyInfo(state, myInfo) {
+      state.myInfo = myInfo
+    },
+    updateContacts(state, contacts) {
+      state.contacts = contacts
+    },
+    updateChatList(state, chatUser) {
+      if (state.chatList.some(item => item.username === chatUser.username)) {
+        return
+      } else {
+        state.chatList.push(chatUser)
       }
     },
-    updateMyInfo(state,myInfo){
-      console.log(myInfo);
-      state.myInfo =myInfo
-    },
-    updateContacts(state,contacts){
-      state.contacts = contacts
+    checkDevice(state, isMobile) {
+      state.isMobile = isMobile
     }
   },
   actions: {

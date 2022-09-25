@@ -34,8 +34,7 @@ export default {
         console.log(this.alertWheel.element);
         return
       }
-       console.log(this.contactsInfo);
-      this.bus.$emit('chatUser',this.contactsInfo)
+      this.$store.commit('updateChatList', this.contactsInfo)
       this.$router.push({
         path: '/chat/toChat',
         query: { userName: this.contactsInfo.username },

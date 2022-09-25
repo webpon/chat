@@ -22,7 +22,8 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+
 .chatTitle {
   position: fixed;
   z-index: 10;
@@ -30,15 +31,13 @@ export default {
   display: flex;
   /* align-items: center; */
   line-height: 66px;
-  padding-left: 20px;
+  padding-left: 5px;
   height: 66px;
   width: 100%;
   background-color: #f5f5f5;
   font-size: 20px;
   flex-wrap: 600;
   border-bottom: 3px solid #f0f0f0;
-}
-.msg_title {
 }
 .back {
   cursor: pointer;

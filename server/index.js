@@ -2,51 +2,53 @@ var express = require('express')
 var app = express()
 var http = require('http').Server(app)
 const jwt = require('jsonwebtoken')
-const hashTable = require('./utils/hashTable')
 var io = require('socket.io')(http, {
   //由于socket.io使用的并不是ws协议，而是经过一些处理的，所以默认不允许跨域，需要以下配置来允许跨域
   cors: {
     origin: "*",
-    methods: ["GET", "POST"]
+    methods: ["GET", "POST", "PUT"]
+  },
+  allowRequest: (req, callback) => {
+    jwt.verify(req._query.token, secretKey, (err) => {
+      if (err) {
+        callback(null, false);
+      } else {
+        callback(null, true);
+      }
+    })
   }
 })
-//统计人数
-var connections = []
 // 创建一对一传输模型
-// var userInfos = new Set()
+const loginUser = new Map()
 //利用哈希表管理在线用户
 //username_socket哈希表
-let onlineUser = new hashTable()
-//username_data哈希表
-let userInfos = new hashTable()
-//username_data
-let id_name = new hashTable()
-//加密函数
-function encryption (Plaintext) {
-  let PlaintextArr = Plaintext.split('').map(char => char.charCodeAt())
-  let PlaintextCharCode = PlaintextArr.join('')
-  return Math.sin(PlaintextCharCode).toString().split('.')[1].slice(0, 16)
-}
-setInterval(() => {
-  console.log(Date())
-  console.log(onlineUser);
-}, 5000);
+let onlineUser = new Map()
+//socketId_data哈希表
+let userInfos = new Map()
+
+const secretKey = 'falanter abc sdfjnklsdjfkljsdfkjsdklfjsdkljfklsdjfklj'
 //连接成功
 io.on('connect', function (socket) {
   console.log('websocket连接成功')
-  connections.push(socket)
-  console.log(socket.id + '登录了');
   socket.on("disconnect", (reason) => {
-    console.log(id_name.get(socket.id) + '退出登录');
+    console.log(userInfos.get(socket.id) && userInfos.get(socket.id).username + '退出登录');
     console.log(reason);
-    onlineUser.remove(id_name.get(socket.id))
-    userInfos.remove(id_name.get(socket.id))
-    id_name.remove(socket.id)
-    socket.broadcast.emit('sendList', userInfos.getAllElement())
-    console.log('在线用户列表信息发送成功');
+    socket.broadcast.emit('sendList', {
+      onlineUser: [...userInfos.values()],
+      changeUser: {
+        username: userInfos.get(socket.id) && userInfos.get(socket.id).username,
+        isOnline: false
+      }
+    })
+    onlineUser.delete(userInfos.get(socket.id) && userInfos.get(socket.id).username)
+    userInfos.delete(socket.id)
   });
   socket.on('sendEvent', function (data) {
-    if (data.to === '智能客服') {
+    const toSocket = onlineUser.get(data.to)
+    const fromSocket = onlineUser.get(data.from)
+    if(!userInfos.get(socket.id) || userInfos.get(socket.id).username !== data.from) return
+    if (data.to === '智能客服' && fromSocket) {
+      console.log('智能客服');
       let str = data.msg
       str = str.replace('吗', '')
       str = str.replace(/[?|？]/g, '!')
@@ -55,48 +57,40 @@ io.on('connect', function (socket) {
       str = str.replace('有', '没有')
       str = str.replace('差', '好')
       setTimeout(() => {
-        socket.emit('emitEvent', {
+        fromSocket.emit('emitEvent', {
           from: '智能客服',
           to: data.from,
           msg: str
         })
       }, 500);
-      return
     } else if (data.to === '群聊') {
       socket.broadcast.emit('emitEvent', data)
-    }
-    let toUser = onlineUser.get(data.to)
-    console.log(data);
-    if (toUser) {
-      console.log(toUser.id);
-      toUser.emit('emitEvent', data)
+    } else if (toSocket) {
+      toSocket.emit('emitEvent', data)
       console.log('聊天信息发送成功');
     }
   })
-  socket.on('getOnlineUserInfo', function (data) {
-    socket.emit('sendList', userInfos.getAllElement())
-    console.log('在线用户列表信息发送成功');
-
+  socket.on('getOnlineUserInfo', function () {
+    socket.emit('sendList', {
+      onlineUser: [...userInfos.values()]
+    })
   })
   socket.on('set', function (data) {
-    console.log(JSON.parse(data));
     if (data) {
-      console.log(data);
-      onlineUser.put(JSON.parse(data).username, socket)
-      userInfos.put(JSON.parse(data).username, JSON.parse(data))
-      id_name.put(socket.id, JSON.parse(data).username)
+      onlineUser.set(JSON.parse(data).username, socket)
+      userInfos.set(socket.id, JSON.parse(data))
       //发送在线用户信息
-      socket.emit('sendList', userInfos.getAllElement())
-      socket.broadcast.emit('sendList', userInfos.getAllElement())
-
-      console.log(onlineUser);
+      socket.broadcast.emit('sendList', {
+        onlineUser: [...userInfos.values()],
+        changeUser: {
+          username: userInfos.get(socket.id) && userInfos.get(socket.id).username,
+          isOnline: true
+        }
+      })
+      console.log(userInfos.get(socket.id) && userInfos.get(socket.id).username + '登录了');
     }
-
   })
-
 })
-
-
 
 //允许跨域
 app.use(require('cors')())
@@ -110,15 +104,12 @@ app.use((req, res, next) => {
   console.log(req.headers.origin);
   console.log(req.path);
   console.log(req.body);
+  const token = req.headers.authorization;
   if (req.url === '/api/admin/login' || req.url === '/api/admin/create') {
     return next()
     //拒绝没有token的请求
-  } else if (req.url !== '/api/admin/login' && !req.body.token) {
-    console.log('没有token');
-    return res.status(401).send('token不存在')
-    //验证token
-  } else if (req.url !== '/api/admin/login' && req.body.token) {
-    jwt.verify(req.headers.authorization, 'random', (err, data) => {
+  } else {
+    jwt.verify(token, secretKey, (err, data) => {
       if (err) {
         res.status(401).send('token错误')
       } else {
@@ -135,15 +126,11 @@ app.post('/api/admin/create', async (req, res) => {
     username: req.body.username,
   })
   if (checkUser) {
-    return res.status(422).send({
+    return res.status(423).send({
       message: '该用户名称已被注册',
     })
   } else {
-    console.log('进行密码加密' + req.body.password);
-    req.body.password = encryption(req.body.password)
-    console.log(req.body);
     const model = await require('./models/Users').create(req.body)
-
     res.send(model)
   }
 })
@@ -162,7 +149,7 @@ app.use('/api/admin/login', async (req, res, next) => {
     })
   }
   // 2、校验密码
-  if (encryption(password) != user.password) {
+  if (password != user.password) {
     console.log('密码错误');
     return res.status(400).send({
       message: '密码错误',
@@ -171,9 +158,13 @@ app.use('/api/admin/login', async (req, res, next) => {
   //3、返回token
   const jwt = require('jsonwebtoken')
   //参数一，记录的信息，第二个令牌，第三个设置过期时间
-  console.log(user);
-  const token = jwt.sign({ id: user._id }, 'random', { expiresIn: '7d' })
-  return res.send({ token, userInfo: user })
+  const token = jwt.sign({ id: user._id }, secretKey, { expiresIn: '1d' })
+  return res.send({
+    token, userInfo: {
+      username: user.username,
+      imgSrc: user.imgSrc
+    }
+  })
 })
 //监听端口
 http.listen(5000, function () {

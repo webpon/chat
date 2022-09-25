@@ -2,7 +2,7 @@
   <div id="chat_body">
     <!-- 聊天列表 -->
     <!-- <chatLists /> -->
-    <div class="chatLists">
+    <div class="chatLists" v-if="!$store.state.isMobile">
        <chatLists />
     </div>
       <!-- 聊天窗口 -->
@@ -23,6 +23,7 @@ export default {
   data() {
     return {
       chatCom: 'chatBackground',
+      mobile: true
     }
   },
   components: {

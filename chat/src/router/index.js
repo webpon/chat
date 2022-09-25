@@ -1,12 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Layout from "@/views/main/layout"
-import login from '../views/login/login.vue'
-import contacts from '@/views/main/childComs/contacts/contacts'
-import chat from '@/views/main/childComs/chat/chat.vue'
-import chatCom from '@/components/content/chatContainer/chatCom'
-import chatBackground from '@/views/main/childComs/chat/chatBackground'
-
+import websocket from '@/network/websocket'
 
 Vue.use(VueRouter)
 
@@ -18,27 +12,27 @@ const routes = [
   {
     path: '/',
     name: 'Layout',
-    component: Layout,
+    component: () => import(/* webpackPrefetch: true */ /* webpackChunkName: "layout" */ '@/views/main/layout'),
     children: [
       {
         path: 'contacts',
         name: 'contacts',
-        component: contacts
+        component: () => import(/* webpackPrefetch: true */ /* webpackChunkName: "contacts" */ '@/views/main/childComs/contacts/contacts'),
       },
       {
         path: 'chat',
         name: 'chat',
-        component: chat,
-        children:[
+        component: () => import(/* webpackPrefetch: true */ /* webpackChunkName: "chat" */ '@/views/main/childComs/chat/chat.vue'),
+        children: [
           {
             path: 'toChat',
             name: 'toChat',
-            component: chatCom
+            component: () => import(/* webpackPrefetch: true */ /* webpackChunkName: "chatCom" */ '@/components/content/chatContainer/chatCom'),
           },
           {
             path: '',
             name: 'background',
-            component: chatBackground
+            component: () => import(/* webpackPrefetch: true */ /* webpackChunkName: "chatBackground" */ '@/views/main/childComs/chat/chatBackground'),
           }
         ]
       }
@@ -46,7 +40,7 @@ const routes = [
   },
   {
     path: '/login',
-    component: login,
+    component: () => import(/* webpackPrefetch: true */ /* webpackChunkName: "login" */ '@/views/login/login.vue'),
   },
 ]
 
@@ -56,13 +50,25 @@ const router = new VueRouter({
   routes
 })
 router.beforeEach((to, from, next) => {
+  console.log(to);
+  console.log(from);
   if (to.path === '/login') {
     next()
   } else {
     let token = localStorage.token
     if (!token) {
       next('/login')
+    } else if(from.path === '/login'){
+      console.log('+++++++++++++++++');
+      websocket()
+      Vue.prototype.$socket.open()
+      next()
     } else {
+      console.log('_____________');
+      if (!Vue.prototype.$socket || Vue.prototype.$socket.disconnected) {
+        websocket()
+        Vue.prototype.$socket.open()
+      }
       next()
     }
   }
