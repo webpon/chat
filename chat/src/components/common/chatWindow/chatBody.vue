@@ -25,7 +25,6 @@ export default {
       return this.$store.state.msgInfo
     },
     currentMsgInfo() {
-      console.log('___________________________________');
       let arr = []
       if (this.$store.state.msgInfo !== null && this.$route.path === '/chat/toChat') {
         this.$store.state.msgInfo.forEach((item) => {
@@ -43,7 +42,7 @@ export default {
         setTimeout(() => {
           let chatBody = document.querySelector('.chatBody')
           chatBody.scrollTo(0, chatBody.scrollHeight)
-        }, 50)
+        }, 150)
         return arr
       }
     },
@@ -56,14 +55,14 @@ export default {
     setTimeout(() => {
       let chatBody = document.querySelector('.chatBody')
       chatBody.scrollTo(0, chatBody.scrollHeight)
-    }, 50)
+    }, 150)
   },
   watch: {
     msgInfo() {
       setTimeout(() => {
         let chatBody = document.querySelector('.chatBody')
         chatBody.scrollTo(0, chatBody.scrollHeight)
-      }, 50)
+      }, 300)
     },
   },
 }

@@ -11,14 +11,7 @@
       <input v-show="false" accept="video/*" ref="fileInputVideo" type="file"
         @change="uploadProgress($event, 'video')" />
     </div>
-    <a-textarea :maxLength="200" placeholder="请输入内容" @input="areaInput" :rows="4" v-model.trim="message.content"
-      @pressEnter.prevent="sendmsg" />
-    <div class="sendAndLength">
-      <span class="length-info">
-        {{ message.content.length }} / 200
-      </span>
-      <a-button @click="sendmsg" class="sendBtn">发送</a-button>
-    </div>
+    <a-button @click="sendmsg" class="sendBtn">发送</a-button>
   </div>
 </template>
 <script>
@@ -42,6 +35,7 @@ export default {
         //本地添加
         this.$store.commit('addMsg', {
           from: JSON.parse(localStorage.myInfo).username,
+          from_avater: JSON.parse(localStorage.myInfo).imgSrc,
           to: this.$route.query.userName,
           msg: this.message.content,
           type: this.message.type
@@ -49,6 +43,7 @@ export default {
         //向要发送的客户端添加
         this.$socket.emit('sendEvent', {
           from: JSON.parse(localStorage.myInfo).username,
+          from_avater: JSON.parse(localStorage.myInfo).imgSrc,
           to: this.$route.query.userName,
           msg: this.message.content,
           type: this.message.type,
@@ -68,7 +63,6 @@ export default {
     },
     async uploadProgress(e, type) {
       var file = e.target.files[0]; // js 获取文件对象
-      console.log(file);
       if (!file) return
       const fileMaxSize = 1024 * 1024 * 20
       if (file.size > fileMaxSize) {
@@ -81,14 +75,14 @@ export default {
         onUploadProgress: progressEvent => {
           let persent = (progressEvent.loaded / progressEvent.total * 100 | 0)		//上传进度百分比
           this.progress = persent
-          if (persent === 100) {
-            this.progress = 0
-          }
         },
       }
       const url = await this.$http.post('http://39.103.233.82:13141/upload', form, config)
       this.message.type = type
       this.message.content = url.data.fileName
+      this.sendmsg()
+      e.target.value = ''
+      this.progress = 0
     },
   },
 }

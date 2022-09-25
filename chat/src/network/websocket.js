@@ -73,10 +73,13 @@ export default () => {
 
     //获取在线用户列表
     socket.on('sendList', (data) => {
-      console.log(data);
       const { onlineUser = [], changeUser = false } = data || {}
       console.log(changeUser);
       store.commit('updateContacts', onlineUser)
+      if (!changeUser) return
+      if (changeUser && changeUser.isOnline) {
+        Vue.prototype.$message.info(`${changeUser.username}登陆了`)
+      } 
     })
     console.log('APPmounted');
   } catch (error) {

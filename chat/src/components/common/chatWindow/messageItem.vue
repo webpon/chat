@@ -4,7 +4,8 @@
       <img :src="imgSrc" alt="" v-viewer />
 
       <span class="left-wraper">
-        <span class="nick">{{sendmsg.from}}</span>
+        <span class="nick" :style="{color: isOnline ? 'blue' : 'gray'}">{{sendmsg.from}} {{isOnline ? '(在线)':
+        '(离线)'}}</span>
         <div v-if="sendmsg.type === 'video'" class="video">
           <video-player :options="{fluid : true, sources: [{src: sendmsg.msg}]}" style="width: 100%;height: 100%" />
         </div>
@@ -19,13 +20,6 @@
 
 <script>
 export default {
-  name: '',
-  data() {
-    return {
-
-    }
-  },
-  components: {},
   props: {
     sendmsg: {
       type: Object,
@@ -34,13 +28,16 @@ export default {
   },
   computed: {
     imgSrc() {
-      let imgSrc
+      return this.sendmsg.from_avater || 'https://img0.baidu.com/it/u=373651998,3173795795&fm=253&fmt=auto&app=138&f=JPEG?w=150&h=150'
+    },
+    isOnline() {
+      let flag = false
       this.$store.state.contacts.forEach(item => {
         if (item.username === this.sendmsg.from) {
-          imgSrc = item.imgSrc
+          flag = true
         }
       });
-      return imgSrc || require('../../../assets/offline.jpg')
+      return flag
     }
   }
 }
@@ -64,6 +61,7 @@ export default {
   float: left;
   display: flex;
   margin: 10px 0;
+
   .img {
     width: 150px;
     height: 150px;
@@ -91,7 +89,6 @@ export default {
 .nick {
   font-size: 10px;
   font-weight: bold;
-  color: blue;
   line-height: 20px;
 }
 
