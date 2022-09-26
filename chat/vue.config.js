@@ -113,11 +113,11 @@ module.exports = {
                     // '^/api':''
                 }
             },
-            // '/api/admin/upload': {
-            //     target: 'http://39.103.233.82:8080',
-            //     changeOrigin: true,
-            //     '^/api/admin': ''
-            // }
+            '/oss': {
+                target: 'http://127.0.0.1:19000',
+                changeOrigin: true,
+                '^/oss': ''
+            }
         },
     },
 }
