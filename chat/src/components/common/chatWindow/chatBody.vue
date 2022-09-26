@@ -6,8 +6,6 @@
       </div>
     </div>
   </div>
-  </div>
-  </div>
 </template>
 
 <script>
@@ -42,7 +40,7 @@ export default {
         setTimeout(() => {
           let chatBody = document.querySelector('.chatBody')
           chatBody.scrollTo(0, chatBody.scrollHeight)
-        }, 150)
+        }, 100)
         return arr
       }
     },
@@ -54,14 +52,14 @@ export default {
     this.$refs.chatBody.style.height = `calc(${this.windowInnerHeight}px - 235px)`
     setTimeout(() => {
       let chatBody = document.querySelector('.chatBody')
-      chatBody.scrollTo(0, chatBody.scrollHeight)
-    }, 150)
+      // chatBody.scrollTo(0, chatBody.scrollHeight)
+    }, 100)
   },
   watch: {
     msgInfo() {
       setTimeout(() => {
         let chatBody = document.querySelector('.chatBody')
-        chatBody.scrollTo(0, chatBody.scrollHeight)
+        // chatBody.scrollTo(0, chatBody.scrollHeight)
       }, 300)
     },
   },

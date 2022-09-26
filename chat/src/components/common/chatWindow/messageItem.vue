@@ -7,7 +7,12 @@
         <span class="nick" :style="{color: isOnline ? 'blue' : 'gray'}">{{sendmsg.from}} {{isOnline ? '(在线)':
         '(离线)'}}</span>
         <div v-if="sendmsg.type === 'video'" class="video">
-          <video-player :options="{fluid : true, sources: [{src: sendmsg.msg}]}" style="width: 100%;height: 100%" />
+          <lazy-component @show="lazyLoadVideo">
+            <img v-if="!loadVideo" style="width: 180px; height: 180px;position: absolute;"
+              src="https://webpon-img.oss-cn-guangzhou.aliyuncs.com/loading.gif" />
+            <video-player v-else :options="{width: 180, height: 180, sources: [{src: sendmsg.msg}]}"
+              style="width: 100%;height: 100%" />
+          </lazy-component>
         </div>
         <span v-viewer v-else-if="/http|https/.test(sendmsg.msg) || sendmsg.type === 'picture'">
           <img v-lazy="sendmsg.msg" class="img" />
@@ -20,6 +25,11 @@
 
 <script>
 export default {
+  data() {
+    return {
+      loadVideo: false
+    }
+  },
   props: {
     sendmsg: {
       type: Object,
@@ -38,6 +48,11 @@ export default {
         }
       });
       return flag
+    }
+  },
+  methods: {
+    lazyLoadVideo() {
+      this.loadVideo = true
     }
   }
 }
@@ -69,11 +84,12 @@ export default {
 
   .video {
     width: 180px;
+    height: 180px;
 
     ::v-deep {
       #vjs_video_3 {
         width: 100%;
-        height: 100%;
+        height: 180px;
       }
     }
   }

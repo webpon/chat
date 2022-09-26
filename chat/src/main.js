@@ -12,13 +12,25 @@ import 'viewerjs/dist/viewer.css'
 import VueLazyload from 'vue-lazyload'
 import VuevideoPlayer from 'vue-video-player';
 import 'video.js/dist/video-js.css';
-
+import VueLazyComponent from '@xunlei/vue-lazy-component';
+import lazyLoad from '@/plugins/lazy-load';
+Vue.use(lazyLoad)
 Vue.prototype.$http = http //这样可以让axios在所有组件中使用
 Vue.use(VueLazyload, {
-  loading: 'https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fwww.grovehousecamberwell.co.uk%2Fimg%2Fspinner-big.gif&refer=http%3A%2F%2Fwww.grovehousecamberwell.co.uk&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1666627924&t=5e5ec1150c1c49397c7afc3d07e47ab4',
+  loading: 'https://webpon-img.oss-cn-guangzhou.aliyuncs.com/loading.gif',
   // 延迟显示，用于测试，实际开发不需要
-  throttleWait: 0
+  throttleWait: 1000,
+  lazyComponent: true,
+  // set observer to true
+  observer: true,
+
+  // optional
+  observerOptions: {
+    rootMargin: '0px',
+    threshold: 0.1
+  }
 })
+Vue.use(VueLazyComponent)
 Vue.use(Viewer)
 Vue.use(VuevideoPlayer);
 Vue.use(antd);
