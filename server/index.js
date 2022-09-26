@@ -18,8 +18,6 @@ var io = require('socket.io')(http, {
     })
   }
 })
-// 创建一对一传输模型
-const loginUser = new Map()
 //利用哈希表管理在线用户
 //username_socket哈希表
 let onlineUser = new Map()

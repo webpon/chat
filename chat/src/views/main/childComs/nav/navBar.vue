@@ -46,11 +46,7 @@ export default {
       return this.$store.state.myInfo
     },
   },
-  created() {
-    // setTimeout(() => {
-    //   this.myInfo = JSON.parse(sessionStorage.getItem('myInfo'))
-    // }, 1000)
-  },
+  
   methods: {
     //退出登录
     logout() {
