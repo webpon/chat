@@ -1,25 +1,25 @@
 <template>
     <div class="chatForm">
-        <div class="upload">
-            <a-icon type="picture" @click="uploadImg" :style="{ fontSize: '20px', color: '#08c' }"/>
-            <a-icon type="play-square" @click="uploadVideo"
-                    :style="{ fontSize: '20px', color: '#08c', 'margin': '0 20px' }"/>
-            <progress :value="progress" max="100" style="width: 65px"></progress>
-            {{ progress }} %
-            <input v-show="false" accept="image/*" ref="fileInputPicture" type="file"
-                   @change="uploadProgress($event, 'picture')"/>
-            <input v-show="false" accept="video/*" ref="fileInputVideo" type="file"
-                   @change="uploadProgress($event, 'video')"/>
-        </div>
-        <a-textarea :maxLength="200" placeholder="请输入内容" @input="areaInput" :rows="4" v-model.trim="message.content"
-                    @pressEnter.prevent="sendmsg"/>
-        <div class="sendAndLength">
-      <span class="length-info">
-        {{ message.content.length }} / 200
-      </span>
-            <a-button @click="sendmsg" class="sendBtn">发送</a-button>
+      <div class="upload">
+        <a-icon type="picture" @click="uploadImg" :style="{ fontSize: '20px', color: '#08c' }" />
+        <a-icon type="play-square" @click="uploadVideo"
+          :style="{ fontSize: '20px', color: '#08c', 'margin': '0 20px' }" />
+        <progress :value="progress" max="100" style="width: 65px"></progress>
+        {{ progress }} %
+        <input v-show="false" accept="image/*" ref="fileInputPicture" type="file"
+          @change="uploadProgress($event, 'picture')" />
+        <input v-show="false" accept="video/*" ref="fileInputVideo" type="file"
+          @change="uploadProgress($event, 'video')" />
+      </div>
+      <a-textarea :maxLength="200" placeholder="请输入内容" @input="areaInput" :rows="4" v-model.trim="message.content"
+                  @pressEnter.prevent="sendmsg" />
+      <div class="sendAndLength">
+        <span class="length-info">
+          {{ message.content.length }} / 200
+        </span>
+        <a-button @click="sendmsg" class="sendBtn">发送</a-button>
 
-        </div>
+      </div>
     </div>
 </template>
 <script>

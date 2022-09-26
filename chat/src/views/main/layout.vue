@@ -2,7 +2,7 @@
   <div>
     <div class="container">
       <!-- 最左侧导航栏 -->
-      <div class="asider_container" v-show="$route.path !== '/chat/toChat' || $store.state.isMobile">
+      <div class="asider_container" v-show="$route.path !== '/chat/toChat' || !$store.state.isMobile">
         <asiderNav />
       </div>
       <!-- 导航栏切换的页面 -->
