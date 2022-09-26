@@ -11,7 +11,15 @@
       <input v-show="false" accept="video/*" ref="fileInputVideo" type="file"
         @change="uploadProgress($event, 'video')" />
     </div>
-    <a-button @click="sendmsg" class="sendBtn">发送</a-button>
+    <a-textarea :maxLength="200" placeholder="请输入内容" @input="areaInput" :rows="4" v-model.trim="message.content"
+                @pressEnter.prevent="sendmsg" />
+    <div class="sendAndLength">
+      <span class="length-info">
+        {{ message.content.length }} / 200
+      </span>
+      <a-button @click="sendmsg" class="sendBtn">发送</a-button>
+
+    </div>
   </div>
 </template>
 <script>
@@ -123,6 +131,15 @@ export default {
   .upload {
     margin-left: 15px;
   }
+
+  .ant-input{
+    border: none;
+  }
+
+  .ant-input:focus{
+    box-shadow: none !important;
+  }
+
 }
 .sendBtn {
   position: fixed;
