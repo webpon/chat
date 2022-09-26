@@ -1,8 +1,8 @@
-﻿import axios from 'axios'
+import axios from 'axios'
 import router from '../router/index'
 import Vue from 'vue'
 const http = axios.create({
-  baseURL: '/api/admin', //这个按实际情况填写
+  baseURL: '/oss', //这个按实际情况填写
   // baseURL: 'http://39.103.233.82:5000/api/admin',
 })
 //axios请求拦截器
