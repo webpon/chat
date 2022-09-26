@@ -34,7 +34,8 @@ export default {
 
 @media screen and (max-width: 750px) {
   .chatBackground {
-     left: 60px;
+     left: 0px;
+     width: ;
   }
 }
 .chatBackground {

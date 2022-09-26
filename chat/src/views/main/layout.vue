@@ -2,14 +2,14 @@
   <div>
     <div class="container">
       <!-- 最左侧导航栏 -->
-      <div class="asider_container">
+      <div class="asider_container" v-show="$route.path !== '/chat/toChat'">
         <asiderNav />
       </div>
       <!-- 导航栏切换的页面 -->
       <div class="content_container">
-       <keep-alive>
+        <keep-alive>
           <router-view />
-       </keep-alive>
+        </keep-alive>
       </div>
     </div>
   </div>
@@ -23,7 +23,7 @@ export default {
     return {}
   },
   components: { asiderNav },
-  created() {},
+  created() { },
   methods: {},
   mounted() {
     // let middle = document.querySelector('#middle_container')
@@ -43,24 +43,41 @@ export default {
 }
 </script>
 
-<style scoped>
-* {
-  margin: 0;
-  padding: 0;
+<style scoped lang="scss">
+@media screen and (min-width: 750px) {
+  .content_container {
+    left: 60px;
+  }
+
+  /* 最左侧导航栏布局 */
+  .asider_container {
+    top: 0;
+    width: 60px;
+    height: 100vh;
+  }
+}
+
+@media screen and (max-width: 750px) {
+  .content_container {
+    left: 0;
+  }
+
+  /* 最左侧导航栏布局 */
+  .asider_container {
+    bottom: 0;
+    width: 100vw;
+    height: 60px;
+  }
 }
 /* 最左侧导航栏布局 */
 .asider_container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 60px;
-  height: 100vh;
-  z-index: 1000;
-}
+    position: fixed;
+    left: 0;
+    z-index: 1000;
+  }
 /* 右侧部分布局 */
 .content_container {
   position: fixed;
-  left: 60px;
   top: 0;
   right: 0;
   bottom: 0;

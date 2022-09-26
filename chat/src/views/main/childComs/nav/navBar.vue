@@ -46,7 +46,7 @@ export default {
       return this.$store.state.myInfo
     },
   },
-  
+
   methods: {
     //退出登录
     logout() {
@@ -59,25 +59,60 @@ export default {
     getOnlineUserInfo() {
       this.$socket.emit('getOnlineUserInfo')
     },
-    showMyInfo(){
-      alert('You are '+ JSON.parse(localStorage.myInfo).username)
+    showMyInfo() {
+      alert('You are ' + JSON.parse(localStorage.myInfo).username)
     }
   },
 }
 </script>
-<style scoped>
+<style scoped lang="scss">
+@media screen and (min-width: 750px) {
+  .navContainer {
+    width: 60px;
+    height: 100vh;
+  }
+
+  .logoutCon {
+    position: fixed;
+    bottom: 100px;
+    left: 15px;
+  }
+}
+
+@media screen and (max-width: 750px) {
+  .navContainer {
+    width: 100vw;
+    height: 60px;
+    display: flex;
+    justify-content: space-evenly;
+  }
+
+  .avaterContainer {
+    order: 4;
+  }
+  .logoutCon {
+    display: flex;
+    align-items: center;
+    order: 3;
+
+  }
+  .tab-bar-item {
+    flex: 0;
+  }
+}
+
 /* 左边导航栏容器 */
 .navContainer {
-  width: 60px;
-  height: 100vh;
   background-color: #1f273a;
 }
+
 /* 头像框布局 */
 .avaterContainer {
   position: relative;
   width: 60px;
   height: 60px;
 }
+
 /* 头像图片设置 */
 .avaterContainer img {
   width: 70%;
@@ -87,12 +122,7 @@ export default {
   transform: translate(-50%, -50%);
   cursor: pointer;
 }
-/* 退出按钮位置 */
-.logoutCon {
-  position: fixed;
-  bottom: 100px;
-  left: 15px;
-}
+
 /* 退出按钮大小设置 */
 .logout {
   cursor: pointer;
