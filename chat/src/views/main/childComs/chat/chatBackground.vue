@@ -6,7 +6,7 @@
     <div class="bac_title" v-else>
       基于Vue+express+Websocket+mongodb实时聊天
     </div>
-    
+
   </div>
 </template>
 
@@ -35,7 +35,6 @@ export default {
 @media screen and (max-width: 750px) {
   .chatBackground {
      left: 0px;
-     width: ;
   }
 }
 .chatBackground {
@@ -44,6 +43,7 @@ export default {
   bottom: 0;
   right: 0;
   height: 100vh;
+  width: 100vw;
   background-color: #fff;
   z-index: 0;
 }

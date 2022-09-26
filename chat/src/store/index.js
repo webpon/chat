@@ -22,6 +22,7 @@ export default new Vuex.Store({
         imgSrc: require('@/assets/avater/4.jpg'),
       },
     ],
+    playingVideo: null,
     isMobile: false
   },
   mutations: {
@@ -54,8 +55,11 @@ export default new Vuex.Store({
     },
     checkDevice(state, isMobile) {
       state.isMobile = isMobile
+    },
+    updatePlayingVideo(state, videoRef) {
+      state.playingVideo = videoRef
     }
-  },
+  }, 
   actions: {
   },
   modules: {

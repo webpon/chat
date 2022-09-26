@@ -6,8 +6,8 @@
           <lazy-component @show="lazyLoadVideo">
             <img v-if="!loadVideo" style="width: 180px; height: 180px;position: absolute;"
               src="https://webpon-img.oss-cn-guangzhou.aliyuncs.com/loading.gif" />
-            <video-player v-else :options="{width: 180, height: 180, sources: [{src: sendmsg.msg}]}"
-              style="width: 100%;height: 100%" />
+            <video-player @play="onPlayerPlay" ref="videoPlayer" v-else
+              :options="{width: 180, height: 180, sources: [{src: sendmsg.msg}]}" style="width: 100%;height: 100%" />
           </lazy-component>
         </div>
 
@@ -22,7 +22,6 @@
 </template>
 
 <script>
-// import lazyComponent from '@/components/utils/lazy-component'
 export default {
   name: '',
   data() {
@@ -37,9 +36,6 @@ export default {
       default: {},
     },
   },
-  components: {
-    // lazyComponent,
-  },
   computed: {
     root() {
       console.log(document.querySelector('#chatRecord'));
@@ -48,8 +44,18 @@ export default {
   },
   methods: {
     lazyLoadVideo() {
-      this.loadVideo = true
-    }
+      setTimeout(() => {
+        this.loadVideo = true
+      }, 250)
+    },
+    // 播放回调
+    onPlayerPlay() {
+      const beforePlayer = this.$store.state.playingVideo
+      if (beforePlayer && beforePlayer !== this.$refs.videoPlayer.player) {
+        beforePlayer.pause()
+      }
+      this.$store.commit('updatePlayingVideo', this.$refs.videoPlayer.player)
+    },
   }
 }
 </script>
@@ -73,7 +79,6 @@ export default {
   float: right;
   margin: 10px 0;
 
-  /* background-color: red; */
   .img {
     width: 150px;
     height: 150px;

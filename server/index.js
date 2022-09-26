@@ -27,7 +27,6 @@ let userInfos = new Map()
 const secretKey = 'falanter abc sdfjnklsdjfkljsdfkjsdklfjsdkljfklsdjfklj33123123'
 //连接成功
 io.on('connect', function (socket) {
-  console.log('_+_+_+_+_+_');
   const { userInfo = '' } = socket.handshake.query || {}
   const userInfoData = JSON.parse(userInfo)
   if (userInfoData) {
@@ -58,7 +57,7 @@ io.on('connect', function (socket) {
     userInfos.delete(socket.id)
   });
   socket.on('sendEvent', function (data) {
-    console.log(data);
+    data.msgId = Math.random().toString() + new Date().valueOf()
     const toSocket = onlineUser.get(data.to)
     const fromSocket = onlineUser.get(data.from)
     if (!userInfos.get(socket.id) || userInfos.get(socket.id).username !== data.from) return
@@ -75,7 +74,8 @@ io.on('connect', function (socket) {
         fromSocket.emit('emitEvent', {
           from: '智能客服',
           to: data.from,
-          msg: str
+          msg: str,
+          msgId: data.msgId
         })
       }, 500);
     } else if (data.to === '群聊') {
