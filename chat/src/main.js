@@ -12,9 +12,6 @@ import 'viewerjs/dist/viewer.css'
 import VueLazyload from 'vue-lazyload'
 import VuevideoPlayer from 'vue-video-player';
 import 'video.js/dist/video-js.css';
-import VueLazyComponent from '@xunlei/vue-lazy-component';
-import lazyLoad from '@/plugins/lazy-load';
-Vue.use(lazyLoad)
 Vue.prototype.$http = http //这样可以让axios在所有组件中使用
 Vue.use(VueLazyload, {
   loading: 'https://webpon-img.oss-cn-guangzhou.aliyuncs.com/loading.gif',
@@ -23,7 +20,6 @@ Vue.use(VueLazyload, {
   lazyComponent: true,
   // set observer to true
   observer: true,
-
   // optional
   observerOptions: {
     rootMargin: '0px',

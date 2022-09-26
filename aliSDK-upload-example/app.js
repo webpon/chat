@@ -1,11 +1,12 @@
 const express = require("express");
 const moment = require("moment");
+const cors = require('cors')
 const { Buffer } = require("buffer");
 const OSS = require("ali-oss");
 
 const app = express();
 const path = require("path");
-
+app.use(cors())
 // 按需配置
 const config = {
   accessKeyId: "",
