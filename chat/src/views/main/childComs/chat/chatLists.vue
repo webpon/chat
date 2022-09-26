@@ -6,7 +6,7 @@
           <a-icon slot="prefix" type="search" />
         </a-input>
         <div class="plus">
-          <a-icon slot="prefix" type="plus" />
+          <a-icon slot="prefix" type="plus" class="test"/>
         </div>
       </div>
     </div>
@@ -40,7 +40,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .plus {
   width: 28px;
   height: 28px;
@@ -48,6 +48,12 @@ export default {
   background-color: #eae8e7;
   border-radius: 5px;
   margin-left: 10px;
+
+  .anticon-plus {
+    position: relative;
+    left: 1px;
+    top: 1px;
+  }
 }
 </style>
 <style scoped>

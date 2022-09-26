@@ -17,7 +17,8 @@ const config = {
 };
 
 if (!config.accessKeyId || !config.accessKeySecret){
-  console.error("请配置阿里连接")
+  console.error("请配置阿里RAM 控制")
+  process.exit()
 }
 
 app.get("/oss", async (req, res) => {
