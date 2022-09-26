@@ -35,6 +35,11 @@ const routes = [
             component: () => import(/* webpackPrefetch: true */ /* webpackChunkName: "chatBackground" */ '@/views/main/childComs/chat/chatBackground'),
           }
         ]
+      },
+      {
+        path: 'info',
+        name: 'info',
+        component: () => import(/* webpackPrefetch: true */ /* webpackChunkName: "chat" */ '@/views/main/childComs/info/myInfo.vue'),
       }
     ]
   },

@@ -26,7 +26,6 @@ Vue.use(VueLazyload, {
     threshold: 0.1
   }
 })
-Vue.use(VueLazyComponent)
 Vue.use(Viewer)
 Vue.use(VuevideoPlayer);
 Vue.use(antd);

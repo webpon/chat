@@ -1,7 +1,7 @@
 <template>
   <div id="chatBodytainer">
     <div class="chatBody" ref="chatBody" id="chatRecord">
-      <div v-for="(item,index) in currentMsgInfo" :key="index">
+      <div v-for="(item, index) in currentMsgInfo" :key="item.msgId || index">
         <msg :msg="item" />
       </div>
     </div>
@@ -37,10 +37,9 @@ export default {
             arr.push(item)
           }
         })
-        setTimeout(() => {
-          let chatBody = document.querySelector('.chatBody')
-          chatBody.scrollTo(0, chatBody.scrollHeight)
-        }, 100)
+        this.$nextTick(() => {
+          this.$refs.chatBody.scrollTo(0, this.$refs.chatBody.scrollHeight)
+        })
         return arr
       }
     },
@@ -51,17 +50,8 @@ export default {
   mounted() {
     this.$refs.chatBody.style.height = `calc(${this.windowInnerHeight}px - 235px)`
     setTimeout(() => {
-      let chatBody = document.querySelector('.chatBody')
-      // chatBody.scrollTo(0, chatBody.scrollHeight)
+      this.$refs.chatBody.scrollTo(0, this.$refs.chatBody.scrollHeight)
     }, 100)
-  },
-  watch: {
-    msgInfo() {
-      setTimeout(() => {
-        let chatBody = document.querySelector('.chatBody')
-        // chatBody.scrollTo(0, chatBody.scrollHeight)
-      }, 300)
-    },
   },
 }
 </script>
@@ -75,10 +65,6 @@ export default {
   background-color: #f5f5f5;
   display: flex;
   flex-direction: column;
-  overflow: auto;
-}
-
-.chatBody {
   overflow-x: hidden;
   overflow-y: auto;
   color: #000;

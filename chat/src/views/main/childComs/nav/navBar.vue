@@ -1,20 +1,24 @@
 <template>
   <div class="navContainer">
     <!-- 头像 -->
-    <div class="avaterContainer" @click="showMyInfo">
+    <navItem style="order: 3;" path="/info" v-if="$store.state.isMobile">
+      <a-icon style="fontSize: 25px;" type="user" slot="item-icon"/>
+      <a-icon style="fontSize: 25px; color: green;"  type="user" slot="item-icon-active"/>
+    </navItem>
+    <div v-else class="avaterContainer" @click="showMyInfo">
       <img :src="myInfo.imgSrc" alt="webpon" />
     </div>
     <!-- Tab按钮 -->
     <navItem path="/chat">
-      <img src="~assets/nav/message.png" alt="" slot="item-icon" />
-      <img src="~assets/nav/message_hover.png" alt="" slot="item-icon-active" />
+      <a-icon style="fontSize: 25px;" type="message" slot="item-icon"/>
+      <a-icon style="fontSize: 25px; color: green;" theme="filled" type="message" slot="item-icon-active"/>
     </navItem>
     <navItem path="/contacts" @click.native="getOnlineUserInfo">
-      <img src="~assets/nav/contacts.png" alt="" slot="item-icon" />
-      <img src="~assets/nav/contacts_hover.png" slot="item-icon-active" />
+      <a-icon style="fontSize: 25px;" type="contacts" slot="item-icon"/>
+      <a-icon style="fontSize: 25px; color: green;" theme="filled" type="contacts" slot="item-icon-active"/>
     </navItem>
     <!-- 退出选项 -->
-    <a-dropdown class="logoutCon">
+    <a-dropdown class="logoutCon" v-if="!$store.state.isMobile">
       <a class="ant-dropdown-link" @click="(e) => e.preventDefault()">
         <a-icon type="import" class="logout" />
       </a>
@@ -88,7 +92,7 @@ export default {
   }
 
   .avaterContainer {
-    order: 4;
+    order: 3;
   }
   .logoutCon {
     display: flex;
