@@ -1,25 +1,25 @@
 <template>
     <div class="chatForm">
-      <div class="upload">
-        <a-icon type="picture" @click="uploadImg" :style="{ fontSize: '20px', color: '#08c' }" />
-        <a-icon type="play-square" @click="uploadVideo"
-          :style="{ fontSize: '20px', color: '#08c', 'margin': '0 20px' }" />
-        <progress :value="progress" max="100" style="width: 65px"></progress>
-        {{ progress }} %
-        <input v-show="false" accept="image/*" ref="fileInputPicture" type="file"
-          @change="uploadProgress($event, 'picture')" />
-        <input v-show="false" accept="video/*" ref="fileInputVideo" type="file"
-          @change="uploadProgress($event, 'video')" />
-      </div>
-      <a-textarea :maxLength="200" placeholder="请输入内容" @input="areaInput" :rows="4" v-model.trim="message.content"
-                  @pressEnter.prevent="sendmsg" />
-      <div class="sendAndLength">
+        <div class="upload">
+            <a-icon type="picture" @click="uploadImg" :style="{ fontSize: '20px', color: '#08c' }"/>
+            <a-icon type="play-square" @click="uploadVideo"
+                    :style="{ fontSize: '20px', color: '#08c', 'margin': '0 20px' }"/>
+            <progress :value="progress" max="100" style="width: 65px"></progress>
+            {{ progress }} %
+            <input v-show="false" accept="image/*" ref="fileInputPicture" type="file"
+                   @change="uploadProgress($event, 'picture')"/>
+            <input v-show="false" accept="video/*" ref="fileInputVideo" type="file"
+                   @change="uploadProgress($event, 'video')"/>
+        </div>
+        <a-textarea :maxLength="200" placeholder="请输入内容" @input="areaInput" :rows="4" v-model.trim="message.content"
+                    @pressEnter.prevent="sendmsg"/>
+        <div class="sendAndLength">
         <span class="length-info">
           {{ message.content.length }} / 200
         </span>
-        <a-button @click="sendmsg" class="sendBtn">发送</a-button>
+            <a-button @click="sendmsg" class="sendBtn">发送</a-button>
 
-      </div>
+        </div>
     </div>
 </template>
 <script>
@@ -91,20 +91,20 @@
                 oss.get("/").then(({data}) => {
                     const key = data.dir + ('xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'
                         .replace(/[xy]/g, c => {
-                                return (c === 'x' ? (Math.random() * 16 | 0) : ('r&0x3' | '0x8')).toString(16)
+                            return (c === 'x' ? (Math.random() * 16 | 0) : ('r&0x3' | '0x8')).toString(16)
                         })) + `_${file.name}`
                     form.append("policy", data.policy)
                     form.append("signature", data.signature)
-                    form.append("OSSAccessKeyId",data.accessid)
+                    form.append("OSSAccessKeyId", data.accessid)
                     form.append("key", key);
-                    form.append("dir",data.dir)
-                    form.append("host",data.host)
+                    form.append("dir", data.dir)
+                    form.append("host", data.host)
                     form.append("file", file); // 文件对象
 
-                    this.$http.post(data.host,  form,config)
+                    this.$http.post(data.host, form, config)
                     this.message.type = type
                     this.message.content = data.host + "/" + key
-                    setTimeout(()=>{
+                    setTimeout(() => {
                         this.sendmsg()
                     }, 200)
                     e.target.value = ''
@@ -168,11 +168,9 @@
         bottom: 10px;
     }
 
-    .chatForm .sendAndLength {
-        height: 40px !important;
-        background-color: #fff !important;
-        padding: 10px;
-        border: none;
-        margin: 0;
+    .length-info {
+        position: fixed;
+        right: 100px;
+        bottom: 10px;
     }
 </style>
