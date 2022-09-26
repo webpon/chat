@@ -24,7 +24,6 @@
 </template>
 <script>
     import oss from "../../../network/oss";
-    import axios from "axios";
 
 
     export default {
@@ -101,13 +100,15 @@
                     form.append("dir",data.dir)
                     form.append("host",data.host)
                     form.append("file", file); // 文件对象
-                    axios.post(data.host,  form).then(()=>{
-                        this.message.type = type
-                        this.message.content = data.host + "/" + key
+
+                    this.$http.post(data.host,  form,config)
+                    this.message.type = type
+                    this.message.content = data.host + "/" + key
+                    setTimeout(()=>{
                         this.sendmsg()
-                        e.target.value = ''
-                        this.progress = 0
-                    })
+                    }, 200)
+                    e.target.value = ''
+                    this.progress = 0
                 })
             },
         },

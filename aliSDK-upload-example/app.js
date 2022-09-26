@@ -6,17 +6,25 @@ const OSS = require("ali-oss");
 const app = express();
 const path = require("path");
 
-// 按需配置
-const config = {
+// 按需配置 https://help.aliyun.com/document_detail/322691.htm?spm=a2c4g.11186623.0.0.64f0110aMTictg#task-2121074
+let config = {
   accessKeyId: "",
   accessKeySecret: "",
   bucket: "",
   callbackUrl: "/result",
   dir: "prefix/",
 };
+config = {
+  accessKeyId: "LTAI5tRctJvAK7VN7QSmWZpr",
+  accessKeySecret: "ES0iM4vKApnPQ8IlNSYSC12vDRD9lq",
+  bucket: "chat-oss-test",
+  callbackUrl: "/result",
+  dir: "prefix/",
+};
 
 if (!config.accessKeyId || !config.accessKeySecret){
-  console.error("请配置阿里连接")
+  console.error("请配置阿里RAM 控制")
+  process.exit()
 }
 
 app.get("/oss", async (req, res) => {
