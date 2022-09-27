@@ -8,3 +8,5 @@
 .DS_Store
 .idea
 npm-debug.log*
+# 忽略deploy下的配置文件
+**/deploy/serverInfo.js
