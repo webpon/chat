@@ -48,7 +48,7 @@ export default {
     },
   },
   mounted() {
-    this.$refs.chatBody.style.height = `calc(${this.windowInnerHeight}px - 235px)`
+    this.$refs.chatBody.style.height = `calc(${this.windowInnerHeight}px - 255px)`
     setTimeout(() => {
       this.$refs.chatBody.scrollTo(0, this.$refs.chatBody.scrollHeight)
     }, 100)
