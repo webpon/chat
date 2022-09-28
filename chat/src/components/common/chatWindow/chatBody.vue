@@ -2,7 +2,7 @@
   <div id="chatBodytainer">
     <div class="chatBody" ref="chatBody" id="chatRecord">
       <a-icon type="loading" v-show="loadingMsg" style="padding: 10px 0" />
-      <div v-for="(item, index) in currentMsgInfo" :key="item.msgId || index">
+      <div v-for="(item, index) in currentMsgInfo" :key="item.msgId">
         <msg :msg="item" />
       </div>
     </div>
@@ -77,6 +77,9 @@ export default {
         for (index = msgInfoLength - 1; index > 0; index--) {
           const item = this.$store.state.msgInfo[index];
           if (item.to === '群聊' && item.to === this.$route.query.userName) {
+            if (!item.msgId) {
+              item.msgId = Math.random().toString() + new Date().valueOf()
+            }
             arr.unshift(item)
           } else if (
             item.from === JSON.parse(localStorage.myInfo).username &&
@@ -84,9 +87,12 @@ export default {
             || item.from === this.$route.query.userName
             && item.to === JSON.parse(localStorage.myInfo).username
           ) {
+            if (!item.msgId) {
+              item.msgId = Math.random().toString() + new Date().valueOf()
+            }
             arr.unshift(item)
           }
-          if (arr.length >= 15) {
+          if (arr.length >= 12) {
             break;
           }
         }
@@ -116,6 +122,9 @@ export default {
       for (index = this.lastMsgInfoIndex - 1; index >= 0; index--) {
         const item = msgInfo[index];
         if (item.to === '群聊' && item.to === this.$route.query.userName) {
+          if (!item.msgId) {
+            item.msgId = Math.random().toString() + new Date().valueOf()
+          }
           arr.unshift(item)
         } else if (
           item.from === JSON.parse(localStorage.myInfo).username &&
@@ -123,9 +132,12 @@ export default {
           || item.from === this.$route.query.userName
           && item.to === JSON.parse(localStorage.myInfo).username
         ) {
+          if (!item.msgId) {
+            item.msgId = Math.random().toString() + new Date().valueOf()
+          }
           arr.unshift(item)
         }
-        if (arr.length >= 15) {
+        if (arr.length >= 12) {
           break;
         }
       }
