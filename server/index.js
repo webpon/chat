@@ -12,7 +12,7 @@ var io = require('socket.io')(http, {
     jwt.verify(req._query.token, secretKey, (err) => {
       if (err) {
         callback(null, false);
-      } else if(req._query.userInfo){
+      } else if (req._query.userInfo) {
         callback(null, true);
       }
     })
@@ -57,7 +57,6 @@ io.on('connect', function (socket) {
     userInfos.delete(socket.id)
   });
   socket.on('sendEvent', function (data) {
-    data.msgId = Math.random().toString() + new Date().valueOf()
     const toSocket = onlineUser.get(data.to)
     const fromSocket = onlineUser.get(data.from)
     if (!userInfos.get(socket.id) || userInfos.get(socket.id).username !== data.from) return

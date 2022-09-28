@@ -7,7 +7,7 @@
       </div>
       <!-- 导航栏切换的页面 -->
       <div class="content_container">
-        <keep-alive>
+        <keep-alive exclude="chatBody">
           <router-view />
         </keep-alive>
       </div>

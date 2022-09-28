@@ -1,6 +1,7 @@
 <template>
   <div id="chatBodytainer">
     <div class="chatBody" ref="chatBody" id="chatRecord">
+      <a-icon type="loading" v-show="loadingMsg" style="padding: 10px 0" />
       <div v-for="(item, index) in currentMsgInfo" :key="item.msgId || index">
         <msg :msg="item" />
       </div>
@@ -14,7 +15,11 @@ export default {
   name: 'chatBody',
   data() {
     return {
-      windowInnerHeight: window.innerHeight
+      windowInnerHeight: window.innerHeight,
+      loadingMsg: false,
+      loadTimer: null,
+      currentMsgInfo: [],
+      lastMsgInfoIndex: 0
     }
   },
   components: { msg },
@@ -22,37 +27,122 @@ export default {
     msgInfo() {
       return this.$store.state.msgInfo
     },
-    currentMsgInfo() {
-      let arr = []
+    session() {
+      return JSON.parse(localStorage.getItem('myInfo'))
+    },
+  },
+  mounted() {
+    this.initMsgList()
+    this.$refs.chatBody.style.height = `calc(${this.windowInnerHeight}px - 255px)`
+    this.$nextTick(() => {
+      this.$refs.chatBody.scrollTo(0, this.$refs.chatBody.scrollHeight)
+    })
+  },
+  watch: {
+    msgInfo: {
+      handler() {
+        const newMsg = this.msgInfo[this.msgInfo.length - 1]
+        if (newMsg.to === '群聊' && newMsg.to === this.$route.query.userName) {
+          this.currentMsgInfo.push(newMsg)
+        } else if (
+          newMsg.from === JSON.parse(localStorage.myInfo).username &&
+          newMsg.to === this.$route.query.userName
+          || newMsg.from === this.$route.query.userName
+          && newMsg.to === JSON.parse(localStorage.myInfo).username
+        ) {
+          this.currentMsgInfo.push(newMsg)
+        }
+        this.$nextTick(() => {
+          this.$refs.chatBody.scrollTo(0, this.$refs.chatBody.scrollHeight)
+        })
+      },
+    },
+    '$route.query': function () {
+      this.initMsgList()
+      this.$nextTick(() => {
+        this.$refs.chatBody.scrollTo(0, this.$refs.chatBody.scrollHeight)
+      })
+    }
+  },
+  methods: {
+    initMsgList() {
+      console.log('初始化数据');
+      this.$refs.chatBody.addEventListener('scroll', this.checkIsTop)
+      this.currentMsgInfo = []
+      const arr = []
+      let index
       if (this.$store.state.msgInfo !== null && this.$route.path === '/chat/toChat') {
-        this.$store.state.msgInfo.forEach((item) => {
+        const msgInfo = this.$store.state.msgInfo
+        const msgInfoLength = msgInfo.length
+        for (index = msgInfoLength - 1; index > 0; index--) {
+          const item = this.$store.state.msgInfo[index];
           if (item.to === '群聊' && item.to === this.$route.query.userName) {
-            arr.push(item)
+            arr.unshift(item)
           } else if (
             item.from === JSON.parse(localStorage.myInfo).username &&
             item.to === this.$route.query.userName
             || item.from === this.$route.query.userName
             && item.to === JSON.parse(localStorage.myInfo).username
           ) {
-            arr.push(item)
+            arr.unshift(item)
           }
-        })
-        this.$nextTick(() => {
-          this.$refs.chatBody.scrollTo(0, this.$refs.chatBody.scrollHeight)
-        })
-        return arr
+          if (arr.length >= 15) {
+            break;
+          }
+        }
+        this.lastMsgInfoIndex = index
+        this.currentMsgInfo = arr
       }
     },
-    session() {
-      return JSON.parse(localStorage.getItem('myInfo'))
+    checkIsTop() {
+      clearTimeout(this.loadTimer)
+      this.loadTimer = setTimeout(() => {
+        if (this.$refs.chatBody.scrollTop < 20) {
+          this.loadingMsg = true
+          this.loadMsg()
+        }
+      }, 300)
     },
+    loadMsg() {
+      console.log('加载数据');
+      if (this.lastMsgInfoIndex <= 0) {
+        this.loadingMsg = false
+        this.$refs.chatBody.removeEventListener('scroll', this.checkIsTop)
+        return
+      }
+      const msgInfo = this.$store.state.msgInfo
+      const arr = []
+      let index
+      for (index = this.lastMsgInfoIndex - 1; index >= 0; index--) {
+        const item = msgInfo[index];
+        if (item.to === '群聊' && item.to === this.$route.query.userName) {
+          arr.unshift(item)
+        } else if (
+          item.from === JSON.parse(localStorage.myInfo).username &&
+          item.to === this.$route.query.userName
+          || item.from === this.$route.query.userName
+          && item.to === JSON.parse(localStorage.myInfo).username
+        ) {
+          arr.unshift(item)
+        }
+        if (arr.length >= 15) {
+          break;
+        }
+      }
+      this.lastMsgInfoIndex = index
+      const beforeHeight = this.$refs.chatBody.scrollHeight
+      setTimeout(() => {
+        this.loadingMsg = false
+        this.currentMsgInfo.unshift(...arr)
+        this.$nextTick(() => {
+          this.$refs.chatBody.scrollTo(0, this.$refs.chatBody.scrollHeight - beforeHeight)
+        })
+      }, 500)
+    }
   },
-  mounted() {
-    this.$refs.chatBody.style.height = `calc(${this.windowInnerHeight}px - 255px)`
-    setTimeout(() => {
-      this.$refs.chatBody.scrollTo(0, this.$refs.chatBody.scrollHeight)
-    }, 100)
-  },
+  beforeDestroy() {
+    this.$refs.chatBody.removeEventListener('scroll', this.checkIsTop)
+  }
 }
 </script>
 
@@ -81,13 +171,11 @@ export default {
 
 .chatBody::-webkit-scrollbar-thumb {
   border-radius: 10px;
-  -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
   background: rgba(0, 0, 0, 0.2);
   height: 4px;
 }
 
 .chatBody::-webkit-scrollbar-track {
-  -weblist_warperkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
   border-radius: 0;
   background: rgba(0, 0, 0, 0.1);
   height: 4px;

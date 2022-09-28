@@ -55,6 +55,7 @@
           to: this.$route.query.userName,
           msg: this.message.content,
           type: this.message.type,
+          msgId: Math.random().toString() + new Date().valueOf()
         })
         this.message.content = ''
         this.message.type = 'string'

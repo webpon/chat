@@ -44,9 +44,7 @@ export default {
   },
   methods: {
     lazyLoadVideo() {
-      setTimeout(() => {
-        this.loadVideo = true
-      }, 250)
+      this.loadVideo = true
     },
     // 播放回调
     onPlayerPlay() {
