@@ -15,6 +15,13 @@ const config = {
   callbackUrl: "/result",
   dir: "prefix/",
 };
+config = {
+  accessKeyId: "LTAI5tRctJvAK7VN7QSmWZpr",
+  accessKeySecret: "ES0iM4vKApnPQ8IlNSYSC12vDRD9lq",
+  bucket: "chat-oss-test",
+  callbackUrl: "/result",
+  dir: "prefix/",
+};
 
 if (!config.accessKeyId || !config.accessKeySecret){
   console.error("请配置阿里RAM 控制")
