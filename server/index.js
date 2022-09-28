@@ -13,7 +13,13 @@ var io = require('socket.io')(http, {
       if (err) {
         callback(null, false);
       } else if (req._query.userInfo) {
-        callback(null, true);
+        const userInfo = JSON.parse(req._query.userInfo)
+        // 3、防止重复登录
+        if (onlineUser.get(userInfo.username)) {
+          callback(null, false);
+        } else {
+          callback(null, true);
+        }
       }
     })
   }
@@ -152,6 +158,12 @@ app.use('/api/admin/login', async (req, res, next) => {
     console.log('密码错误');
     return res.status(400).send({
       message: '密码错误',
+    })
+  }
+  // 3、防止重复登录
+  if (onlineUser.get(username)) {
+    return res.status(424).send({
+      message: '你已经在别处登录了',
     })
   }
   //3、返回token

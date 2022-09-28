@@ -56,6 +56,7 @@ module.exports = {
         optimization: IS_PROD ? {
             minimize: true,
             /**
+             * 异步代码文件清单，可以提高浏览器缓存功能
              * runtimeChunk可选值有：true或'multiple'或'single'
              * true或'multiple'会有每个入口对应的chunk。不过一般情况下
              * 考虑到要模块初始化，设置为single就够多数情况下使用啦。
@@ -98,9 +99,9 @@ module.exports = {
         externals: IS_PROD ? {
             'vue': 'Vue',
             'ant-design-vue': 'antd',
-            // 'vuex': 'Vuex',
-            // 'vue-router': 'VueRouter',
-            // 'axios': 'axios',
+            'vuex': 'Vuex',
+            'vue-router': 'VueRouter',
+            'axios': 'axios',
         } : {}
     },
     //解决跨域问题

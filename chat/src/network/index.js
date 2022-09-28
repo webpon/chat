@@ -38,15 +38,18 @@ http.interceptors.response.use(res => {
     case 422:
       Vue.prototype.$message.error('用户不存在, 请注册!')
       break
-      case 423:
-        Vue.prototype.$message.error('该用户名称已被注册!')
-        break
+    case 423:
+      Vue.prototype.$message.error('该用户名称已被注册!')
+      break
+    case 424:
+      Vue.prototype.$message.error('你已经在别处登录了!')
+      break
     // case ...
     default:
       console.log('其他错误')
       break
   }
-  return Promise.reject(res)
+  return Promise.reject(err)
 }
 )
 export default http

@@ -2,13 +2,14 @@
 import { io } from 'socket.io-client'
 import router from '@/router/index'
 import store from '@/store/index'
+console.log(router.currentRoute.path);
 let socket = null
 export default () => {
   //设置io连接配置，并且连接
   // if(!localStorage.myInfo){
   // 39.103.233.82
   socket = io('http://39.103.233.82:5000',
-  // socket = io('http://localhost:5000',
+    // socket = io('http://localhost:5000',
     {
       //禁止默认自动断开重连
       reconnection: false,
@@ -37,16 +38,22 @@ export default () => {
     socket.on('disconnect', () => {
       console.log('websocket断开连接')
       // 如果token存在，重新连接websocket
-      if (localStorage.token && router.app && router.app.$route.path !== '/login') {
-        let reconnect = setInterval(() => {
-          socket.open()
-          console.log('正在尝试重新连接')
-          if (socket.connected) {
-            console.log('重新连接成功');
-            clearInterval(reconnect)
-          }
-        }, 8000);
-      }
+      setTimeout(() => {
+        const isReconnect = localStorage.token && router.currentRoute.path !== '/login'
+        if (isReconnect) {
+          let reconnect = setInterval(() => {
+            socket.open()
+            console.log('正在尝试重新连接')
+            if (socket.connected) {
+              console.log('重新连接成功');
+              clearInterval(reconnect)
+            }
+            if(!isReconnect) {
+              clearInterval(reconnect)
+            }
+          }, 8000);
+        }
+      }, 1000)
     })
 
     //监听消息
@@ -79,7 +86,7 @@ export default () => {
       if (!changeUser) return
       if (changeUser && changeUser.isOnline) {
         Vue.prototype.$message.info(`${changeUser.username}登陆了`)
-      } 
+      }
     })
     console.log('APPmounted');
   } catch (error) {
