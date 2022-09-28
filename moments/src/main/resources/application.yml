@@ -1,0 +1,16 @@
+spring:
+  datasource:
+    username: root
+    password: 123456
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/moments?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&serverTimezone=GMT&useSSL=false
+mybatis:
+  mapper-locations: classpath:/mapper/*.xml
+  type-aliases-package: com.webpom.moments.entity #实体类取别名
+  configuration:
+      ## 下划线转驼峰配置
+    map-underscore-to-camel-case: true
+## 显示dao 执⾏sql语句
+logging:
+  level:
+    com.ppl.springboot.dao: debug # 改成你的dao接口文件所在包路径可以打印出sql语句
