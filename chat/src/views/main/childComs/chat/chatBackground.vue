@@ -29,6 +29,10 @@ export default {
 @media screen and (min-width: 750px) {
   .chatBackground {
      left: 310px;
+     background-color: #fff;
+  }
+  .chatLists {
+    background-color: #fff;
   }
 }
 
@@ -44,7 +48,6 @@ export default {
   right: 0;
   height: 100vh;
   width: 100vw;
-  background-color: #fff;
   z-index: 0;
 }
 
@@ -56,7 +59,6 @@ export default {
 }
 
 .chatLists {
-  background-color: #fff;
   position: relative;
   z-index: 100;
 }

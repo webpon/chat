@@ -37,7 +37,6 @@ export default {
   flex: 1;
   width: 60px;
   height: 60px;
-  box-shadow: 0 -1px 1px rgba(100, 100, 100, 0.1);
 }
 .tab-bar-item div {
   display: flex;

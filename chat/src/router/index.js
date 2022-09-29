@@ -30,7 +30,7 @@ const routes = [
             component: () => import(/* webpackPrefetch: true */ /* webpackChunkName: "chatCom" */ '@/components/content/chatContainer/chatCom'),
           },
           {
-            path: '',
+            path: '/',
             name: 'background',
             component: () => import(/* webpackPrefetch: true */ /* webpackChunkName: "chatBackground" */ '@/views/main/childComs/chat/chatBackground'),
           }
@@ -39,7 +39,24 @@ const routes = [
       {
         path: 'info',
         name: 'info',
-        component: () => import(/* webpackPrefetch: true */ /* webpackChunkName: "chat" */ '@/views/main/childComs/info/myInfo.vue'),
+        component: () => import(/* webpackPrefetch: true */ /* webpackChunkName: "info" */ '@/views/main/childComs/info/myInfo.vue'),
+      },
+      {
+        path: 'discover',
+        name: 'discover',
+        component: () => import(/* webpackPrefetch: true */ /* webpackChunkName: "discover" */ '@/views/main/childComs/discover/index.vue'),
+        children: [
+          {
+            path: '/',
+            name: '',
+            component: () => import(/* webpackPrefetch: true */ /* webpackChunkName: "moments" */ '@/views/main/childComs/discover/discover.vue'),
+          },
+          {
+            path: 'moments',
+            name: 'moments',
+            component: () => import(/* webpackPrefetch: true */ /* webpackChunkName: "moments" */ '@/views/main/childComs/discover/moments/index.vue'),
+          },
+        ]
       }
     ]
   },

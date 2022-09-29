@@ -5,7 +5,7 @@
     <div class="chatLists" v-if="!$store.state.isMobile">
       <chatLists />
     </div>
-    <div v-if="$store.state.isMobile">
+    <div v-if="$store.state.isMobile && isNeedAnimate">
       <!-- 聊天窗口 -->
       <transition name="chat_move">
         <router-view v-if="$route.path === '/chat'" />
@@ -24,19 +24,25 @@
 import chatLists from '@/views/main/childComs/chat/chatLists'
 export default {
   name: 'chat',
-  data() {
-    return {
-      chatCom: 'chatBackground',
-    }
-  },
   components: {
     chatLists,
   },
-  methods: {},
+  computed: {
+    isNeedAnimate() {
+      const matched = this.$route.matched
+      return /^\/chat/.test(matched[matched.length - 1].path)
+    }
+  },
 }
 </script>
 
 <style scoped lang="scss">
+@media sreen and (min-width: 750px) {
+  .chatLists {
+    background-color: #fff;
+  }
+}
+
 .chat_move-enter-active,
 .chat_move-leave-active {
   transition: all 0.3s;
@@ -86,7 +92,6 @@ export default {
 }
 
 .chatLists {
-  background-color: #fff;
   position: relative;
   z-index: 100;
 }

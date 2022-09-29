@@ -1,0 +1,11 @@
+/* 全局scss mixin，
+    用法一 .test{ @include back} 
+    用法二 .test{ @include back_w(200px, 300px)
+*/
+@mixin back() {
+    font-size: 100px;
+}
+@mixin back_w($width: 100px, $height: 120px) {
+    width: $width;
+    height: $height;
+}

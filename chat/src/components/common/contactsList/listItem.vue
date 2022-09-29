@@ -29,7 +29,7 @@ export default {
   components: {},
   methods: {
     toChat() {
-      if(this.contactsInfo.username === JSON.parse(localStorage.myInfo).username){
+      if (this.contactsInfo.username === JSON.parse(localStorage.myInfo).username) {
         this.alertWheel.div.add(this.alertWheel.button).add(this.alertWheel.p).show()
         console.log(this.alertWheel.element);
         return
@@ -45,31 +45,47 @@ export default {
 </script>
 
 <style scoped>
+@media screen and (min-width: 750px) {
+  .listItem {
+    background-color: #eae8e7;
+  }
+}
+
+@media screen and (max-width: 750px) {
+  .listItem {
+    background-color: #fff;
+  }
+}
+
 .listItem {
   height: 65px;
   /* width: 100%; */
-  background-color: #eae8e7;
   display: flex;
   padding: 12px;
   /* cursor: pointer; */
 }
+
 .listItem:hover {
   background-color: #cac8c6;
 }
+
 .list_avater_container {
   width: 60px;
 }
+
 .list_avater_container img {
   width: 42px;
   height: 42px;
 }
-.msgContainer {
-}
+
+.msgContainer {}
+
 .Title {
   font-size: 16px;
   font-weight: 600;
   line-height: 41px;
 }
+
 .text {
   /* line-height: 10px; */
   text-align: left;
@@ -84,7 +100,5 @@ export default {
 
   user-select: none;
 }
-.active {
-  /* background-color: red !important; */
-}
+
 </style>

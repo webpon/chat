@@ -1,7 +1,7 @@
 <template>
   <div class="listItem" @click="toChat" :class="{ active: isActive == true }">
     <div class="list_avater_container">
-      <img :src="userInfo.imgSrc" alt="" :key="Math.random()" />
+      <img :src="userInfo.imgSrc" />
     </div>
     <div class="msgContainer">
       <p class="Title">
@@ -9,7 +9,6 @@
       </p>
       <p class="text">{{ userInfo.msg }}</p>
     </div>
-    <div></div>
   </div>
 </template>
 
@@ -34,49 +33,60 @@ export default {
         path: '/chat/toChat',
         query: { userName: this.userInfo.username },
       })
-     
-      // this.isActive = !this.isActive
-
-      // this.$store.commit('activeUser', this.userInfo)
-      // console.log(this.$store.state.activeUser)
     },
   },
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+@media screen and (min-width: 750px) {
+  .listItem {
+    background-color: #eae8e7;
+  }
+}
+
+@media screen and (max-width: 750px) {
+  .listItem {
+    background-color: #fff;
+  }
+}
+
 .listItem {
   height: 65px;
   width: 100%;
-  background-color: #eae8e7;
   display: flex;
   position: relative;
   /* cursor: pointer; */
 }
+
 .listItem:hover {
   background-color: #cac8c6;
 }
+
 .list_avater_container {
-  width: 60px;
   position: absolute;
   left: 15px;
   top: 50%;
   transform: translateY(-50%);
 }
+
 .list_avater_container img {
   width: 42px;
   height: 42px;
 }
+
 .msgContainer {
   position: absolute;
   top: 50%;
   left: 65px;
   transform: translateY(-50%);
 }
+
 .Title {
   font-size: 16px;
   font-weight: 600;
 }
+
 .text {
   /* line-height: 10px; */
   width: 170px;
@@ -98,6 +108,7 @@ export default {
 
   user-select: none;
 }
+
 .active {
   background-color: red !important;
 }

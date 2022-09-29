@@ -16,7 +16,12 @@
     <navItem path="/contacts" @click.native="getOnlineUserInfo">
       <a-icon style="fontSize: 25px;" type="contacts" slot="item-icon"/>
       <a-icon style="fontSize: 25px; color: green;" theme="filled" type="contacts" slot="item-icon-active"/>
+    </navItem>  
+    <navItem path="/discover" @click.native="getOnlineUserInfo">
+      <a-icon style="fontSize: 25px;" type="compass" slot="item-icon"/>
+      <a-icon style="fontSize: 25px; color: green;" theme="filled" type="compass" slot="item-icon-active"/>
     </navItem>
+    
     <!-- 退出选项 -->
     <a-dropdown class="logoutCon" v-if="!$store.state.isMobile">
       <a class="ant-dropdown-link" @click="(e) => e.preventDefault()">
@@ -74,6 +79,7 @@ export default {
   .navContainer {
     width: 60px;
     height: 100vh;
+    background-color: #1f273a;
   }
 
   .logoutCon {
@@ -89,6 +95,7 @@ export default {
     height: 60px;
     display: flex;
     justify-content: space-evenly;
+    background-color: rgba(255, 255, 255, 0.7);;
   }
 
   .avaterContainer {
@@ -105,10 +112,6 @@ export default {
   }
 }
 
-/* 左边导航栏容器 */
-.navContainer {
-  background-color: #1f273a;
-}
 
 /* 头像框布局 */
 .avaterContainer {
