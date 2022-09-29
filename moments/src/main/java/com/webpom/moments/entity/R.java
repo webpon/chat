@@ -18,19 +18,22 @@ public class R {
 
 
 
-    public static R ok(Integer code, String msg, Object data){
-        return new R(code,msg,data);
+    public static R ok(String msg, Object data){
+        return new R(200,msg,data);
+    }
+    public static R ok(Object data){
+        return new R(200,null,data);
     }
 
-    public static R ok(Integer code, String msg){
-        return new R(code,msg,null);
+    public static R ok(String msg){
+        return new R(200,msg,null);
     }
 
     public static R ok(){
         return new R(200,"成功",null);
     }
 
-    public static R error(Integer code, String msg){
-        return new R(code,msg,null);
+    public static R error(String msg){
+        return new R(400,msg,null);
     }
 }

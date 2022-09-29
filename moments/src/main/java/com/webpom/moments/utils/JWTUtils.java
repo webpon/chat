@@ -9,7 +9,7 @@ import java.util.Calendar;
 import java.util.Map;
 
 public class JWTUtils {
-    private static String SIGNATURE = "token!@#$%^7890";
+    private static String SIGNATURE = "falanter abc sdfjnklsdjfkljsdfkjsdklfjsdkljfklsdjfklj33123123";
 
     /**
      * 生成token
@@ -43,4 +43,5 @@ public class JWTUtils {
     public static DecodedJWT getToken(String token){
         return JWT.require(Algorithm.HMAC256(SIGNATURE)).build().verify(token);
     }
+
 }

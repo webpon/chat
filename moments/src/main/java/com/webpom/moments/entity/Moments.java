@@ -9,6 +9,7 @@ public class Moments {
     private Integer id;
     private String content;
     private List<Image> images;
-    private Integer userId;
+    private String userId;
     private boolean isMy;
+    private String time;
 }

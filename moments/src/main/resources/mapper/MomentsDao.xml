@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.webpom.moments.dao.MomentsDao">
+
+    <insert id="save" parameterType="Moments" useGeneratedKeys="true" keyProperty="id">
+        insert into moments (content, user_id) values (#{content}, #{userId})
+    </insert>
+
+    <select id="query" resultType="com.webpom.moments.entity.Moments">
+         select * from moments limit #{size}, 10
+    </select>
 </mapper>

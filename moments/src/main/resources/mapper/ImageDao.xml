@@ -1,4 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.webpom.moments.dao.ImageDao">
+    <insert id="saveList">
+        insert into image (moments_id, type, url) values
+        <foreach collection="images" item="image" separator=",">
+            (#{image.momentsId}, #{image.type}, #{image.url})
+        </foreach>
+    </insert>
+
+    <select id="queryByMomentsId" resultType="com.webpom.moments.entity.Image">
+        select * from image where moments_id = #{id}
+    </select>
 </mapper>
+
