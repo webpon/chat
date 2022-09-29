@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.webpom.moments.dao.CommentDao">
+    <select id="queryByMomentsId" resultType="com.webpom.moments.entity.Comment">
+        select * from `comment` where moments_id = #{momentsId} order by `time`
+    </select>
+    <insert id="save" useGeneratedKeys="true" keyProperty="id">
+        insert into comment (content, user_id, moments_id, reply_id)
+        values (#{content}, #{userId}, #{momentsId}, #{replyId})
+    </insert>
 </mapper>
