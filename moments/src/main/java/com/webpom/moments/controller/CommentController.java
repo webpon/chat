@@ -18,7 +18,7 @@ public class CommentController {
 
     @PostMapping
     public R save(@RequestBody Comment comment,
-                  @RequestHeader("token") String token){
+                  @RequestHeader("Authorization") String token){
         Claim id = JWTUtils.getToken(token).getClaim("id");
         return commentService.save(comment, id.asString());
     }

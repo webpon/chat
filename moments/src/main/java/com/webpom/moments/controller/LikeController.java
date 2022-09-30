@@ -20,7 +20,7 @@ public class LikeController {
 
     @PostMapping
     public R likeMoments(@RequestBody Like like,
-                         @RequestHeader String token){
+                         @RequestHeader("Authorization") String token){
         Claim id = JWTUtils.getToken(token).getClaim("id");
         return likeService.likeMoments(like, id.asString());
     }

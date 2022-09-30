@@ -18,14 +18,14 @@ public class MomentsController {
 
     @PostMapping
     public R save(@RequestBody Moments moments,
-            @RequestHeader("token") String token) {
+            @RequestHeader("Authorization") String token) {
         Claim id = JWTUtils.getToken(token).getClaim("id");
         return momentsService.save(moments, id.asString());
     }
 
     @GetMapping("/{p}")
     public R query(@PathVariable(required = false) Integer p,
-                   @RequestHeader("token") String token){
+                   @RequestHeader("Authorization") String token){
         Claim id = JWTUtils.getToken(token).getClaim("id");
         return momentsService.query(p, id.asString());
     }

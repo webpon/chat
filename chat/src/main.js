@@ -14,7 +14,10 @@ import VuevideoPlayer from 'vue-video-player';
 import 'video.js/dist/video-js.css';
 
 import commonMixin from '@/mixins/common.js';
+import moments from "network/moments";
+
 Vue.prototype.$http = http //这样可以让axios在所有组件中使用
+Vue.prototype.$moment = moments //这样可以让axios在所有组件中使用
 
 Vue.mixin(commonMixin);
 

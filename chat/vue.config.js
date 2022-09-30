@@ -145,7 +145,16 @@ module.exports = {
             '/oss': {
                 target: 'http://127.0.0.1:19000',
                 changeOrigin: true,
-                '^/oss': ''
+                pathRewrite: {
+                    '^/oss': ''
+                }
+            },
+            '/moments': {
+                target: 'http://127.0.0.1:9090',
+                changeOrigin: true,
+                pathRewrite: {
+                    '^/moments': ''
+                }
             }
         },
     },

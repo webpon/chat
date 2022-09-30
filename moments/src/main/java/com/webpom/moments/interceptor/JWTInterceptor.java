@@ -22,7 +22,7 @@ public class JWTInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         R r = null;
         //令牌建议是放在请求头中，获取请求头中令牌
-        String token = request.getHeader("token");
+        String token = request.getHeader("Authorization");
         if (token != null) {
             try {
                 JWTUtils.verify(token);//验证令牌
