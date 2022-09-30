@@ -33,7 +33,7 @@ export default {
   },
   mounted() {
     this.initMsgList()
-    this.$refs.chatBody.style.height = `calc(${this.windowInnerHeight}px - 255px)`
+    this.$refs.chatBody.style.height = `calc(${this.windowInnerHeight}px - 205px)`
     this.$nextTick(() => {
       this.$refs.chatBody.scrollTo(0, this.$refs.chatBody.scrollHeight)
     })
