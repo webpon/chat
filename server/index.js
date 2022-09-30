@@ -123,6 +123,20 @@ app.use((req, res, next) => {
     })
   }
 })
+app.get('/api/admin/user', async (req, res, next) => {
+  const adminUser = require('./models/Users')
+  console.log(req.query);
+  const { id } = req.query
+  const user = await adminUser.findOne({
+    _id: id
+  })
+  return res.send({
+    userInfo: {
+      username: user.username,
+      imgSrc: user.imgSrc
+    }
+  })
+})
 //注册
 // 添加用户
 app.post('/api/admin/create', async (req, res) => {
@@ -141,7 +155,7 @@ app.post('/api/admin/create', async (req, res) => {
 })
 //登录
 app.use('/api/admin/login', async (req, res, next) => {
-  const { username, password } = req.body
+  const { username, password } = req.body 
   //1、根据用户名找用户
   const adminUser = require('./models/Users')
   const user = await adminUser.findOne({
