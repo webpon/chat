@@ -1,7 +1,7 @@
 <template>
     <div class="background">
         <div class="avaterContainer">
-            <img :src="myInfo.imgSrc" />
+            <img class="_avater" :src="myInfo.imgSrc" />
             <div class="name-container">
                 <p class="nick-name">{{myInfo.username}}</p>
                 <p class="status">在线</p>

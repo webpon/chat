@@ -16,7 +16,7 @@
         </span>
         <p class="msgCard" v-else-if="sendmsg.type === 'string'">{{ sendmsg.msg }}</p>
       </span>
-      <img :src="myInfo.imgSrc" alt="" v-viewer />
+      <img class="_avater" :src="myInfo.imgSrc" alt="" v-viewer />
     </div>
   </div>
 </template>
@@ -116,5 +116,6 @@ export default {
   background-color: skyblue;
   word-break: break-all;
   vertical-align: top;
+  border-radius: 5px;
 }
 </style>

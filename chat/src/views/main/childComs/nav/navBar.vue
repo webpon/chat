@@ -6,7 +6,7 @@
       <a-icon style="fontSize: 25px; color: green;"  type="user" slot="item-icon-active"/>
     </navItem>
     <div v-else class="avaterContainer" @click="showMyInfo">
-      <img :src="myInfo.imgSrc" alt="webpon" />
+      <img class="_avater" :src="myInfo.imgSrc" alt="webpon" />
     </div>
     <!-- Tab按钮 -->
     <navItem path="/chat">

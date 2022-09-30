@@ -1,7 +1,7 @@
 <template>
   <div class="listItem" @click="toChat" :class="{ active: isActive == true }">
     <div class="list_avater_container">
-      <img :src="userInfo.imgSrc" />
+      <img class="_avater" :src="userInfo.imgSrc" />
     </div>
     <div class="msgContainer">
       <p class="Title">

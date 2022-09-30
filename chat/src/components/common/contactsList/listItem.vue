@@ -1,7 +1,7 @@
 <template>
   <div class="listItem" @click="toChat" :class="{ active: isActive == true }">
     <div class="list_avater_container">
-      <img :src="contactsInfo.imgSrc" alt="" :key="Math.random()" />
+      <img class="_avater" :src="contactsInfo.imgSrc" alt="" :key="Math.random()" />
     </div>
     <div class="msgContainer">
       <p class="Title">

@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="messageWarpper">
-      <img :src="imgSrc" alt="" v-viewer />
+      <img class="_avater" :src="imgSrc" alt="" v-viewer />
 
       <span class="left-wraper">
         <span class="nick" :style="{color: isOnline ? 'blue' : 'gray'}">{{sendmsg.from}} {{isOnline ? '(在线)':
@@ -130,5 +130,6 @@ export default {
   background-color: #fff;
   word-break: break-all;
   max-width: 180px;
+  border-radius: 5px;
 }
 </style>
