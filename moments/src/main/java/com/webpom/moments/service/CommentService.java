@@ -9,4 +9,6 @@ public interface CommentService {
     List<Comment> queryByMomentsId(Integer MomentsId, String userId);
 
     R save(Comment comment, String token);
+
+    void deleteByMomentsId(Integer id);
 }

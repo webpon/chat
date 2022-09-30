@@ -14,4 +14,6 @@ public interface ImageService {
      * 按照朋友圈id查询
      */
     List<Image> queryByMomentsId(Integer id);
+
+    void deleteByMomentsId(Integer id);
 }

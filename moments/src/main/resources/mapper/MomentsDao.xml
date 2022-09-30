@@ -7,6 +7,14 @@
     </insert>
 
     <select id="query" resultType="com.webpom.moments.entity.Moments">
-         select * from moments limit #{size}, 10
+         select * from moments order by time desc limit #{size}, 10
     </select>
+
+    <select id="queryByIdAndUserId" resultType="com.webpom.moments.entity.Moments">
+         select * from moments where id = #{id} and user_id = #{userId}
+    </select>
+
+    <delete id="deleteById">
+        delete from moments where id = #{id}
+    </delete>
 </mapper>

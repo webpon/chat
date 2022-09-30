@@ -7,7 +7,7 @@
             <img :src="$store.state.myInfo.imgSrc" class="b_avater avater">
         </div>
         <div class="momentContainer" ref="momentContainer">
-            <moments v-for="item in momentsList" :collect="item" :key="item.moments.id" />
+            <moments v-for="item in momentsList" :collect="item" :key="item.moments.id" @delete="deleteMoments"/>
         </div>
     </div>
 </template>
@@ -30,12 +30,17 @@ export default {
     },
     methods: {
         getMoments() {
-            this.$moment.get(`/moments/${this.p}`).then(({ data: { code, data } }) => {
+            this.$moments.get(`/moments/${this.p}`).then(({ data: { code, data } }) => {
                 if (code === 200) {
                     this.momentsList.push(...data)
                 } else {
                     this.toGet = false
                 }
+            })
+        },
+        deleteMoments(id){
+            this.momentsList = this.momentsList.filter(v => {
+                return v.id !== id
             })
         }
     },

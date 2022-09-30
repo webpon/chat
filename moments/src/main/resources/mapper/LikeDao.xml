@@ -14,4 +14,7 @@
     <delete id="delete">
         delete from `like` where id = #{id}
     </delete>
+    <delete id="deleteByMomentsId">
+        delete from `like` where moment_id = #{id}
+    </delete>
 </mapper>

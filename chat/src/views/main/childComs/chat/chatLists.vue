@@ -79,6 +79,7 @@ export default {
 
 .formContainer {
   display: flex;
+  justify-content: center;
   width: 100%;
 }
 

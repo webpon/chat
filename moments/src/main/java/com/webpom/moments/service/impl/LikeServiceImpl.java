@@ -28,6 +28,11 @@ public class LikeServiceImpl implements LikeService {
         return this.like(like);
     }
 
+    @Override
+    public void deleteByMomentsId(Integer id) {
+        likeDao.deleteByMomentsId(id);
+    }
+
     private Like queryByUserIdAndMomentsId(Like like) {
         return likeDao.queryByUserIdAndMomentsId(like);
     }

@@ -30,4 +30,11 @@ public class MomentsController {
         return momentsService.query(p, id.asString());
     }
 
+    @DeleteMapping("/{id}")
+    public R delete(@PathVariable Integer id,
+                   @RequestHeader("Authorization") String token){
+        Claim uid = JWTUtils.getToken(token).getClaim("id");
+        return momentsService.delete(id, uid.asString());
+    }
+
 }

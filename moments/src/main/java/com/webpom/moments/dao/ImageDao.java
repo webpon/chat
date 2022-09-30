@@ -11,4 +11,6 @@ public interface ImageDao {
     boolean saveList(@Param("images") List<Image> images);
 
     List<Image> queryByMomentsId(Integer id);
+
+    void deleteByMomentsId(@Param("id") Integer id);
 }

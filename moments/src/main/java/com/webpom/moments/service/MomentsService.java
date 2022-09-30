@@ -13,4 +13,9 @@ public interface MomentsService {
      * 查询朋友圈
      */
     R query(Integer p, String userId);
+
+    /**
+     * 删除朋友圈
+     */
+    R delete(Integer id, String userId);
 }

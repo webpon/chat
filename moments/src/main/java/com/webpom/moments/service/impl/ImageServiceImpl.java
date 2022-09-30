@@ -21,4 +21,9 @@ public class ImageServiceImpl implements ImageService {
     public List<Image> queryByMomentsId(Integer id) {
         return imageDao.queryByMomentsId(id);
     }
+
+    @Override
+    public void deleteByMomentsId(Integer id) {
+        imageDao.deleteByMomentsId(id);
+    }
 }

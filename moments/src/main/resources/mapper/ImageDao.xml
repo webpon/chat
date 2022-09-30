@@ -11,5 +11,9 @@
     <select id="queryByMomentsId" resultType="com.webpom.moments.entity.Image">
         select * from image where moments_id = #{id}
     </select>
+
+    <delete id="deleteByMomentsId">
+        delete from image where moments_id = #{id}
+    </delete>
 </mapper>
 

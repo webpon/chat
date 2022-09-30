@@ -10,7 +10,6 @@ import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 public class CommentServiceImpl implements CommentService {
@@ -49,5 +48,10 @@ public class CommentServiceImpl implements CommentService {
             return R.ok("保存成功", comment);
         }
         return R.error("保存失败");
+    }
+
+    @Override
+    public void deleteByMomentsId(Integer id) {
+        commentDao.deleteByMomentsId(id);
     }
 }

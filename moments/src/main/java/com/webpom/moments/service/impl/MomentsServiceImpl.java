@@ -67,4 +67,19 @@ public class MomentsServiceImpl implements MomentsService {
         }
         return R.error("没有更多朋友圈");
     }
+
+    @Override
+    public R delete(Integer id, String userId) {
+        Moments moments = momentsDao.queryByIdAndUserId(id,userId);
+        if (moments == null) {
+            return R.error("这不是你的 或者 没有这条朋友圈");
+        }
+        likeService.deleteByMomentsId(id);
+        commentService.deleteByMomentsId(id);
+        imageService.deleteByMomentsId(id);
+        if (momentsDao.deleteById(id)){
+            return R.ok("删除成功");
+        }
+        return R.error("删除失败");
+    }
 }

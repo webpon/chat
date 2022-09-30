@@ -10,4 +10,5 @@ public interface CommentDao {
 
     boolean save(Comment comment);
 
+    void deleteByMomentsId(@Param("id") Integer id);
 }

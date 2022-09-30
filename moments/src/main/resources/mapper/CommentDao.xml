@@ -8,4 +8,7 @@
         insert into comment (content, user_id, moments_id, reply_id)
         values (#{content}, #{userId}, #{momentsId}, #{replyId})
     </insert>
+    <delete id="deleteByMomentsId">
+        delete from `comment` where  moments_id = #{id}
+    </delete>
 </mapper>
