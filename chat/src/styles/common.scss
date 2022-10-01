@@ -1,8 +1,7 @@
 /* 全局公共样式，影响所有地方 */
 ._back {
     cursor: pointer;
-    padding: 10px;
-    font-size: 23px;
+    font-size: 21px;
     font-weight: 500;
 }
 ._avater {
@@ -21,4 +20,8 @@
 .center {
     justify-content: center;
     align-items: center;
+}
+._title {
+    font-size: 15px;
+    font-weight: bold;
 }

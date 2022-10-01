@@ -6,9 +6,9 @@
         :style="{ fontSize: '20px', color: '#08c', 'margin': '0 20px' }" />
       <progress :value="progress" max="100" style="width: 150px"></progress>
       {{ progress }} %
-      <input v-show="false" accept="image/*" ref="fileInputPicture" type="file"
+      <input v-show="false" accept="image/*" ref="fileInputPicture" type="file" :multiple="false"
         @change="uploadProgress($event, 'picture')" />
-      <input v-show="false" accept="video/*" ref="fileInputVideo" type="file"
+      <input v-show="false" accept="video/*" ref="fileInputVideo" type="file" :multiple="false"
         @change="uploadProgress($event, 'video')" />
     </div>
     <a-textarea class="msg_textarea" :maxLength="200" placeholder="请输入内容" @input="areaInput" :rows="4"
@@ -84,7 +84,7 @@ export default {
       }
       const url = await this.$http.post('http://39.103.233.82:13141/upload', form, config)
       this.message.type = type
-      this.message.content = url.data.fileName
+      this.message.content = url.data.fileList[0]
       this.sendmsg()
       e.target.value = ''
       this.progress = 0

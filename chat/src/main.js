@@ -7,6 +7,7 @@ import http from 'network/index'
 import './network/websocket.js'
 import alertWheel from './components/common/alertWheel/index'
 import antd from 'ant-design-vue';
+import vant from 'vant';
 import Viewer from 'v-viewer'
 import 'viewerjs/dist/viewer.css'
 import VueLazyload from 'vue-lazyload'
@@ -37,6 +38,7 @@ Vue.use(VueLazyload, {
 Vue.use(Viewer)
 Vue.use(VuevideoPlayer);
 Vue.use(antd);
+Vue.use(vant);
 Vue.prototype.bus = new Vue()
 Vue.config.productionTip = false
 Vue.prototype.alertWheel = alertWheel

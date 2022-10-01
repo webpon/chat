@@ -56,6 +56,11 @@ const routes = [
             name: 'moments',
             component: () => import(/* webpackPrefetch: true */ /* webpackChunkName: "moments" */ '@/views/main/childComs/discover/moments/index.vue'),
           },
+          {
+            path: 'editMoment',
+            name: 'moments',
+            component: () => import(/* webpackPrefetch: true */ /* webpackChunkName: "editMoment" */ '@/views/main/childComs/discover/moments/editMoment.vue'),
+          },
         ]
       }
     ]

@@ -1,12 +1,8 @@
 <template>
     <div class="background">
         <div v-if="$store.state.isMobile && isNeedAnimate">
-            <!-- 聊天窗口 -->
-            <transition name="chat_move">
-                <router-view v-if="$route.path === '/discover'"/>
-            </transition>
-            <transition name="move">
-                <router-view v-if="$route.path !== '/discover'" />
+            <transition :name="transitionName">
+                <router-view class="transitionBody"></router-view>
             </transition>
         </div>
         <div v-else>
@@ -17,55 +13,56 @@
   
 <script>
 export default {
-    computed: {
-        isNeedAnimate() {
-            const matched = this.$route.matched
-            return /^\/discover/.test(matched[matched.length - 1].path)
+    data() {
+        return {
+            transitionName: 'transitionLeft'
         }
     },
-    mounted() {
-        console.log(this.$route);
+    computed: {
+        isNeedAnimate() {
+            console.log("+++++++");
+            console.log(this.$route);
+            const matched = this.$route.matched
+            return /^\/discover/.test(matched[matched.length - 1].path)
+        },
+    },
+    //控制左右滑动
+    watch: {
+        '$route'(to, from) {
+            const arr = ['/discover', '/discover/moments', '/discover/editMoment']
+            this.transitionName = arr.indexOf(to.path) > arr.indexOf(from.path) ? 'transitionLeft' : 'transitionRight'
+        }
     }
 }
 </script>
   
 <style scoped lang="scss">
-.chat_move-enter-active,
-.chat_move-leave-active {
-    transition: all 0.2s;
+.transitionBody {
+    transition: all 0.4s ease-out; //设置动画
 }
 
-.move-enter-active,
-.move-leave-active {
-    transition: all 0.2s;
+.transitionLeft-enter,
+.transitionRight-leave-to {
+    transform: translate(100%, 0);
 }
 
-/* 元素进入或消失过程中的第一帧存在,然后立刻消失 */
-.chat_move-enter,
-.chat_move-leave-to {
-    left: -100vw !important;
+.transitionLeft-enter-to {
+    transform: translate(0, 0);
 }
 
-/* 元素进入或消失过程中的第二帧存在,最后一刻移除 */
-.chat_move-enter-to,
-.chat_move-leave {
-    left: 0px !important;
+.transitionLeft-leave-to,
+.transitionRight-enter {
+    transform: translate(-100%, 0);
 }
 
-/* 元素进入或消失过程中的第一帧存在,然后立刻消失 */
-.move-enter,
-.move-leave-to {
-    left: 100vw !important;
-}
-
-/* 元素进入或消失过程中的第二帧存在,最后一刻移除 */
-.move-enter-to,
-.move-leave {
-    left: 0px !important;
-}
-
-.background {
-    position: fixed;
+.transitionLeft-enter-active,
+.transitionRight-enter-active {
+    //防止过渡时元素抖动
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
 }
 </style>
   

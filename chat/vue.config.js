@@ -129,6 +129,7 @@ module.exports = {
             'vuex': 'Vuex',
             'vue-router': 'VueRouter',
             'axios': 'axios',
+            'vant': 'vant'
         } : {}
     },
     //解决跨域问题
