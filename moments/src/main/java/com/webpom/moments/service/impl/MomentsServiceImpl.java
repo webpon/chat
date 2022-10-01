@@ -61,7 +61,8 @@ public class MomentsServiceImpl implements MomentsService {
                 List<Like> likes = likeService.queryByMomentsId(moments.getId());
                 boolean b = moments.getUserId().equals(userId);
                 moments.setMy(b);
-                collects.add(new Collect(moments,comments, likes, b));
+                Like like = likeService.queryByMomentsIdAndUserId(moments.getId(), userId);
+                collects.add(new Collect(moments,comments, likes, like != null));
             });
             return R.ok(collects);
         }

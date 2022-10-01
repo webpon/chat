@@ -3,7 +3,7 @@ import router from '../router/index'
 import Vue from 'vue'
 const http = axios.create({
   // baseURL: '/moments', //这个按实际情况填写
-  baseURL: 'http://127.0.0.1:9090',
+  baseURL: 'http://150.158.191.140:5389',
 })
 //axios请求拦截器
 http.interceptors.request.use(

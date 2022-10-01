@@ -31,7 +31,7 @@ export default {
     },
     methods: {
         getMoments() {
-            this.$moments.get(`http://150.158.191.140:5389/moments/${this.p}`).then(({ data: { code, data } }) => {
+            this.$moments.get(`/moments/${this.p}`).then(({ data: { code, data } }) => {
                 if (code === 200) {
                     this.momentsList.push(...data)
                 } else {

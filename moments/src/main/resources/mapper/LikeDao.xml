@@ -2,19 +2,19 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.webpom.moments.dao.LikeDao">
     <select id="queryByMomentsId" resultType="com.webpom.moments.entity.Like">
-        select * from `like` where  moment_id = #{momentsId}
+        select * from `like` where  moments_id = #{momentsId}
     </select>
     <select id="queryByUserIdAndMomentsId" resultType="com.webpom.moments.entity.Like">
-        select * from `like` where  moment_id = #{momentsId} and user_id = #{userId}
+        select * from `like` where  moments_id = #{momentsId} and user_id = #{userId}
     </select>
     <insert id="save" useGeneratedKeys="true" keyProperty="id">
-        insert into `like` (user_id, moment_id)
+        insert into `like` (user_id, moments_id)
         values (#{userId}, #{momentsId})
     </insert>
     <delete id="delete">
         delete from `like` where id = #{id}
     </delete>
     <delete id="deleteByMomentsId">
-        delete from `like` where moment_id = #{id}
+        delete from `like` where moments_id = #{id}
     </delete>
 </mapper>

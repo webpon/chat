@@ -33,6 +33,14 @@ public class LikeServiceImpl implements LikeService {
         likeDao.deleteByMomentsId(id);
     }
 
+    @Override
+    public Like queryByMomentsIdAndUserId(Integer id, String userId) {
+        Like like = new Like();
+        like.setUserId(userId);
+        like.setMomentsId(id);
+        return likeDao.queryByUserIdAndMomentsId(like);
+    }
+
     private Like queryByUserIdAndMomentsId(Like like) {
         return likeDao.queryByUserIdAndMomentsId(like);
     }
@@ -40,7 +48,7 @@ public class LikeServiceImpl implements LikeService {
 
     private R unLike(Like like) {
         if (likeDao.delete(like))
-            return R.ok("取消成功");
+            return R.ok("取消成功", like);
         return R.error("取消失败");
     }
 

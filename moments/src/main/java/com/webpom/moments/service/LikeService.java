@@ -12,4 +12,6 @@ public interface LikeService {
     R likeMoments(Like like, String id);
 
     void deleteByMomentsId(@Param("id") Integer id);
+
+    Like queryByMomentsIdAndUserId(Integer id, String userId);
 }

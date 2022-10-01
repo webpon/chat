@@ -26,19 +26,54 @@
                     </div>
                     <div>
                         <div v-show="showOparate">
-                            <button @click="like">点赞</button>
+                            <button @click="like" v-if="collect.isMyLike">
+                                <svg t="1664639307088" class="icon" viewBox="0 0 1024 1024" version="1.1"
+                                     xmlns="http://www.w3.org/2000/svg" p-id="2597" width="20" height="20"
+                                    style="position:relative; top: 4px;"
+                                >
+                                    <path d="M32 407.584a279.584 279.584 0 0 1 480-194.944 279.584 279.584 0 0 1 480 194.944 278.144 278.144 0 0 1-113.024 224.512L562.592 892.8a96 96 0 0 1-124.416-1.952l-308.16-270.688A278.976 278.976 0 0 1 32 407.584z" p-id="4428" fill="#d81e06"></path>
+                                </svg>
+                                取消
+                            </button>
+                            <button @click="like" v-else>
+                                <svg t="1664639307088" class="icon" viewBox="0 0 1024 1024" version="1.1"
+                                     xmlns="http://www.w3.org/2000/svg" p-id="2597" width="20" height="20"
+                                    style="position:relative; top: 4px;"
+                                >
+                                    <path d="M512 883.2l-140.8-140.8c-4.266667-4.266667-8.533333-8.533333-17.066667-12.8l-209.066666-209.066667c-85.333333-85.333333-85.333333-221.866667 0-307.2l4.266666-4.266666c85.333333-85.333333 221.866667-85.333333 307.2 0l55.466667 42.666666 46.933333-46.933333c85.333333-85.333333 221.866667-85.333333 307.2 0l4.266667 4.266667c85.333333 85.333333 85.333333 221.866667 0 307.2L512 883.2zM311.466667 209.066667c-38.4 0-76.8 12.8-106.666667 42.666666l-8.533333 4.266667c-59.733333 59.733333-59.733333 157.866667 0 217.6L405.333333 682.666667c4.266667 4.266667 8.533333 8.533333 12.8 8.533333l4.266667 4.266667 93.866667 93.866666 136.533333-136.533333 179.2-179.2c59.733333-59.733333 59.733333-157.866667 0-217.6l-4.266667-4.266667c-59.733333-59.733333-157.866667-59.733333-217.6 0L512 345.6 418.133333 251.733333c-29.866667-29.866667-68.266667-42.666667-106.666666-42.666666z" p-id="2598" fill="#fff"></path>
+                                </svg>
+                                点赞
+                            </button>
                             <button @click="()=>{
                                 this.showComment = true
                                 this.showOparate = false
                                 this.prompt='评论'
-                            }">评论
+                            }">
+                                <svg t="1664639307088" class="icon" viewBox="0 0 1024 1024" version="1.1"
+                                     xmlns="http://www.w3.org/2000/svg" p-id="2597" width="20" height="20"
+                                     style="position:relative; top: 4px;"
+                                >
+                                    <path d="M853.333333 768c35.413333 0 64-20.650667 64-55.978667V170.581333A63.978667 63.978667 0 0 0 853.333333 106.666667H170.666667C135.253333 106.666667 106.666667 135.253333 106.666667 170.581333v541.44C106.666667 747.285333 135.338667 768 170.666667 768h201.173333l110.016 117.44a42.752 42.752 0 0 0 60.586667 0.042667L651.904 768H853.333333z m-219.029333-42.666667h-6.250667l-115.797333 129.962667c-0.106667 0.106667-116.010667-129.962667-116.010667-129.962667H170.666667c-11.776 0-21.333333-1.621333-21.333334-13.312V170.581333A21.205333 21.205333 0 0 1 170.666667 149.333333h682.666666c11.776 0 21.333333 9.536 21.333334 21.248v541.44c0 11.754667-9.472 13.312-21.333334 13.312H634.304zM341.333333 490.666667a42.666667 42.666667 0 1 0 0-85.333334 42.666667 42.666667 0 0 0 0 85.333334z m170.666667 0a42.666667 42.666667 0 1 0 0-85.333334 42.666667 42.666667 0 0 0 0 85.333334z m170.666667 0a42.666667 42.666667 0 1 0 0-85.333334 42.666667 42.666667 0 0 0 0 85.333334z" fill="#ffffff" p-id="1392"></path>
+                                </svg>
+                                评论
                             </button>
                         </div>
                         <p class="bar" @click="showOparate = !showOparate">··</p>
                     </div>
                 </div>
                 <div class="comment_container">
-                    <!-- todo 点赞展示-->
+                    <div>
+                        <svg t="1664639307088" class="icon" viewBox="0 0 1024 1024" version="1.1"
+                             xmlns="http://www.w3.org/2000/svg" p-id="2597" width="20" height="20"
+                             style="position:relative; top: 4px;"
+                        >
+                            <path d="M512 883.2l-140.8-140.8c-4.266667-4.266667-8.533333-8.533333-17.066667-12.8l-209.066666-209.066667c-85.333333-85.333333-85.333333-221.866667 0-307.2l4.266666-4.266666c85.333333-85.333333 221.866667-85.333333 307.2 0l55.466667 42.666666 46.933333-46.933333c85.333333-85.333333 221.866667-85.333333 307.2 0l4.266667 4.266667c85.333333 85.333333 85.333333 221.866667 0 307.2L512 883.2zM311.466667 209.066667c-38.4 0-76.8 12.8-106.666667 42.666666l-8.533333 4.266667c-59.733333 59.733333-59.733333 157.866667 0 217.6L405.333333 682.666667c4.266667 4.266667 8.533333 8.533333 12.8 8.533333l4.266667 4.266667 93.866667 93.866666 136.533333-136.533333 179.2-179.2c59.733333-59.733333 59.733333-157.866667 0-217.6l-4.266667-4.266667c-59.733333-59.733333-157.866667-59.733333-217.6 0L512 345.6 418.133333 251.733333c-29.866667-29.866667-68.266667-42.666667-106.666666-42.666666z" p-id="2598" fill="#666"></path>
+                        </svg>
+                        <template v-for="({username},i) in likeNameList">
+                            <span class="nick">{{username}}</span>
+                            <span v-if="i !== likeNameList.length -1">,</span>
+                        </template>
+                    </div>
 
                     <template v-for="item in col.comments">
                         <comment :comment="item" :key="item.id" @send="update"/>
@@ -73,7 +108,8 @@
                     username:null,
                     imgSrc:null
                 },
-                prompt:"评论"
+                prompt:"评论",
+                likeNameList:[]
             }
         },
         components: {comment},
@@ -87,6 +123,7 @@
             this.$http.get("/user", {params:{id}}).then(({data:{userInfo}})=>{
                 this.user = userInfo
             })
+
         },
         methods: {
             onPlayerPlay() {
@@ -130,9 +167,15 @@
             },
             like() {
                 this.$moments.post("/like", {momentsId: this.col.moments.id})
-                    .then(({data: {code, data}}) => {
+                    .then(({data: {code, data, msg}}) => {
                         if (code === 200) {
-                            this.col.likes.push(data)
+                            if (msg === "点赞成功") {
+                                this.col.likes.push(data)
+                                this.col.isMyLike = true
+                            }else {
+                                this.col.likes = this.col.likes.filter(item => item.id !== data.id)
+                                this.col.isMyLike = false
+                            }
                         }
                     })
                 this.showOparate = false
@@ -155,10 +198,8 @@
                 let hour = minute * 60;
                 let day = hour * 24;
                 let week = day * 7;
-                // let halfamonth = day * 15;
                 let month = day * 30;
                 let now = new Date().getTime();   //获取当前时间毫秒
-                console.log(now)
                 let diffValue = now - dateTimeStamp;//时间差
 
                 if (diffValue < 0) {
@@ -188,12 +229,23 @@
                     let Nyear = datetime.getFullYear();
                     let Nmonth = datetime.getMonth() + 1 < 10 ? "0" + (datetime.getMonth() + 1) : datetime.getMonth() + 1;
                     let Ndate = datetime.getDate() < 10 ? "0" + datetime.getDate() : datetime.getDate();
-                    // let Nhour = datetime.getHours() < 10 ? "0" + datetime.getHours() : datetime.getHours();
-                    // let Nminute = datetime.getMinutes() < 10 ? "0" + datetime.getMinutes() : datetime.getMinutes();
-                    // let Nsecond = datetime.getSeconds() < 10 ? "0" + datetime.getSeconds() : datetime.getSeconds();
                     result = Nyear + "-" + Nmonth + "-" + Ndate
                 }
                 return result;
+            }
+        },
+        watch:{
+            "col.likes":{
+                handler(){
+                    let likes = this.col.likes
+                    likes.forEach(l => {
+                        let id = l.userId
+                        this.$http.get("/user", {params: {id}}).then(({data: {userInfo}}) => {
+                            this.likeNameList.push(userInfo)
+                        })
+                    })
+                },
+                immediate: true
             }
         }
     }
