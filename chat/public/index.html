@@ -2,32 +2,32 @@
 <html lang="">
 
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <% if(process.env.NODE_ENV==="production" ) { %>
-    <script src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.13/vue.min.js"></script>
-    <script src="https://cdn.bootcdn.net/ajax/libs/ant-design-vue/1.7.8/antd.min.js"></script>
-    <script src="https://cdn.bootcss.com/vuex/3.6.0/vuex.min.js"></script>
-    <script src="https://cdn.bootcss.com/axios/0.21.1/axios.min.js"></script>
-    <script src="https://cdn.bootcss.com/vue-router/3.2.0/vue-router.min.js"></script>
-    <script src="https://unpkg.com/vant@2.12.50/lib/vant.min.js"></script>
-    <% } %>
-      <link href="https://cdn.bootcdn.net/ajax/libs/ant-design-vue/1.7.8/antd.min.css" rel="stylesheet">
-      <link rel="stylesheet" href="https://unpkg.com/vant@2.12.50/lib/index.css" />
-      <link rel="icon" href="<%= BASE_URL %>favicon.ico">
-      <title>
-        <%= htmlWebpackPlugin.options.title %>
-      </title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <% if(process.env.NODE_ENV==="production") { %>
+        <script src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.13/vue.min.js"></script>
+        <script src="https://cdn.bootcdn.net/ajax/libs/ant-design-vue/1.7.8/antd.min.js"></script>
+        <script src="https://cdn.bootcss.com/vuex/3.6.0/vuex.min.js"></script>
+        <script src="https://cdn.bootcss.com/axios/0.21.1/axios.min.js"></script>
+        <script src="https://cdn.bootcss.com/vue-router/3.2.0/vue-router.min.js"></script>
+        <script src="https://unpkg.com/vant@2.12.50/lib/vant.min.js"></script>
+        <% } %>
+            <link href="https://cdn.bootcdn.net/ajax/libs/ant-design-vue/1.7.8/antd.min.css" rel="stylesheet">
+            <link rel="stylesheet" href="https://unpkg.com/vant@2.12.50/lib/index.css" />
+            <link rel="icon" href="<%= BASE_URL %>favicon.ico">
+            <title>
+                <%= htmlWebpackPlugin.options.title %>
+            </title>
 </head>
 
 <body>
-  <noscript>
+    <noscript>
     <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled.
         Please enable it to continue.</strong>
   </noscript>
-  <div id="app"></div>
-  <!-- built files will be auto injected -->
+    <div id="app"></div>
+    <!-- built files will be auto injected -->
 </body>
 
 </html>
