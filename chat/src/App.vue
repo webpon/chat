@@ -13,7 +13,6 @@
 </template>
 <script>
 import Layout from './views/main/layout'
-import websocket from '@/network/websocket'
 export default {
   name: 'App',
   data() {
