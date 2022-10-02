@@ -34,7 +34,8 @@ export default {
             page: 1,
             toGet: true,
             loadTimer: null,
-            showTop: false
+            showTop: false,
+            timeFlag: true
         }
     },
     mounted() {
@@ -64,15 +65,24 @@ export default {
             })
         },
         checkIsBottom() {
+            const container = this.$refs.container
+            if (this.timeFlag) {
+                this.timeFlag = false
+                setTimeout(() => {
+                    if (container.scrollTop >= 230) {
+                        this.showTop = true
+                    } else {
+                        this.showTop = false
+                    }
+                    this.timeFlag = true
+                }, 500)
+            }
+
             clearTimeout(this.loadTimer)
             this.loadTimer = setTimeout(() => {
-                const container = this.$refs.container
+
                 console.log(container.scrollTop);
-                if (container.scrollTop >= 230) {
-                    this.showTop = true
-                } else {
-                    this.showTop = false
-                }
+
                 if (container.clientHeight + container.scrollTop > container.scrollHeight - 20) {
                     console.log('竖向滚动条已经滚动到底部')
                     this.page++
