@@ -77,24 +77,15 @@ export default {
             }
             clearTimeout(this.loadTimer)
             this.loadTimer = setTimeout(() => {
-
-                console.log(container.scrollTop);
-
-                if (container.clientHeight + container.scrollTop > container.scrollHeight - 20) {
-                    console.log('竖向滚动条已经滚动到底部')
+                if (container.clientHeight + container.scrollTop > container.scrollHeight - 20 && this.toGet) {
                     this.page++
                     this.getMoments()
                 }
             }, 100)
         },
     },
-    watch: {
-        page: {
-            handler() {
-                this.getMoments()
-            },
-            immediate: true
-        }
+    created() {
+        this.getMoments()
     }
 }
 </script>
@@ -111,6 +102,7 @@ export default {
 .container {
     position: fixed;
     overflow-y: auto;
+    padding-bottom: 20px;
 
     .background {
         position: relative;

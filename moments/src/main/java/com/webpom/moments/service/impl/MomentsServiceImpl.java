@@ -51,7 +51,7 @@ public class MomentsServiceImpl implements MomentsService {
         if (p == null){
             p = 1;
         }
-        Integer size = (p - 1) * 20;
+        Integer size = (p - 1) * 10;
         List<Moments> list = momentsDao.query(size);
         if (!list.isEmpty()){
             ArrayList<Collect> collects = new ArrayList<>();
