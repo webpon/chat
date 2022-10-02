@@ -75,9 +75,8 @@ export default {
                         this.showTop = false
                     }
                     this.timeFlag = true
-                }, 500)
+                }, 300)
             }
-
             clearTimeout(this.loadTimer)
             this.loadTimer = setTimeout(() => {
 
