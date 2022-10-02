@@ -2,6 +2,7 @@
 import { io } from 'socket.io-client'
 import router from '@/router/index'
 import store from '@/store/index'
+import t from "@/assets/msg.mp3"
 let socket = null
 export default () => {
   //设置io连接配置，并且连接
@@ -57,8 +58,10 @@ export default () => {
 
     //监听消息
     socket.on('emitEvent', (data) => {
-      console.log('接收到信息');
-      console.log(data);
+
+      let audio = new Audio()
+      audio.src = t
+      audio.play();
       let imgSrc
       if (data.to === '群聊') {
         Vue.prototype.$message.info(data.from + '向群聊发送了一条消息')
