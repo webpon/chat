@@ -11,6 +11,7 @@
 import chatTtile from '../../common/chatWindow/chatTitle'
 import chatBody from '../../common/chatWindow/chatBody'
 import chatForm from '../../common/chatWindow/chatForm'
+
 export default {
   name: 'chatCom',
   components: {

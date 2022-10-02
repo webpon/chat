@@ -2,7 +2,7 @@
 import { io } from 'socket.io-client'
 import router from '@/router/index'
 import store from '@/store/index'
-import t from "@/assets/msg.mp3"
+// import t from "https://webpon-img.oss-cn-guangzhou.aliyuncs.com/msg.mp3"
 let socket = null
 export default () => {
   //设置io连接配置，并且连接
@@ -60,7 +60,7 @@ export default () => {
     socket.on('emitEvent', (data) => {
 
       let audio = new Audio()
-      audio.src = t
+      audio.src = "https://webpon-img.oss-cn-guangzhou.aliyuncs.com/msg.mp3"
       audio.play();
       let imgSrc
       if (data.to === '群聊') {
@@ -74,7 +74,9 @@ export default () => {
         });
         store.commit('updateChatList', {
           username: data.from,
-          imgSrc: imgSrc
+          imgSrc,
+          msgNumber:0,
+          msg: data.msg
         })
       }
       store.commit('addMsg', data)

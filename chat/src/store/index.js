@@ -15,11 +15,13 @@ export default new Vuex.Store({
         username: '智能客服',
         msg: '欢迎反馈bug',
         imgSrc: 'https://webpon-img.oss-cn-guangzhou.aliyuncs.com/avater/avater/1.jpg',
+        msgNumber:0
       },
       {
         username: '群聊',
         msg: '在这里可以收到所有人的信息',
         imgSrc: 'https://webpon-img.oss-cn-guangzhou.aliyuncs.com/avater/avater/4.jpg',
+        msgNumber:0
       },
     ],
     playingVideo: null,
@@ -48,13 +50,28 @@ export default new Vuex.Store({
     },
     updateChatList(state, chatUser) {
       if (state.chatList.some(item => item.username === chatUser.username)) {
-        return
+        state.chatList.forEach((item,i) => {
+          if (item.username === chatUser.username){
+            item.msg = chatUser.msg
+            item.msgNumber ++
+            state.chatList[i] = item
+          }
+        })
       } else {
+        chatUser.msgNumber = 0
         state.chatList.push(chatUser)
       }
     },
     checkDevice(state, isMobile) {
       state.isMobile = isMobile
+    },
+    updateMsgNum(state, info) {
+      state.chatList.forEach((item,i) =>{
+        if (item.username === info.username){
+          state.chatList[i].msgNumber = 0
+        }
+      })
+
     },
     updatePlayingVideo(state, videoRef) {
       state.playingVideo = videoRef

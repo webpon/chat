@@ -9,6 +9,9 @@
       </p>
       <p class="text">{{ userInfo.msg }}</p>
     </div>
+    <div class="num" v-if="userInfo.msgNumber !== 0">
+      {{userInfo.msgNumber}}
+    </div>
   </div>
 </template>
 
@@ -29,6 +32,7 @@ export default {
   components: {},
   methods: {
     toChat() {
+      this.$store.commit("updateMsgNum", this.userInfo)
       this.$router.push({
         path: '/chat/toChat',
         query: { userName: this.userInfo.username },
@@ -111,5 +115,19 @@ export default {
 
 .active {
   background-color: red !important;
+}
+
+.num {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 15px;
+  height: 15px;
+  color: white;
+  line-height: 15px;
+  text-align: center;
+  border-radius: 50%;
+  background-color: red;
 }
 </style>
