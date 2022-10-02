@@ -38,7 +38,7 @@ export default {
   
 <style scoped lang="scss">
 .transitionBody {
-    transition: all 0.4s ease-out; //设置动画
+    transition: all 0.3s ease-out; //设置动画
 }
 
 .transitionLeft-enter,

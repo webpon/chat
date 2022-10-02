@@ -6,17 +6,15 @@
                 <p class="nick">{{user.username}}</p>
                 <p class="msg_content">{{col.moments.content}}</p>
                 <div v-if="col.moments.images.length === 1">
-                    <img v-if="col.moments.images[0].type === 1" :src="col.moments.images[0].url"
-                         class="msg_img" alt="">
-                    <video-player @play="onPlayerPlay" ref="videoPlayer" v-else
-                                  :options="{/*width: 180, */height: 200,
-                                  sources: [{src: col.moments.images[0].url}]}"
-                                  style="width: 100%;height: 100%"/>
+                    <img v-if="col.moments.images[0].type === 1" :src="col.moments.images[0].url" class="msg_img"
+                        @click="previewImg(0)">
+                    <video-player @play="onPlayerPlay" ref="videoPlayer" v-else :options="{/*width: 180, */height: 200,
+                    sources: [{src: col.moments.images[0].url}]}" style="width: 100%;height: 100%" />
                 </div>
                 <div v-else>
-                    <template v-for="image in col.moments.images">
+                    <template v-for="(image, index) in col.moments.images">
                         <img v-if="image.type === 1" :src="image.url" class="msg_img" alt=""
-                             style="width: 20px; height: 20px;">
+                            style="width: 97px; height: 97px;" @click="previewImg(index)">
                     </template>
                 </div>
                 <div class="flex oparate">
@@ -76,12 +74,13 @@
                     </div>
 
                     <template v-for="item in col.comments">
-                        <comment :comment="item" :key="item.id" @send="update"/>
-                        <comment v-if="item.children.length > 0" v-for="c in item.children" :comment="c" :key="c.id" :reply-id="item.userId"/>
+                        <comment :comment="item" :key="item.id" @send="update" />
+                        <comment v-if="item.children.length > 0" v-for="c in item.children" :comment="c" :key="c.id"
+                            :reply-id="item.userId" />
                     </template>
                     <div class="comment" v-show="showComment">
                         <a-textarea :maxLength="200" :placeholder="prompt" :rows="4" v-model.trim="commentObj.content"
-                                    @pressEnter.prevent="sendMsg"/>
+                            @pressEnter.prevent="sendMsg" />
                         <button @click="sendMsg">发送</button>
                     </div>
                 </div>
@@ -91,7 +90,8 @@
 </template>
 
 <script>
-    import comment from "./comment";
+import comment from "./comment";
+import { ImagePreview, Dialog } from 'vant';
 
     export default {
         name: "moments",
@@ -109,7 +109,8 @@
                     imgSrc:null
                 },
                 prompt:"评论",
-                likeNameList:[]
+                likeNameList:[],
+                show: false
             }
         },
         components: {comment},
@@ -123,9 +124,14 @@
             this.$http.get("/user", {params:{id}}).then(({data:{userInfo}})=>{
                 this.user = userInfo
             })
-
         },
         methods: {
+            previewImg(index) {
+                ImagePreview({
+                    images: this.col.moments.images.map(item => item.url),
+                    startPosition: index,
+                });
+            },
             onPlayerPlay() {
                 const beforePlayer = this.$store.state.playingVideo
                 if (beforePlayer && beforePlayer !== this.$refs.videoPlayer.player) {
@@ -198,8 +204,10 @@
                 let hour = minute * 60;
                 let day = hour * 24;
                 let week = day * 7;
+                // let halfamonth = day * 15;
                 let month = day * 30;
                 let now = new Date().getTime();   //获取当前时间毫秒
+                console.log(now)
                 let diffValue = now - dateTimeStamp;//时间差
 
                 if (diffValue < 0) {
@@ -233,76 +241,63 @@
                 }
                 return result;
             }
-        },
-        watch:{
-            "col.likes":{
-                handler(){
-                    let likes = this.col.likes
-                    likes.forEach(l => {
-                        let id = l.userId
-                        this.$http.get("/user", {params: {id}}).then(({data: {userInfo}}) => {
-                            this.likeNameList.push(userInfo)
-                        })
-                    })
-                },
-                immediate: true
-            }
         }
     }
 </script>
 
 <style scoped lang="scss">
+.msg_container {
+    padding: 20px 20px 0;
 
-    .msg_container {
-        padding: 20px 20px 0;
-
-        .nick {
-            font-weight: bold;
-            color: rgb(37, 37, 206);
-        }
-
-        .msg_img {
-            height: 200px;
-        }
+    .nick {
+        font-weight: bold;
+        color: rgb(37, 37, 206);
     }
 
-    .msg {
-        padding: 0 10px;
-        line-height: 25px;
-        flex: 1;
+    .msg_img {
+        height: 200px;
+        width: 200px;
+        padding: 0 5px 0 0;
     }
+}
 
-    .oparate {
-        justify-content: space-between;
+.msg {
+    padding: 0 10px;
+    line-height: 25px;
+    flex: 1;
+}
+
+.oparate {
+    justify-content: space-between;
+    align-items: center;
+
+    >div {
+        display: flex;
         align-items: center;
+        margin-bottom: 5px;
+        height: 30px;
 
-        > div {
-            display: flex;
-            align-items: center;
-            margin-bottom: 5px;
-            height: 30px;
+        span {
+            color: red;
+            width: 40px;
+            text-align: center;
+            margin-left: 5px;
+        }
 
-            span {
-                color: red;
-                width: 40px;
-                text-align: center;
-                margin-left: 5px;
+        >div {
+            background-color: #1f273a;
+            margin-right: 5px;
+
+            button {
+                background: none;
+                color: #ffffff;
+                border: none;
             }
 
-            > div {
-                background-color: #1f273a;
-                margin-right: 5px;
-
-                button {
-                    background: none;
-                    color: #ffffff;
-                    border: none;
-                }
-
-                button:last-child {
-                    border-left: #ffffff 1px solid;
-                }
+            button:last-child {
+                border-left: #ffffff 1px solid;
             }
+        }
 
             .bar {
                 width: 20px;

@@ -1,8 +1,17 @@
 <template>
-    <div class="container">
+    <div class="container" ref="container">
         <div class="background">
-            <a-icon type="left" class="_back back" @click="back" />
-            <a-icon type="camera" class="post_moment" theme="filled" @click="toEditMoment" />
+            <div v-if="showTop" class="top-wrapper flex center">
+                <a-icon type="left" class="_back back" @click="back" />
+                <p style="color: #fff;font-weight: bold; font-size: 15px">朋友圈</p>
+                <a-icon type="camera" class="post_moment" theme="filled" @click="toEditMoment" />
+            </div>
+            <template v-else>
+                <a-icon type="left" class="_back back" @click="back" />
+                <a-icon type="camera" class="post_moment" theme="filled" @click="toEditMoment" />
+            </template>
+
+
             <img class="moment_back"
                 src="https://picx.zhimg.com/80/v2-35857f0199cc225e186098e765dd173c_720w.webp?source=1940ef5c" />
             <img :src="$store.state.myInfo.imgSrc" class="b_avater avater">
@@ -22,16 +31,20 @@ export default {
     data() {
         return {
             momentsList: [],
-            p: 1,
-            toGet: true
+            page: 1,
+            toGet: true,
+            loadTimer: null,
+            showTop: false,
+            timeFlag: true
         }
     },
     mounted() {
-        this.$refs.momentContainer.style.height = `calc(${window.innerHeight}px - 260px)`
+        this.$refs.container.style.height = `${window.innerHeight}px`
+        this.$refs.container.addEventListener('scroll', this.checkIsBottom)
     },
     methods: {
         getMoments() {
-            this.$moments.get(`/moments/${this.p}`).then(({ data: { code, data } }) => {
+            this.$moments.get(`/moments/${this.page}`).then(({ data: { code, data } }) => {
                 if (code === 200) {
                     this.momentsList.push(...data)
                 } else {
@@ -48,10 +61,35 @@ export default {
             this.$router.push({
                 path: '/discover/editMoment'
             })
-        }
+        },
+        checkIsBottom() {
+            const container = this.$refs.container
+            if (this.timeFlag) {
+                this.timeFlag = false
+                setTimeout(() => {
+                    if (container.scrollTop >= 230) {
+                        this.showTop = true
+                    } else {
+                        this.showTop = false
+                    }
+                    this.timeFlag = true
+                }, 300)
+            }
+            clearTimeout(this.loadTimer)
+            this.loadTimer = setTimeout(() => {
+
+                console.log(container.scrollTop);
+
+                if (container.clientHeight + container.scrollTop > container.scrollHeight - 20) {
+                    console.log('竖向滚动条已经滚动到底部')
+                    this.page++
+                    this.getMoments()
+                }
+            }, 100)
+        },
     },
     watch: {
-        p: {
+        page: {
             handler() {
                 this.getMoments()
             },
@@ -72,6 +110,7 @@ export default {
 
 .container {
     position: fixed;
+    overflow-y: auto;
 
     .background {
         position: relative;
@@ -91,11 +130,18 @@ export default {
             color: #fff;
         }
     }
+
+    .top-wrapper {
+        position: fixed;
+        top: 0;
+        background-color: rgba(#000, 0.9);
+        width: 100vw;
+        height: 60px;
+    }
 }
 
 .momentContainer {
     overflow-y: auto;
-    height: 200px;
 }
 
 .moment_back {
@@ -104,7 +150,7 @@ export default {
 }
 
 .back {
-    position: absolute;
+    position: fixed;
     color: #fff;
     top: 20px;
     left: 10px;

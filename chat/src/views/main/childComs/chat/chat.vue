@@ -45,12 +45,12 @@ export default {
 
 .chat_move-enter-active,
 .chat_move-leave-active {
-  transition: all 0.3s;
+  transition: all 0.25s ease-out;
 }
 
 .move-enter-active,
 .move-leave-active {
-  transition: all 0.3s;
+  transition: all 0.25s ease-out;
 }
 
 /* 元素进入或消失过程中的第一帧存在,然后立刻消失 */

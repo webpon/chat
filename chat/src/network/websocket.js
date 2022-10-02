@@ -2,7 +2,6 @@
 import { io } from 'socket.io-client'
 import router from '@/router/index'
 import store from '@/store/index'
-console.log(router.currentRoute.path);
 let socket = null
 export default () => {
   //设置io连接配置，并且连接
