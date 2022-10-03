@@ -66,7 +66,6 @@ export default {
   },
   methods: {
     initMsgList() {
-      console.log('初始化数据');
       this.$refs.chatBody.addEventListener('scroll', this.checkIsTop)
       this.currentMsgInfo = []
       const arr = []
@@ -110,7 +109,6 @@ export default {
       }, 300)
     },
     loadMsg() {
-      console.log('加载数据');
       if (this.lastMsgInfoIndex <= 0) {
         this.loadingMsg = false
         this.$refs.chatBody.removeEventListener('scroll', this.checkIsTop)

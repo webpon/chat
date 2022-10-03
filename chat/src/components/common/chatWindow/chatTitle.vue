@@ -11,7 +11,21 @@
 export default {
   name: '',
   data() {
-    return {}
+    return {
+      value:null
+    }
+  },
+  watch:{
+    "$store.state.chatList":{
+      handler(newArr){
+        newArr.forEach((item,i)=>{
+          if (item.username === this.$route.query.userName) {
+            this.$store.state.chatList[i].msgNumber = 0
+          }
+        })
+      },
+      deep:true
+    }
   },
   components: {},
   methods: {

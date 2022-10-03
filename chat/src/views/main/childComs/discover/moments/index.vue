@@ -19,6 +19,8 @@
         <div class="momentContainer" ref="momentContainer">
             <moments v-for="item in momentsList" :collect="item" :key="item.moments.id" @delete="deleteMoments" />
         </div>
+        <div v-if="toGet" class="hint">加载中...</div>
+        <div v-else class="hint">到底啦!</div>
     </div>
 </template>
 
@@ -146,6 +148,12 @@ export default {
     color: #fff;
     top: 20px;
     left: 10px;
+}
+
+.hint{
+    text-align: center;
+    margin: 5px 0;
+    color: #999999;
 }
 </style>
   

@@ -8,6 +8,7 @@ import com.webpom.moments.service.CommentService;
 import com.webpom.moments.service.ImageService;
 import com.webpom.moments.service.LikeService;
 import com.webpom.moments.service.MomentsService;
+import com.webpom.moments.utils.Admin;
 import com.webpom.moments.utils.JWTUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -55,12 +56,14 @@ public class MomentsServiceImpl implements MomentsService {
         List<Moments> list = momentsDao.query(size);
         if (!list.isEmpty()){
             ArrayList<Collect> collects = new ArrayList<>();
+            boolean admin = Admin.isAdmin(userId);
             list.forEach(moments -> {
                 moments.setImages(imageService.queryByMomentsId(moments.getId()));
                 List<Comment> comments = commentService.queryByMomentsId(moments.getId(), userId);
                 List<Like> likes = likeService.queryByMomentsId(moments.getId());
                 boolean b = moments.getUserId().equals(userId);
                 moments.setMy(b);
+                moments.setAdmin(admin);
                 Like like = likeService.queryByMomentsIdAndUserId(moments.getId(), userId);
                 collects.add(new Collect(moments,comments, likes, like != null));
             });
@@ -71,9 +74,11 @@ public class MomentsServiceImpl implements MomentsService {
 
     @Override
     public R delete(Integer id, String userId) {
-        Moments moments = momentsDao.queryByIdAndUserId(id,userId);
-        if (moments == null) {
-            return R.error("这不是你的 或者 没有这条朋友圈");
+        if (!Admin.isAdmin(userId)){
+            Moments moments = momentsDao.queryByIdAndUserId(id,userId);
+            if (moments == null) {
+                return R.error("这不是你的 或者 没有这条朋友圈");
+            }
         }
         likeService.deleteByMomentsId(id);
         commentService.deleteByMomentsId(id);
