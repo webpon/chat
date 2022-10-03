@@ -8,7 +8,32 @@
 </template>
 
 <script>
-export default {}
+export default {
+  name: '',
+  data() {
+    return {
+      value:null
+    }
+  },
+  watch:{
+    "$store.state.chatList":{
+      handler(newArr){
+        newArr.forEach((item,i)=>{
+          if (item.username === this.$route.query.userName) {
+            this.$store.state.chatList[i].msgNumber = 0
+          }
+        })
+      },
+      deep:true
+    }
+  },
+  components: {},
+  methods: {
+    back() {
+      this.$router.push({ path: '/chat'});
+    },
+  },
+}
 </script>
 
 <style scoped lang="scss">

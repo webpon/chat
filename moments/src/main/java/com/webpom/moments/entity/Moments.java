@@ -12,4 +12,6 @@ public class Moments {
     private String userId;
     private boolean isMy;
     private String time;
+    private boolean isAdmin;
+
 }

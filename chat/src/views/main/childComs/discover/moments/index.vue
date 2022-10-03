@@ -87,7 +87,7 @@ export default {
                     this.timeFlag = true
                 }, 300)
             }
-            
+
             if(!this.toGet) return
             clearTimeout(this.loadTimer)
             this.loadTimer = setTimeout(() => {
@@ -167,6 +167,12 @@ export default {
 .no-more {
     text-align: center;
     padding: 10px 0 0 0;
+}
+
+.hint{
+    text-align: center;
+    margin: 5px 0;
+    color: #999999;
 }
 </style>
   

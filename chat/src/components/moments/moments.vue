@@ -22,7 +22,7 @@
                 <div class="flex oparate">
                     <div>
                         <p>{{time}}</p>
-                        <span v-if="col.moments.my" @click="deleteMoments">删除</span>
+                        <span v-if="col.moments.my || col.moments.admin" @click="deleteMoments">删除</span>
                     </div>
                     <div>
                         <div v-show="showOparate">
