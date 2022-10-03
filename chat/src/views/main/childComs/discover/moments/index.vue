@@ -54,7 +54,7 @@ export default {
         },
         deleteMoments(id) {
             this.momentsList = this.momentsList.filter(v => {
-                return v.id !== id
+                return v.moments.id !== id
             })
         },
         toEditMoment() {
