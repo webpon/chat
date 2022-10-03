@@ -8,18 +8,7 @@
 </template>
 
 <script>
-export default {
-  name: '',
-  data() {
-    return {}
-  },
-  components: {},
-  methods: {
-    back() {
-      this.$router.push({ path: '/chat'});
-    },
-  },
-}
+export default {}
 </script>
 
 <style scoped lang="scss">

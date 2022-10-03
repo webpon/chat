@@ -145,6 +145,7 @@ export default {
         background-color: rgba(#000, 0.9);
         width: 100vw;
         height: 60px;
+        z-index: 10000;
     }
 }
 
