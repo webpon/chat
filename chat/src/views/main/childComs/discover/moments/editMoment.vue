@@ -9,7 +9,7 @@
             <a-textarea class="cus-area" v-model.trim="message.content" :rows="4" placeholder="这一刻的想法..."></a-textarea>
             <div class="upload flex">
                 <img class="upload_img" :src="item" v-for="(item, index) in imgList" :key="index" />
-                <div @click="uploadImg" class="upload-wrapper flex center">
+                <div @click="uploadImg" class="upload-wrapper flex center" v-show="imgList.length < 9">
                     <a-icon type="plus" style="font-size: 20px;" />
                 </div>
                 <input v-show="false" accept="image/*" ref="fileInputPicture" type="file" multiple
@@ -127,14 +127,15 @@ export default {
     }
 
     .upload_img {
-        width: 119px;
+        width: 110px;
+        height: 110px;
         margin: 5px 5px 5px 0;
         flex-shrink: 0;
     }
 
     .upload-wrapper {
-        width: 119px;
-        height: 119px;
+        width: 110px;
+        height: 110px;
         margin: 5px 5px 5px 0;
         box-sizing: content-box;
         background-color: #eee;

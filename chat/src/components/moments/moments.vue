@@ -16,7 +16,7 @@
                 <div v-else>
                     <template v-for="(image, index) in col.moments.images">
                         <img v-if="image.type === 1" v-lazy="image.url" class="msg_img" alt=""
-                            style="width: 97px; height: 97px;" @click="previewImg(index)">
+                            style="width: 95px; height: 95px;" @click="previewImg(index)">
                     </template>
                 </div>
                 <div class="flex oparate">
@@ -295,14 +295,17 @@ import { ImagePreview, Dialog } from 'vant';
     .msg_img {
         height: 200px;
         width: 200px;
-        padding: 0 5px 0 0;
+        padding: 0 5px 5px 0;
     }
 }
 
 .msg {
-    padding: 0 10px;
+    padding-left: 10px;
     line-height: 25px;
     flex: 1;
+    .msg_content {
+        word-break: break-all;
+    }
 }
 
 .oparate {
