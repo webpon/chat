@@ -6,7 +6,7 @@
                 <span class="nick" @click="toChat(user.username)">{{user.username}}</span>
                 <p class="msg_content">{{col.moments.content}}</p>
                 <div v-if="col.moments.images.length === 1">
-                    <img v-if="col.moments.images[0].type === 1" :src="col.moments.images[0].url" class="msg_img"
+                    <img v-if="col.moments.images[0].type === 1" v-lazy="col.moments.images[0].url" class="msg_img"
                         @click="previewImg(0)">
                     <video-player @play="onPlayerPlay" ref="videoPlayer" v-else
                                     :options="{height: 200,
@@ -15,7 +15,7 @@
                 </div>
                 <div v-else>
                     <template v-for="(image, index) in col.moments.images">
-                        <img v-if="image.type === 1" :src="image.url" class="msg_img" alt=""
+                        <img v-if="image.type === 1" v-lazy="image.url" class="msg_img" alt=""
                             style="width: 97px; height: 97px;" @click="previewImg(index)">
                     </template>
                 </div>

@@ -2,7 +2,9 @@
     <div class="background">
         <div v-if="$store.state.isMobile && isNeedAnimate">
             <transition :name="transitionName">
-                <router-view class="transitionBody"></router-view>
+                <keep-alive>
+                    <router-view class="transitionBody"></router-view>
+                </keep-alive>
             </transition>
         </div>
         <div v-else>
