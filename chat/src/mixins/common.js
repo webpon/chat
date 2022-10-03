@@ -1,11 +1,15 @@
 export default {
     data() {
-      return {};
+        return {};
     },
     computed: {},
     methods: {
-      back() {
-        this.$router.back()
-      }
+        back() {
+            if (window.history.length >= 3) {
+                this.$router.back()
+            } else {
+                this.$router.push('/chat')
+            }
+        }
     },
-  };
+};

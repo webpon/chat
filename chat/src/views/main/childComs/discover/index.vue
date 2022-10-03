@@ -1,8 +1,9 @@
 <template>
     <div class="background">
-        <div v-if="$store.state.isMobile && isNeedAnimate">
+        {{isNeedAnimate}}
+        <div v-if="$store.state.isMobile">
             <transition :name="transitionName">
-                <keep-alive exclude="discover">
+                <keep-alive>
                     <router-view class="transitionBody"></router-view>
                 </keep-alive>
             </transition>
@@ -17,14 +18,8 @@
 export default {
     data() {
         return {
-            transitionName: 'transitionLeft'
+            transitionName: '',
         }
-    },
-    computed: {
-        isNeedAnimate() {
-            const matched = this.$route.matched
-            return /^\/discover/.test(matched[matched.length - 1].path)
-        },
     },
     //控制左右滑动
     watch: {
