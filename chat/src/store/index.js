@@ -25,7 +25,13 @@ export default new Vuex.Store({
       },
     ],
     playingVideo: null,
-    isMobile: false
+    isMobile: false,
+    msgHint:{
+      username:"lwj",
+      msg: '在这里可以收到所有人的信息',
+      imgSrc: 'https://webpon-img.oss-cn-guangzhou.aliyuncs.com/avater/avater/4.jpg',
+      show: false
+    },
   },
   mutations: {
     addMsg(state, data) {
@@ -75,6 +81,12 @@ export default new Vuex.Store({
     },
     updatePlayingVideo(state, videoRef) {
       state.playingVideo = videoRef
+    },
+    updateMsgHint(state, msg){
+      state.msgHint = msg
+      setTimeout(()=>{
+          state.msgHint.show = false
+      }, 2000)
     }
   }, 
   actions: {

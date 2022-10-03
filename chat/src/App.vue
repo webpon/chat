@@ -1,5 +1,8 @@
 <template>
   <div id="app">
+    <transition appear>
+        <msg-hint v-show="$store.state.msgHint.show"/>
+    </transition>
     <keep-alive>
       <router-view />
     </keep-alive>
@@ -13,14 +16,16 @@
 </template>
 <script>
 import Layout from './views/main/layout'
+import msgHint from "./components/common/chatWindow/msgHint";
 export default {
   name: 'App',
   data() {
     return {
       ring: false
+      ,isShow:false
     }
   },
-  components: { Layout },
+  components: { Layout, msgHint },
   computed: {
     path: function () {
       return this.$route.path
@@ -74,4 +79,22 @@ export default {
     }
   }
 }
+.v-enter-active{
+  animation: test 0.1s;
+}
+
+.v-leave-active{
+  animation: test 0.1s reverse;
+}
+
+@keyframes test {
+  from{
+    transform: translateY(-100%);
+  }
+  to{
+    transform: translateY(0);
+
+  }
+}
+
 </style>

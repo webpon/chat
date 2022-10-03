@@ -1,15 +1,17 @@
 <template>
     <div class="msg_container">
         <div class="moment_msg flex">
-            <img :src="user.imgSrc" class="_avater">
+            <img :src="user.imgSrc" class="_avater" @click="toChat(user.username)">
             <div class="msg">
-                <p class="nick">{{user.username}}</p>
+                <span class="nick" @click="toChat(user.username)">{{user.username}}</span>
                 <p class="msg_content">{{col.moments.content}}</p>
                 <div v-if="col.moments.images.length === 1">
                     <img v-if="col.moments.images[0].type === 1" :src="col.moments.images[0].url" class="msg_img"
                         @click="previewImg(0)">
-                    <video-player @play="onPlayerPlay" ref="videoPlayer" v-else :options="{/*width: 180, */height: 200,
-                    sources: [{src: col.moments.images[0].url}]}" style="width: 100%;height: 100%" />
+                    <video-player @play="onPlayerPlay" ref="videoPlayer" v-else
+                                    :options="{height: 200,
+                                    sources: [{src: col.moments.images[0].url}]}"
+                                    style="width: 100%;height: 100%" />
                 </div>
                 <div v-else>
                     <template v-for="(image, index) in col.moments.images">
@@ -130,7 +132,7 @@ import { ImagePreview, Dialog } from 'vant';
         },
         methods: {
             toChat(userName){
-                console.log(userName)
+                // 私信
                 this.$router.push({
                     path: '/chat/toChat',
                     query:{userName}
@@ -150,6 +152,7 @@ import { ImagePreview, Dialog } from 'vant';
                 this.$store.commit('updatePlayingVideo', this.$refs.videoPlayer.player)
             },
             sendMsg() {
+                // 评论
                 this.commentObj.momentsId = this.col.moments.id
                 this.$moments.post("/comment", this.commentObj).then(({data: {msg, code, data}}) => {
                     if (code === 200) {
@@ -177,9 +180,11 @@ import { ImagePreview, Dialog } from 'vant';
                 }
                 this.showComment = false
             },
-            update(id) {
+            update(id, username) {
+                // 回复评论
                 this.commentObj.replyId = id
                 this.showComment = true
+                this.prompt = `回复 ${username}`
             },
             like() {
                 this.$moments.post("/like", {momentsId: this.col.moments.id})

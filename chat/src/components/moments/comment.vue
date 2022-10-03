@@ -51,7 +51,7 @@
         methods: {
             reply() {
                 this.$emit("send", this.comment.replyId === 0 ?
-                    this.comment.id : this.comment.replyId)
+                    this.comment.id : this.comment.replyId, this.user.username)
             }
         }
     }
