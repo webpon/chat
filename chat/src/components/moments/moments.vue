@@ -6,7 +6,7 @@
                 <span class="nick" @click="toChat(user.username)">{{user.username}}</span>
                 <p class="msg_content">{{col.moments.content}}</p>
                 <div v-if="col.moments.images.length === 1">
-                    <img v-if="col.moments.images[0].type === 1" :src="col.moments.images[0].url" class="msg_img"
+                    <img v-if="col.moments.images[0].type === 1" v-lazy="col.moments.images[0].url" class="msg_img"
                         @click="previewImg(0)">
                     <video-player @play="onPlayerPlay" ref="videoPlayer" v-else
                                     :options="{height: 200,
@@ -15,8 +15,8 @@
                 </div>
                 <div v-else>
                     <template v-for="(image, index) in col.moments.images">
-                        <img v-if="image.type === 1" :src="image.url" class="msg_img" alt=""
-                            style="width: 97px; height: 97px;" @click="previewImg(index)">
+                        <img v-if="image.type === 1" v-lazy="image.url" class="msg_img" alt=""
+                            style="width: 95px; height: 95px;" @click="previewImg(index)">
                     </template>
                 </div>
                 <div class="flex oparate">
@@ -295,14 +295,17 @@ import { ImagePreview, Dialog } from 'vant';
     .msg_img {
         height: 200px;
         width: 200px;
-        padding: 0 5px 0 0;
+        padding: 0 5px 5px 0;
     }
 }
 
 .msg {
-    padding: 0 10px;
+    padding-left: 10px;
     line-height: 25px;
     flex: 1;
+    .msg_content {
+        word-break: break-all;
+    }
 }
 
 .oparate {

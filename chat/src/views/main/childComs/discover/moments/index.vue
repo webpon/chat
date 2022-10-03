@@ -19,8 +19,8 @@
         <div class="momentContainer" ref="momentContainer">
             <moments v-for="item in momentsList" :collect="item" :key="item.moments.id" @delete="deleteMoments" />
         </div>
-        <div v-if="toGet" class="hint">加载中...</div>
-        <div v-else class="hint">到底啦!</div>
+        <div class="flex center"><a-icon type="loading" v-show="loadingMoments" style="padding: 10px 0" /></div>
+        <div class="no-more" v-if="!toGet">没有更多了 ~</div>
     </div>
 </template>
 
@@ -37,7 +37,8 @@ export default {
             toGet: true,
             loadTimer: null,
             showTop: false,
-            timeFlag: true
+            timeFlag: true,
+            loadingMoments: false
         }
     },
     mounted() {
@@ -45,13 +46,22 @@ export default {
         this.$refs.container.addEventListener('scroll', this.checkIsBottom)
     },
     methods: {
-        getMoments() {
+        getMoments({refresh = false} = {}) {
+            if(refresh) {
+                this.page = 1
+                this.toGet = true
+            }
             this.$moments.get(`/moments/${this.page}`).then(({ data: { code, data } }) => {
                 if (code === 200) {
-                    this.momentsList.push(...data)
+                    if(refresh) {
+                        this.momentsList = data
+                    } else {
+                        this.momentsList.push(...data)
+                    }
                 } else {
                     this.toGet = false
                 }
+                this.loadingMoments = false
             })
         },
         deleteMoments(id) {
@@ -69,7 +79,7 @@ export default {
             if (this.timeFlag) {
                 this.timeFlag = false
                 setTimeout(() => {
-                    if (container.scrollTop >= 230) {
+                    if (container.scrollTop >= 200) {
                         this.showTop = true
                     } else {
                         this.showTop = false
@@ -77,17 +87,21 @@ export default {
                     this.timeFlag = true
                 }, 300)
             }
+
+            if(!this.toGet) return
             clearTimeout(this.loadTimer)
             this.loadTimer = setTimeout(() => {
-                if (container.clientHeight + container.scrollTop > container.scrollHeight - 20 && this.toGet) {
+                if (container.clientHeight + container.scrollTop > container.scrollHeight - 60) {
+                    this.loadingMoments = true
                     this.page++
                     this.getMoments()
                 }
             }, 100)
         },
     },
-    created() {
-        this.getMoments()
+    activated() {
+        this.showTop = false
+        this.getMoments({refresh: true})
     }
 }
 </script>
@@ -131,6 +145,7 @@ export default {
         background-color: rgba(#000, 0.9);
         width: 100vw;
         height: 60px;
+        z-index: 10000;
     }
 }
 
@@ -148,6 +163,10 @@ export default {
     color: #fff;
     top: 20px;
     left: 10px;
+}
+.no-more {
+    text-align: center;
+    padding: 10px 0 0 0;
 }
 
 .hint{

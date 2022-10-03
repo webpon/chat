@@ -2,7 +2,7 @@
   <div id="chatBodytainer">
     <div class="chatBody" ref="chatBody" id="chatRecord">
       <a-icon type="loading" v-show="loadingMsg" style="padding: 10px 0" />
-      <div v-for="(item, index) in currentMsgInfo" :key="item.msgId">
+      <div v-for="item in currentMsgInfo" :key="item.msgId">
         <msg :msg="item" />
       </div>
     </div>
