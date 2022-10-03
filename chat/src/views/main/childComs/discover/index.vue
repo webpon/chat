@@ -2,7 +2,7 @@
     <div class="background">
         <div v-if="$store.state.isMobile && isNeedAnimate">
             <transition :name="transitionName">
-                <keep-alive>
+                <keep-alive exclude="discover">
                     <router-view class="transitionBody"></router-view>
                 </keep-alive>
             </transition>
@@ -22,8 +22,6 @@ export default {
     },
     computed: {
         isNeedAnimate() {
-            console.log("+++++++");
-            console.log(this.$route);
             const matched = this.$route.matched
             return /^\/discover/.test(matched[matched.length - 1].path)
         },

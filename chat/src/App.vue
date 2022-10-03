@@ -1,17 +1,11 @@
 <template>
   <div id="app">
-    <transition appear>
+    <transition>
         <msg-hint v-show="$store.state.msgHint.show"/>
     </transition>
     <keep-alive>
       <router-view />
     </keep-alive>
-    <!-- <easy-ring :open="true" :ring="ring" src="https://webpon-img.oss-cn-guangzhou.aliyuncs.com/music/14289.mp3" /> -->
-    <!-- <audio controls>
-    <source src="horse.ogg" type="audio/ogg">
-    <source src="horse.mp3" type="audio/mpeg">
-  您的浏览器不支持 audio 元素。
-  </audio> -->
   </div>
 </template>
 <script>
