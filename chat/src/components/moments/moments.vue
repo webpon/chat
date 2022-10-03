@@ -197,12 +197,21 @@ import { ImagePreview, Dialog } from 'vant';
                 this.showOparate = false
             },
             deleteMoments() {
-                this.$moments.delete(`/moments/${this.col.moments.id}`)
-                    .then(({data:{code}})=>{
-                        if (code === 200){
-                            this.$emit("delete", this.col.moments.id)
-                        }
-                    })
+                 Dialog.confirm({
+                title: '提示',
+                message: '删除该朋友圈？',
+            })
+                .then(() => {
+                    this.$moments.delete(`/moments/${this.col.moments.id}`)
+                        .then(({ data: { code } }) => {
+                            if (code === 200) {
+                                this.$emit("delete", this.col.moments.id)
+                            }
+                        })
+                })
+                .catch(() => {
+                    // on cancel
+                });
             }
         },
         computed: {
