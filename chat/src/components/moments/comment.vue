@@ -121,13 +121,9 @@
 
 <style scoped lang="scss">
     .comment {
+        font-size: 13px;
         .nick {
-            font-size: 13px;
             color: rgb(37, 37, 206);
-        }
-
-        .comment_content {
-            font-size: 13px;
         }
     }
 

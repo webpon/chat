@@ -53,7 +53,7 @@
                             <span class="nick"
                                   @click="()=>toChat(username)"
                             >{{username}}</span>
-                            <span v-if="i !== likeNameList.length -1">,</span>
+                            <span v-if="i !== likeNameList.length -1">, </span>
                         </template>
                     </div>
 
