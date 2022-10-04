@@ -231,7 +231,7 @@ export default {
 }
 
 .card {
-  height: 350px;
+  height: 365px;
   position: fixed;
   top: 50%;
   left: 50%;

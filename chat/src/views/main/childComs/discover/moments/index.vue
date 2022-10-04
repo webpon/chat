@@ -17,9 +17,12 @@
             <img :src="$store.state.myInfo.imgSrc" class="b_avater avater">
         </div>
         <div class="momentContainer" ref="momentContainer">
-            <moments v-for="item in momentsList" :collect="item" :key="item.moments.id" @delete="deleteMoments" />
+            <div v-for="item in momentsList" :key="item.moments.id">
+                <moments :collect="item" @delete="deleteMoments" />
+                <div class="line"></div>
+            </div>
         </div>
-        <div class="flex center"><a-icon type="loading" v-show="loadingMoments" style="padding: 10px 0" /></div>
+        <div class="flex center" style="padding: 10px 0 3px 0"><span v-show="loadingMoments"><a-icon type="loading" style="padding-right: 10px" />正在加载...</span></div>
         <div class="no-more" v-if="!toGet">没有更多了 ~</div>
     </div>
 </template>
@@ -154,6 +157,11 @@ export default {
 
 .momentContainer {
     overflow-y: auto;
+    
+    .line {
+        height: 1px;
+        background-color: #ddd;
+    }
 }
 
 .moment_back {
