@@ -279,6 +279,7 @@ export default {
 .imgItem {
   width: 75px;
   height: 75px;
+  box-sizing: border-box;
 }
 
 .imgItemBorder {
