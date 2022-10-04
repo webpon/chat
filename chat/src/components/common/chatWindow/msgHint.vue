@@ -24,18 +24,37 @@
 </script>
 
 <style scoped lang="scss">
+@media screen and (min-width: 750px) {
+    .hint{
+        width: 20vw;
+        height: 70px;
+        padding: 10px;
+        position: fixed;
+        z-index: 19999;
+        top: 10px;
+        right: 10px;
+        background-color: #fff;
+        box-shadow: 0 0 5px #888;
+        border-radius: 15px;
+    }
+}
+@media screen and (max-width: 750px) {
+    .hint{
+        width: 90vw;
+        height: 70px;
+        padding: 10px;
+        position: fixed;
+        z-index: 19999;
+        top: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #fff;
+        box-shadow: 0 0 5px #888;
+        border-radius: 15px;
+    }
+}
+
 .hint {
-    width: 90vw;
-    height: 70px;
-    padding: 10px;
-    position: fixed;
-    z-index: 19999;
-    top: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: #fff;
-    box-shadow: 0 0 5px #888;
-    border-radius: 15px;
 
     img {
         border-radius: 10px;

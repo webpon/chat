@@ -26,11 +26,6 @@ export default {
   components: {
     listItem,
   },
-  methods: {
-    active() {
-      console.log(this.$store.state.isMobile)
-    },
-  },
   beforeDestroy() {
     //移除监听事件"aMsg"
     this.bus.$off('chatUser')
