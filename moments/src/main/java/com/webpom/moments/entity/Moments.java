@@ -13,5 +13,4 @@ public class Moments {
     private boolean isMy;
     private String time;
     private boolean isAdmin;
-
 }

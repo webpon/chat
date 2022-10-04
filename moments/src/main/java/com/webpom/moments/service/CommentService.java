@@ -10,5 +10,7 @@ public interface CommentService {
 
     R save(Comment comment, String token);
 
-    void deleteByMomentsId(Integer id);
+    boolean deleteByMomentsId(Integer id);
+
+    R deleteByIdAndUserId(Comment comment, String userId);
 }

@@ -10,5 +10,7 @@ public interface CommentDao {
 
     boolean save(Comment comment);
 
-    void deleteByMomentsId(@Param("id") Integer id);
+    boolean deleteByMomentsId(@Param("id") Integer id);
+
+    Comment queryById(@Param("id") Integer id);
 }
