@@ -63,7 +63,7 @@ public class CommentServiceImpl implements CommentService {
         if (Admin.isAdmin(userId) ||
                 commentDao.queryById(comment.getId()) != null
         ){
-            return this.deleteByMomentsId(comment.getId()) ?
+            return commentDao.deleteById(comment.getId()) ?
                     R.ok("删除成功", comment) : R.error("删除失败");
         }
         return R.error("没有这个评论");

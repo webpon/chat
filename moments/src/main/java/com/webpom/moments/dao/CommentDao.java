@@ -13,4 +13,6 @@ public interface CommentDao {
     boolean deleteByMomentsId(@Param("id") Integer id);
 
     Comment queryById(@Param("id") Integer id);
+
+    boolean deleteById(@Param("id") Integer id);
 }

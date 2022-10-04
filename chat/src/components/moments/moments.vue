@@ -79,9 +79,9 @@
                     </div>
 
                     <template v-for="item in col.comments">
-                        <comment :comment="item" :key="item.id" @send="update" />
+                        <comment :comment="item" :key="item.id" @send="update" @del="delComment"/>
                         <comment v-if="item.children.length > 0" v-for="c in item.children" :comment="c" :key="c.id"
-                            :reply-id="item.userId" />
+                            :reply-id="item.userId" @del="delComment"/>
                     </template>
                     <div class="comment" v-show="showComment">
                         <a-textarea :maxLength="200" :placeholder="prompt" :rows="4" v-model.trim="commentObj.content"
@@ -131,6 +131,9 @@ import { ImagePreview, Dialog } from 'vant';
             })
         },
         methods: {
+            delComment(id){
+                this.col.comments = this.col.comments.filter(item => item.id !== id)
+            },
             toChat(userName){
                 // 私信
                 this.$router.push({

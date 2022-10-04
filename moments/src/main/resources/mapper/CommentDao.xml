@@ -14,4 +14,7 @@
     <delete id="deleteByMomentsId">
         delete from `comment` where  moments_id = #{id}
     </delete>
+    <delete id="deleteById">
+        delete from `comment` where  id = #{id}
+    </delete>
 </mapper>

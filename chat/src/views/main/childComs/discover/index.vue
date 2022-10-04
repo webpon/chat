@@ -1,6 +1,5 @@
 <template>
     <div class="background">
-        {{isNeedAnimate}}
         <div v-if="$store.state.isMobile">
             <transition :name="transitionName">
                 <keep-alive>

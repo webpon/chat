@@ -26,7 +26,10 @@
 
 <script>
 import moments from "@/components/moments/moments";
-
+document.oncontextmenu = function(e){
+    return false
+    //或者 e.preventDefault()
+}
 export default {
     name: "momentsView",
     components: { moments },
