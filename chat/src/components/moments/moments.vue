@@ -13,10 +13,10 @@
                                     sources: [{src: col.moments.images[0].url}]}"
                                     style="width: 100%;height: 100%" />
                 </div>
-                <div v-else>
+                <div v-else style="min-width: 290px">
                     <template v-for="(image, index) in col.moments.images">
                         <img v-if="image.type === 1" v-lazy="image.url" class="msg_img" alt=""
-                            style="width: 95px; height: 95px;" @click="previewImg(index)">
+                            style="width: 90px; height: 90px;" @click="previewImg(index)">
                     </template>
                 </div>
                 <div class="flex oparate">

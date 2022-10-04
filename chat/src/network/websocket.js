@@ -2,7 +2,7 @@
 import { io } from 'socket.io-client'
 import router from '@/router/index'
 import store from '@/store/index'
-
+const audio = new Audio()
 let socket = null
 export default () => {
     //设置io连接配置，并且连接
@@ -58,7 +58,6 @@ export default () => {
 
         //监听消息
         socket.on('emitEvent', (data) => {
-            let audio = new Audio()
             audio.src = "https://webpon-img.oss-cn-guangzhou.aliyuncs.com/msg.mp3"
             audio.play();
             let imgSrc
@@ -77,11 +76,11 @@ export default () => {
                     msgNumber: 1,
                     ...obj
                 })
-                store.commit('updateMsgHint', {
-                    show: true,
-                    ...obj
-                })
             }
+            store.commit('updateMsgHint', {
+                show: true,
+                ...data
+            })
             store.commit('addMsg', data)
         })
 
