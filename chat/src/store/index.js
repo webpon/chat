@@ -10,8 +10,7 @@ export default new Vuex.Store({
         msgInfo: JSON.parse(localStorage.msgInfo || 'null') || null,
         myInfo: JSON.parse(localStorage.getItem('myInfo')),
         contacts: [],
-        chatList: [
-            {
+        chatList: [{
                 username: '智能客服',
                 msg: '欢迎反馈bug',
                 imgSrc: 'https://webpon-img.oss-cn-guangzhou.aliyuncs.com/avater/avater/1.jpg',
@@ -68,7 +67,7 @@ export default new Vuex.Store({
         updateMsgItem(state, info) {
             state.chatList.forEach((item, i) => {
                 if (item.username === info.username) {
-                    state.chatList[i] = {...state.chatList[i],...info, }
+                    state.chatList[i] = {...state.chatList[i], ...info, }
                     state.chatList[i].msgNumber = 0
                 }
             })
@@ -80,7 +79,7 @@ export default new Vuex.Store({
             state.msgHint = msg
             setTimeout(() => {
                 state.msgHint.show = false
-            }, 2000)
+            }, 1500)
         }
     },
     actions: {},

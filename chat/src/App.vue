@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <transition>
+    <transition name="msgMove">
         <msg-hint v-show="$store.state.msgHint.show"/>
     </transition>
     <keep-alive>
@@ -73,22 +73,20 @@ export default {
     }
   }
 }
-.v-enter-active{
-  animation: test 0.1s;
+.msgMove-enter-active,
+.msgMove-leave-active {
+  transition: all 0.25s ease-out;
 }
 
-.v-leave-active{
-  animation: test 0.1s reverse;
+/* 元素进入或消失过程中的第一帧存在,然后立刻消失 */
+.msgMove-enter,
+.msgMove-leave-to {
+  top: -70px !important;
 }
 
-@keyframes test {
-  from{
-    transform: translateY(-100%);
-  }
-  to{
-    transform: translateY(0);
-
-  }
+/* 元素进入或消失过程中的第二帧存在,最后一刻移除 */
+.msgMove-enter-to,
+.msgMove-leave {
+  top: 10px !important;
 }
-
 </style>

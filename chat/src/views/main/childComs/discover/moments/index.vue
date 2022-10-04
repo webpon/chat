@@ -169,10 +169,5 @@ export default {
     padding: 10px 0 0 0;
 }
 
-.hint{
-    text-align: center;
-    margin: 5px 0;
-    color: #999999;
-}
 </style>
   

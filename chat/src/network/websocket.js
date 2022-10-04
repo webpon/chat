@@ -1,5 +1,5 @@
 ﻿import Vue from 'vue'
-import {io} from 'socket.io-client'
+import { io } from 'socket.io-client'
 import router from '@/router/index'
 import store from '@/store/index'
 
@@ -21,7 +21,7 @@ export default () => {
         },
     );
     socket.open()
-    //把socket对象与Vue的原型绑定，这样就可以在其他组件引用了
+        //把socket对象与Vue的原型绑定，这样就可以在其他组件引用了
     Vue.prototype.$socket = socket
     try {
         //监听websocket连接成功
@@ -37,7 +37,7 @@ export default () => {
         //监听websocket断开
         socket.on('disconnect', () => {
             console.log('websocket断开连接')
-            // 如果token存在，重新连接websocket
+                // 如果token存在，重新连接websocket
             setTimeout(() => {
                 const isReconnect = localStorage.token && router.currentRoute.path !== '/login'
                 if (isReconnect) {
@@ -58,7 +58,6 @@ export default () => {
 
         //监听消息
         socket.on('emitEvent', (data) => {
-
             let audio = new Audio()
             audio.src = "https://webpon-img.oss-cn-guangzhou.aliyuncs.com/msg.mp3"
             audio.play();
@@ -88,7 +87,7 @@ export default () => {
 
         //获取在线用户列表
         socket.on('sendList', (data) => {
-            const {onlineUser = [], changeUser = false} = data || {}
+            const { onlineUser = [], changeUser = false } = data || {}
             console.log(changeUser);
             store.commit('updateContacts', onlineUser)
             if (!changeUser) return

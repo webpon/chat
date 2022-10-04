@@ -25,20 +25,22 @@
 
 <style scoped lang="scss">
 .hint {
-    width: 350px;
+    width: 90vw;
     height: 70px;
     padding: 10px;
     position: fixed;
-    z-index: 99;
+    z-index: 19999;
     top: 10px;
-    right: 20px;
-    background-color: white;
-    box-shadow: 0 0 10px black;
-    border-radius: 20px;
-
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #fff;
+    box-shadow: 0 0 5px #888;
+    border-radius: 15px;
 
     img {
         border-radius: 10px;
+        width: 50px;
+        height: 50px;
     }
 
     .msg {
