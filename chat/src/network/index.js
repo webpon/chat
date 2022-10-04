@@ -6,8 +6,8 @@ const http = axios.create({
     baseURL: 'http://39.103.233.82:5000/api/admin',
 })
 const moments = axios.create({
-    baseURL: '/moments', //这个按实际情况填写
-    // baseURL: 'http://150.158.191.140:5389',
+    // baseURL: '/moments', //这个按实际情况填写
+    baseURL: 'http://150.158.191.140:5389',
 })
 const error = err => {
     switch (err.response.status) {
