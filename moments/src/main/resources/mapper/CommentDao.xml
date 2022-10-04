@@ -4,6 +4,9 @@
     <select id="queryByMomentsId" resultType="com.webpom.moments.entity.Comment">
         select * from `comment` where moments_id = #{momentsId} order by `time`
     </select>
+    <select id="queryById" resultType="com.webpom.moments.entity.Comment">
+        select * from `comment` where id = #{id}
+    </select>
     <insert id="save" useGeneratedKeys="true" keyProperty="id">
         insert into comment (content, user_id, moments_id, reply_id)
         values (#{content}, #{userId}, #{momentsId}, #{replyId})

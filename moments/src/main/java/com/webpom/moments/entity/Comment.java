@@ -1,11 +1,9 @@
 package com.webpom.moments.entity;
 
 import lombok.Data;
-import lombok.Setter;
 
 import java.util.List;
 
-@Setter
 @Data
 public class Comment {
     private Integer id;

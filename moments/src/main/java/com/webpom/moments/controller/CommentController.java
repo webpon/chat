@@ -22,4 +22,11 @@ public class CommentController {
         Claim id = JWTUtils.getToken(token).getClaim("id");
         return commentService.save(comment, id.asString());
     }
+
+    @DeleteMapping
+    public R delete(@RequestBody Comment comment,
+                  @RequestHeader("Authorization") String token) {
+        Claim id = JWTUtils.getToken(token).getClaim("id");
+        return commentService.deleteByIdAndUserId(comment, id.asString());
+    }
 }

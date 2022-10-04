@@ -82,7 +82,7 @@ export default {
             })
         },
         async sendMsg() {
-            await this.$http.post('http://150.158.191.140:5389/moments', this.message)
+            await this.$moments.post('/moments', this.message)
             this.$message.success('发布成功')
             this.$router.replace('/discover/moments')
         }
