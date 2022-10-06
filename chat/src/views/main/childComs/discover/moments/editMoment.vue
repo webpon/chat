@@ -85,18 +85,31 @@ export default {
             await this.$moments.post('/moments', this.message)
             this.$message.success('发布成功')
             this.$router.replace('/discover/moments')
+            this.message.content = ""
+            this.message.images = []
         }
     },
 };
 </script>
 
 <style lang='scss' scoped>
+@media screen and (min-width: 750px) {
+    .container{
+        width: 500px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+}
+@media screen and (max-width: 750px) {
+    .container {
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+    }
+}
 .container {
     position: fixed;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
     background-color: #fff;
 
     .top-wrapper {

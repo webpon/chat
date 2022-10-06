@@ -57,7 +57,7 @@ export default new Vuex.Store({
                     }
                 })
             } else {
-                chatUser.msgNumber = 1
+                chatUser.msgNumber = (chatUser.msg === null?0:1)
                 state.chatList.push(chatUser)
             }
         },

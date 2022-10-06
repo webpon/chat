@@ -31,10 +31,13 @@ export default {
     toChat() {
       if (this.contactsInfo.username === JSON.parse(localStorage.myInfo).username) {
         this.alertWheel.div.add(this.alertWheel.button).add(this.alertWheel.p).show()
-        console.log(this.alertWheel.element);
         return
       }
-      this.$store.commit('updateChatList', this.contactsInfo)
+      let c = {
+        ...this.contactsInfo,
+        msg: null
+      }
+      this.$store.commit('updateChatList', c)
       this.$router.push({
         path: '/chat/toChat',
         query: { userName: this.contactsInfo.username },
