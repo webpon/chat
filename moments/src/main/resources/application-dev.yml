@@ -1,0 +1,6 @@
+spring:
+  datasource:
+    username: moments
+    password: hJX8cZmYxbbar8Rj
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://150.158.191.140:3306/moments?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&serverTimezone=GMT&useSSL=false

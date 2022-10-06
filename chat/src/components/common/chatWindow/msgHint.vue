@@ -35,6 +35,7 @@
         width: 90vw;
         left: 50%;
         transform: translateX(-50%);
+        overflow-x: hidden;
     }
 }
 .hint {

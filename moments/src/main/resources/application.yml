@@ -1,9 +1,11 @@
 spring:
-  datasource:
-    username: xxx
-    password: xxx
-    driverClassName: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql:/url?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&serverTimezone=GMT&useSSL=false
+    profiles:
+      active: dev
+#  datasource:
+#    username: xxx
+#    password: xxx
+#    driverClassName: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql:/url?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&serverTimezone=GMT&useSSL=false
 mybatis:
   mapper-locations: classpath:/mapper/*.xml
   type-aliases-package: com.webpom.moments.entity #实体类取别名

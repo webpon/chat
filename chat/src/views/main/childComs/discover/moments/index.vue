@@ -113,10 +113,30 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@media screen and (min-width: 750px) {
+    .container{
+        width: 500px;
+        margin: auto;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    .moment_back{
+        width: 480px;
+    }
+    .top-wrapper {
+        width: 400px;
+    }
+}
 @media screen and (max-width: 750px) {
     .bar {
         height: 50px;
         background-color: #fff;
+        width: 100vw;
+    }
+    .moment_back {
+        width: 100vw;
+    }
+    .top-wrapper {
         width: 100vw;
     }
 }
@@ -149,7 +169,6 @@ export default {
         position: fixed;
         top: 0;
         background-color: rgba(#000, 0.9);
-        width: 100vw;
         height: 60px;
         z-index: 10000;
     }
@@ -166,14 +185,12 @@ export default {
 
 .moment_back {
     height: 230px;
-    width: 100vw;
 }
 
 .back {
     position: fixed;
     color: #fff;
     top: 20px;
-    left: 10px;
 }
 .no-more {
     text-align: center;
