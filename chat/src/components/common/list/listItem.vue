@@ -38,7 +38,7 @@ export default {
         query: { userName: this.userInfo.username },
       })
     },
-  },
+  }
 }
 </script>
 

@@ -57,18 +57,24 @@ export default new Vuex.Store({
                     }
                 })
             } else {
-                chatUser.msgNumber = 0
+                chatUser.msgNumber = 1
                 state.chatList.push(chatUser)
             }
         },
         checkDevice(state, isMobile) {
             state.isMobile = isMobile
         },
-        updateMsgItem(state, info) {
+        updateMsgItemNumber(state, info) {
             state.chatList.forEach((item, i) => {
                 if (item.username === info.username) {
-                    state.chatList[i] = {...state.chatList[i], ...info, }
                     state.chatList[i].msgNumber = 0
+                }
+            })
+        },
+        updateMsgItemMsg(state, info) {
+            state.chatList.forEach((item, i) => {
+                if (item.username === info.username) {
+                    state.chatList[i].msg = info.msg
                 }
             })
         },

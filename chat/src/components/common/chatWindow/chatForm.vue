@@ -60,6 +60,10 @@ export default {
         msg: this.message.content,
         msgNumber:0
       })
+      this.$store.commit("updateMsgItemMsg",{
+        username:this.$route.query.userName,
+        msg: this.message.content
+      })
       this.message.content = ''
     },
     areaInput() {

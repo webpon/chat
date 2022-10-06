@@ -57,7 +57,7 @@ export default {
         })
       },
     },
-    '$route.query': function () {
+    '$route.query'() {
       this.initMsgList()
       this.$nextTick(() => {
         this.$refs.chatBody.scrollTo(0, this.$refs.chatBody.scrollHeight)

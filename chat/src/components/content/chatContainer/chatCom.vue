@@ -3,7 +3,6 @@
     <chatTtile />
     <chatBody />
     <chatForm />
-
   </div>
 </template>
 
@@ -19,6 +18,11 @@ export default {
     chatBody,
     chatForm,
   },
+  watch:{
+    "$route.query.userName"(username){
+      this.$store.commit("updateMsgItemNumber", {username})
+    }
+  }
 }
 </script>
 
