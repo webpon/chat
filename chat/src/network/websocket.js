@@ -58,19 +58,14 @@ export default () => {
 
         //监听消息
         socket.on('emitEvent', (data) => {
+            console.log(data);
             audio.src = "https://webpon-img.oss-cn-guangzhou.aliyuncs.com/msg.mp3"
             audio.play();
-            let imgSrc
             // 群聊不需弹窗提醒
             if (data.to !== '群聊') {
-                store.state.contacts.forEach(item => {
-                    if (item.username === data.from) {
-                        imgSrc = item.imgSrc
-                    }
-                })
                 const obj = {
                     username: data.from,
-                    imgSrc,
+                    imgSrc: data.from_avater,
                     msg: data.msg,
                 }
                 store.commit('updateChatList', {

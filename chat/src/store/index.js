@@ -85,7 +85,7 @@ export default new Vuex.Store({
             state.msgHint = msg
             setTimeout(() => {
                 state.msgHint.show = false
-            }, 1500)
+            }, 1200)
         }
     },
     actions: {},

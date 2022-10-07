@@ -45,6 +45,13 @@ export default {
         width: 100vw;
     }
 }
+@media screen and (min-width: 750px) {
+    .bar {
+        height: 50px;
+        background-color: #fff;
+        width: 500px;
+    }
+}
 
 .line {
     height: 1px;
@@ -59,7 +66,6 @@ export default {
     align-items: center;
     justify-content: space-between;
     padding: 20px;
-    width: 100vw;
 }
 
 .series {

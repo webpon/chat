@@ -1,7 +1,7 @@
 <template>
     <div class="container" ref="container">
         <div class="background">
-            <div v-if="showTop" class="top-wrapper flex center">
+            <div v-if="showTop" class="top-wrapper flex">
                 <a-icon type="left" class="_back back" @click="back" />
                 <p style="color: #fff;font-weight: bold; font-size: 15px">朋友圈</p>
                 <a-icon type="camera" class="post_moment" theme="filled" @click="toEditMoment" />
@@ -171,6 +171,8 @@ export default {
         background-color: rgba(#000, 0.9);
         height: 60px;
         z-index: 10000;
+        align-items: center;
+        justify-content: center;
     }
 }
 
@@ -191,6 +193,7 @@ export default {
     position: fixed;
     color: #fff;
     top: 20px;
+    left: 15px;
 }
 .no-more {
     text-align: center;
