@@ -45,7 +45,7 @@ export default {
   },
   methods: {
     updateDeviceInfo() {
-      this.$store.commit('checkDevice', /Mobi|Android|iPhone/i.test(navigator.userAgent))
+      this.$store.commit('checkDevice', /Android|iPhone/i.test(navigator.userAgent))
     }
   }
 }
