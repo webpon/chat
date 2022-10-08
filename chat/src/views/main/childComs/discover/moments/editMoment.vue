@@ -95,12 +95,13 @@ export default {
 
 <style lang='scss' scoped>
 @media screen and (min-width: 750px) {
-    .container{
+    .container {
         width: 500px;
         left: 50%;
         transform: translateX(-50%);
     }
 }
+
 @media screen and (max-width: 750px) {
     .container {
         left: 0;
@@ -109,6 +110,7 @@ export default {
         bottom: 0;
     }
 }
+
 .container {
     position: fixed;
     background-color: #fff;
