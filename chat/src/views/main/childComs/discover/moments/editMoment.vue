@@ -80,6 +80,7 @@ export default {
                     type: 1
                 })
             })
+            e.target.value = ''
         },
         async sendMsg() {
             await this.$moments.post('/moments', this.message)
