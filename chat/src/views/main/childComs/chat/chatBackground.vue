@@ -4,7 +4,7 @@
       <chatLists />
     </div>
     <div class="bac_title" v-else>
-      基于Vue+express+Websocket+mongodb实时聊天
+      Welcome!
     </div>
 
   </div>
@@ -47,7 +47,6 @@ export default {
   bottom: 0;
   right: 0;
   height: 100vh;
-  width: 100vw;
   z-index: 0;
 }
 

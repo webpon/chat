@@ -1,7 +1,7 @@
 <template>
   <div class="chatBackground">
     <div class="bac_title">
-      基于Vue+express+Websocket+mongodb实时聊天
+      Welcome!
     </div>
   </div>
 </template>

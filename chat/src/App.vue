@@ -45,7 +45,7 @@ export default {
   },
   methods: {
     updateDeviceInfo() {
-      this.$store.commit('checkDevice', /Android|iPhone/i.test(navigator.userAgent))
+      this.$store.commit('checkDevice', window.matchMedia("only screen and (max-width: 750px)").matches)
     }
   }
 }
