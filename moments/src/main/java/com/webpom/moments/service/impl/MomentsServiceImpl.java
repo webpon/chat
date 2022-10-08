@@ -10,6 +10,7 @@ import com.webpom.moments.service.LikeService;
 import com.webpom.moments.service.MomentsService;
 import com.webpom.moments.utils.Admin;
 import com.webpom.moments.utils.JWTUtils;
+import com.webpom.moments.utils.TimeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -63,6 +64,13 @@ public class MomentsServiceImpl implements MomentsService {
                 List<Like> likes = likeService.queryByMomentsId(moments.getId());
                 moments.setMy(moments.getUserId().equals(userId));
                 moments.setAdmin(admin);
+                moments.setTimeDesc(
+                        TimeUtils.natureTime(
+                                TimeUtils.strToDate(
+                                    moments.getTime()
+                                )
+                        )
+                );
                 Like like = likeService.queryByMomentsIdAndUserId(moments.getId(), userId);
                 collects.add(new Collect(moments,comments, likes, like != null));
             });
