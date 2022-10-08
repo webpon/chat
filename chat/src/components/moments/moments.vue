@@ -50,7 +50,7 @@
                     <div v-if="likeNameList.length >= 1 ">
                         <van-icon name="like" color="red" style="padding-right: 3px;"/>
                         <template v-for="({username},i) in likeNameList">
-                            <span class="nick"
+                            <span class="nick" :key="i"
                                   @click="()=>toChat(username)"
                             >{{username}}</span>
                             <span v-if="i !== likeNameList.length -1">, </span>
@@ -176,7 +176,13 @@ import { ImagePreview, Dialog } from 'vant';
                                 this.col.likes.push(data)
                                 this.col.isMyLike = true
                             }else {
-                                this.col.likes = this.col.likes.filter(item => item.id !== data.id)
+                                let list = []
+                                this.col.likes.forEach((item)=>{
+                                       if (item.id !== data.id){
+                                           list.push(item)
+                                       }
+                                })
+                                this.col.likes = list
                                 this.col.isMyLike = false
                             }
                         }
@@ -251,6 +257,7 @@ import { ImagePreview, Dialog } from 'vant';
         watch:{
             "col.likes":{
                 handler(){
+                    this.likeNameList = []
                     this.col.likes.map(i=>{
                         let id = i.userId
                         this.$http.get("/user", {params:{id}}).then(({data:{userInfo}})=>{
