@@ -108,6 +108,12 @@ import { ImagePreview, Dialog } from 'vant';
             this.$http.get("/user", {params:{id}}).then(({data:{userInfo}})=>{
                 this.user = userInfo
             })
+            this.col.likes.map(i=>{
+                let id = i.userId
+                this.$http.get("/user", {params:{id}}).then(({data:{userInfo}})=>{
+                    this.likeNameList.push({...userInfo, id})
+                })
+            })
         },
         methods: {
             delComment(id){
@@ -175,12 +181,19 @@ import { ImagePreview, Dialog } from 'vant';
                             if (msg === "点赞成功") {
                                 this.col.likes.push(data)
                                 this.col.isMyLike = true
+                                let id = data.userId
+                                this.$http.get("/user", {params:{id}}).then(({data:{userInfo}})=>{
+                                    this.likeNameList.push({...userInfo, id})
+                                })
                             }else {
                                 let list = []
                                 this.col.likes.forEach((item)=>{
                                        if (item.id !== data.id){
                                            list.push(item)
                                        }
+                                })
+                                this.likeNameList = this.likeNameList.filter((item)=>{
+                                    return item.id = data.userId
                                 })
                                 this.col.likes = list
                                 this.col.isMyLike = false
@@ -254,21 +267,6 @@ import { ImagePreview, Dialog } from 'vant';
                 return result;
             }
         },
-        watch:{
-            "col.likes":{
-                handler(){
-                    this.likeNameList = []
-                    this.col.likes.map(i=>{
-                        let id = i.userId
-                        this.$http.get("/user", {params:{id}}).then(({data:{userInfo}})=>{
-                            this.likeNameList.push(userInfo)
-                        })
-
-                    })
-                },
-                immediate:true
-            }
-        }
     }
 </script>
 
