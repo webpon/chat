@@ -15,3 +15,4 @@ npm-debug.log*
 **/deploy/serverInfo.js
 **/*.iml
 **/JWTConfig.java
+**/server/config/*

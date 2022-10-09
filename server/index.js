@@ -4,7 +4,6 @@ require("dotenv").config()
 const axios = require('axios');
 var http = require('http').Server(app)
 const jwt = require('jsonwebtoken')
-const nodemailer = require('nodemailer');
 var io = require('socket.io')(http, {
     //由于socket.io使用的并不是ws协议，而是经过一些处理的，所以默认不允许跨域，需要以下配置来允许跨域
     cors: {
@@ -32,22 +31,7 @@ var io = require('socket.io')(http, {
 let onlineUser = new Map()
 //socketId_data哈希表
 let userInfos = new Map()
-const transport = nodemailer.createTransport({
-        host: 'smtp.qq.com',
-        port: 25,
-        auth: {
-            user: '', //邮箱的账号
-            pass: ''//邮箱的密码
-        }
-    }
-)
-let mailOptions = {
-    from: '', //邮件来源
-    to: '', //邮件发送到哪里，多个邮箱使用逗号隔开
-    subject: 'chat 网站bug反馈', // 邮件主题
-    text: 'Hello world ?', // 存文本类型的邮件正文
-};
-const secretKey = 'falanter abc sdfjnklsdjfkljsdfkjsdklfjsdkljfklsdjfklj33123123'
+const email = new Email();
 //连接成功
 io.on('connect', function (socket) {
     const {userInfo = ''} = socket.handshake.query || {}
@@ -101,8 +85,7 @@ io.on('connect', function (socket) {
                     }, 500);
                 })
             } else {
-                mailOptions.text = str.slice(4)
-                transport.sendMail(mailOptions, (error) => {
+                email.sendMsg(str.slice(4), (error) => {
                     if (error) {
                         console.log(error)
                     }
@@ -132,6 +115,7 @@ app.use(express.json()) // for parsing application/json
 app.use(express.urlencoded({extended: true})) // for parsing application/x-www-form-urlencoded
 //连接数据
 require('./plugins/mongoose')
+const {tokenKey} = require("./config");
 //中间件，如果没有token或者token错误则阻止请求
 
 app.use((req, res, next) => {
@@ -143,7 +127,7 @@ app.use((req, res, next) => {
         return next()
         //拒绝没有token的请求
     } else {
-        jwt.verify(token, secretKey, (err, data) => {
+        jwt.verify(token, tokenKey, (err, data) => {
             if (err) {
                 res.status(401).send('token错误')
             } else {
@@ -212,7 +196,7 @@ app.use('/api/admin/login', async (req, res, next) => {
     //3、返回token
     const jwt = require('jsonwebtoken')
     //参数一，记录的信息，第二个令牌，第三个设置过期时间
-    const token = jwt.sign({id: user._id}, secretKey, {expiresIn: '1d'})
+    const token = jwt.sign({id: user._id}, tokenKey, {expiresIn: '1d'})
     return res.send({
         token,
         userInfo: {
@@ -222,6 +206,6 @@ app.use('/api/admin/login', async (req, res, next) => {
     })
 })
 //监听端口
-http.listen(15000, function () {
+http.listen(5000, function () {
     console.log('listening on *:5000')
 })
