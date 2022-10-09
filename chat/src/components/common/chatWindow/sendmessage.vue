@@ -1,5 +1,9 @@
 <template>
   <div>
+    <rightClick :axis="axis" :show="showCopy">
+      <button @click="copy">复制</button>
+    </rightClick>
+
     <div class="messageWarpper" v-if="sendmsg !== null">
       <span>
         <div v-if="sendmsg.type === 'video'" class="video">
@@ -14,7 +18,7 @@
         <span v-viewer v-else-if="/http|https/.test(sendmsg.msg) || sendmsg.type === 'picture'">
           <img v-lazy="sendmsg.msg" class="img" />
         </span>
-        <p class="msgCard" v-else-if="sendmsg.type === 'string'">{{ sendmsg.msg }}</p>
+        <p class="msgCard" v-else-if="sendmsg.type === 'string'" @contextmenu.prevent.stop="sCopy">{{ sendmsg.msg }}</p>
       </span>
       <img class="_avater" :src="myInfo.imgSrc" alt="" v-viewer />
     </div>
@@ -22,14 +26,22 @@
 </template>
 
 <script>
+import rightClick from "../../rightClick";
+
 export default {
   name: '',
   data() {
     return {
       myInfo: this.$store.state.myInfo,
-      loadVideo: false
+      loadVideo: false,
+      axis:{
+        x:100,
+        y:100
+      },
+      showCopy: false
     }
   },
+  components:{rightClick},
   props: {
     sendmsg: {
       type: Object,
@@ -56,6 +68,27 @@ export default {
       }
       this.$store.commit('updatePlayingVideo', this.$refs.videoPlayer.player)
     },
+    sCopy({x,y}){
+      this.axis.x = x
+      this.axis.y = y
+      this.showCopy = true
+      const copy = e => {
+        this.showCopy = false
+        document.removeEventListener("click", copy)
+      }
+      document.addEventListener('click',copy)
+
+    },
+    copy(){
+      var textareaC = document.createElement('textarea');
+      textareaC.setAttribute('readonly', 'readonly'); //设置只读属性防止手机上弹出软键盘
+      textareaC.value = this.sendmsg.msg;
+      document.body.appendChild(textareaC); //将textarea添加为body子元素
+      textareaC.select();
+      var res = document.execCommand('copy');
+      document.body.removeChild(textareaC);//移除DOM元素
+      return res;
+    }
   }
 }
 </script>

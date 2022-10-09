@@ -3,7 +3,7 @@
 /server/node_modules/
 # production  打包文件
 /chat/dist/
-
+/server/config/emailConfig.js
 # misc 
 .DS_Store
 *.idea
@@ -14,3 +14,4 @@ npm-debug.log*
 # 忽略deploy下的配置文件
 **/deploy/serverInfo.js
 **/*.iml
+**/JWTConfig.java

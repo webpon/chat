@@ -8,8 +8,9 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import java.util.Calendar;
 import java.util.Map;
 
+import static sun.security.x509.X509CertImpl.SIGNATURE;
+
 public class JWTUtils {
-    private static String SIGNATURE = "falanter abc sdfjnklsdjfkljsdfkjsdklfjsdkljfklsdjfklj33123123";
 
     /**
      * 生成token
