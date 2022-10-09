@@ -5,6 +5,8 @@ const axios = require('axios');
 var http = require('http').Server(app)
 const jwt = require('jsonwebtoken')
 const nodemailer = require('nodemailer');
+
+const {mail_config, mail_options, tokenKey} = require('./config')
 var io = require('socket.io')(http, {
     //由于socket.io使用的并不是ws协议，而是经过一些处理的，所以默认不允许跨域，需要以下配置来允许跨域
     cors: {
@@ -12,7 +14,7 @@ var io = require('socket.io')(http, {
         methods: ["GET", "POST", "PUT"]
     },
     allowRequest: (req, callback) => {
-        jwt.verify(req._query.token, secretKey, (err) => {
+        jwt.verify(req._query.token, tokenKey, (err) => {
             if (err) {
                 callback(null, false);
             } else if (req._query.userInfo) {
@@ -32,22 +34,8 @@ var io = require('socket.io')(http, {
 let onlineUser = new Map()
 //socketId_data哈希表
 let userInfos = new Map()
-const transport = nodemailer.createTransport({
-        host: 'smtp.qq.com',
-        port: 25,
-        auth: {
-            user: '', //邮箱的账号
-            pass: ''//邮箱的密码
-        }
-    }
-)
-let mailOptions = {
-    from: '', //邮件来源
-    to: '', //邮件发送到哪里，多个邮箱使用逗号隔开
-    subject: 'chat 网站bug反馈', // 邮件主题
-    text: 'Hello world ?', // 存文本类型的邮件正文
-};
-const secretKey = 'falanter abc sdfjnklsdjfkljsdfkjsdklfjsdkljfklsdjfklj33123123'
+const transport = nodemailer.createTransport(mail_config)
+let mailOptions = mail_options;
 //连接成功
 io.on('connect', function (socket) {
     const {userInfo = ''} = socket.handshake.query || {}
@@ -143,7 +131,7 @@ app.use((req, res, next) => {
         return next()
         //拒绝没有token的请求
     } else {
-        jwt.verify(token, secretKey, (err, data) => {
+        jwt.verify(token, tokenKey, (err, data) => {
             if (err) {
                 res.status(401).send('token错误')
             } else {
@@ -212,7 +200,7 @@ app.use('/api/admin/login', async (req, res, next) => {
     //3、返回token
     const jwt = require('jsonwebtoken')
     //参数一，记录的信息，第二个令牌，第三个设置过期时间
-    const token = jwt.sign({id: user._id}, secretKey, {expiresIn: '1d'})
+    const token = jwt.sign({id: user._id}, tokenKey, {expiresIn: '1d'})
     return res.send({
         token,
         userInfo: {
@@ -223,5 +211,5 @@ app.use('/api/admin/login', async (req, res, next) => {
 })
 //监听端口
 http.listen(15000, function () {
-    console.log('listening on *:5000')
+    console.log('listening on *:15000')
 })
