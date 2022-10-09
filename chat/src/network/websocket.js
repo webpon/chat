@@ -4,11 +4,13 @@ import router from '@/router/index'
 import store from '@/store/index'
 const audio = new Audio()
 let socket = null
+const IS_PROD = process.env.NODE_ENV === "production";
+const baseURL = IS_PROD ? 'http://39.103.233.82:14399' : 'http://localhost:14399'
 export default () => {
     //设置io连接配置，并且连接
     // if(!localStorage.myInfo){
     // 39.103.233.82
-    socket = io('http://39.103.233.82:15000',
+    socket = io(baseURL,
         // socket = io('http://localhost:15000',
         {
             //禁止默认自动断开重连

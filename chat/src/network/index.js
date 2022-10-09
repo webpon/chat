@@ -1,13 +1,16 @@
 ﻿import axios from 'axios'
 import router from '../router/index'
 import Vue from 'vue'
+const IS_PROD = process.env.NODE_ENV === "production";
+const http_baseURL = IS_PROD ? 'http://39.103.233.82:14399/api/admin' : '/api/admin'
+const moment_baseURL = IS_PROD ? 'http://150.158.191.140:5389' : '/moments'
 const http = axios.create({
     // baseURL: '/api/admin', //这个按实际情况填写
-    baseURL: 'http://39.103.233.82:15000/api/admin',
+    baseURL: http_baseURL
 })
 const moments = axios.create({
     // baseURL: '/moments', //这个按实际情况填写
-    baseURL: 'http://150.158.191.140:5389',
+    baseURL: moment_baseURL,
 })
 const error = err => {
     switch (err.response.status) {

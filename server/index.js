@@ -210,6 +210,6 @@ app.use('/api/admin/login', async (req, res, next) => {
     })
 })
 //监听端口
-http.listen(15000, function () {
-    console.log('listening on *:15000')
+http.listen(14399, function () {
+    console.log('listening on *:14399')
 })
