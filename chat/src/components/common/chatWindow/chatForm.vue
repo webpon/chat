@@ -85,25 +85,38 @@ export default {
     async uploadProgress(e, type) {
       var file = e.target.files[0]; // js 获取文件对象
       if (!file) return
-      const fileMaxSize = 1024 * 1024 * 20
+      const fileMaxSize = 1024 * 1024 * 1000
       if (file.size > fileMaxSize) {
-        this.$message.error('最高支持20MB大小')
+        this.$message.error('最高支持1000MB大小')
         return
       }
       let form = new FormData(); // FormData 对象
-      form.append("file", file); // 文件对象
       const config = {
         onUploadProgress: progressEvent => {
           let persent = (progressEvent.loaded / progressEvent.total * 100 | 0)		//上传进度百分比
           this.progress = persent
         },
       }
-      const url = await this.$http.post('http://39.103.233.82:13141/upload', form, config)
-      this.message.type = type
-      this.message.content = url.data.fileList[0]
-      this.sendmsg()
-      e.target.value = ''
-      this.progress = 0
+      // 请求签前面
+      this.$oss.get("/").then(async ({data}) => {
+          const key = data.dir + ('xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'
+              .replace(/[xy]/g, c => {
+                      return (c === 'x' ? (Math.random() * 16 | 0) : ('r&0x3' | '0x8')).toString(16)
+              })) + `_${file.name}`
+          form.append("policy", data.policy)
+          form.append("signature", data.signature)
+          form.append("OSSAccessKeyId",data.accessid)
+          form.append("key", key);
+          form.append("dir",data.dir)
+          form.append("host",data.host)
+          form.append("file", file); // 文件对象
+          await this.$http.post(data.host, form, config)
+          this.message.type = type
+          this.message.content = data.host + "/" + key
+          this.sendmsg()
+          e.target.value = ''
+          this.progress = 0
+      })
     },
     sCopy({x,y}){
       this.axis.x = x

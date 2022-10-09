@@ -17,3 +17,4 @@ npm-debug.log*
 **/*.iml
 **/JWTConfig.java
 **/server/config/*
+**/oss/config/*

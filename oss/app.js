@@ -8,15 +8,8 @@ const app = express();
 const path = require("path");
 app.use(cors())
 // 按需配置
-const config = {
-  accessKeyId: "",
-  accessKeySecret: "",
-  bucket: "",
-  callbackUrl: "/result",
-  dir: "prefix/",
-};
-
-if (!config.accessKeyId || !config.accessKeySecret){
+const { config } = require("./config/oss")
+if (!config.accessKeyId || !config.accessKeySecret) {
   console.error("请配置阿里RAM 控制")
   process.exit()
 }
@@ -43,9 +36,8 @@ app.get("/oss", async (req, res) => {
   //签名
   const formData = await client.calculatePostSignature(policy);
   //bucket域名
-  const host = `http://${config.bucket}.${
-    (await client.getBucketLocation()).location
-  }.aliyuncs.com`.toString();
+  const host = `http://${config.bucket}.${(await client.getBucketLocation()).location
+    }.aliyuncs.com`.toString();
   //回调
   const callback = {
     callbackUrl: config.callbackUrl,
@@ -87,6 +79,6 @@ app.post("/result", (req, res) => {
 });
 
 app.listen(19000, () => {
-  console.log("http://127.0.0.1:19000");
+  console.log("http://127.0.0.1:14400");
   console.log("App of postObject started.");
 });

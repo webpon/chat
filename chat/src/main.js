@@ -3,7 +3,7 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 // import 'animate.css'
-import { http, moments } from 'network/index'
+import { http, moments, oss } from 'network/index'
 import './network/websocket.js'
 import alertWheel from './components/common/alertWheel/index'
 import antd from 'ant-design-vue';
@@ -18,6 +18,7 @@ import commonMixin from '@/mixins/common.js';
 
 Vue.prototype.$http = http //这样可以让axios在所有组件中使用
 Vue.prototype.$moments = moments //这样可以让axios在所有组件中使用
+Vue.prototype.$oss = oss //这样可以让axios在所有组件中使用
 
 Vue.mixin(commonMixin);
 
