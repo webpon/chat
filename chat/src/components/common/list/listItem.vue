@@ -32,7 +32,6 @@ export default {
   components: {},
   methods: {
     toChat() {
-      this.$store.commit("updateMsgItem", this.userInfo)
       this.$router.push({
         path: '/chat/toChat',
         query: { userName: this.userInfo.username },

@@ -55,11 +55,6 @@ export default {
         msgId: Math.random().toString() + new Date().valueOf()
       })
       this.message.type = 'string'
-      this.$store.commit("updateMsgItem", {
-        username: this.$route.query.userName,
-        msg: this.message.content,
-        msgNumber:0
-      })
       this.$store.commit("updateMsgItemMsg",{
         username:this.$route.query.userName,
         msg: this.message.content

@@ -3,7 +3,7 @@
 /server/node_modules/
 # production  打包文件
 /chat/dist/
-
+/server/config/emailConfig.js
 # misc 
 .DS_Store
 *.idea
