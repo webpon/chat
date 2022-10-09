@@ -1,8 +1,9 @@
 <template>
     <div>
-        <div class="del" :style="{top:delAxis.y+'px',left:delAxis.x+'px'}" v-show="showDel" v-if="comment.my || comment.admin" >
-            <button @click="delComment">删除</button>
-        </div>
+        <rightClick :axis="delAxis" :show="showDel" >
+            <button @click="copy">复制</button>
+            <button @click="delComment" v-if="comment.my || comment.admin">删除</button>
+        </rightClick>
         <div class="comment flex" @click="reply" @contextmenu.prevent.stop="del"
              @touchstart="handlerTouchstart" @touchmove="handlerTouchmove" @touchend="handlerTouchend">
             <p>
@@ -20,9 +21,11 @@
 
 <script>
     import {Dialog} from "vant";
+    import rightClick from "../rightClick";
 
     export default {
         name: "comment",
+        components:{rightClick},
         props: {
             comment: {
                 type: Object
@@ -113,6 +116,16 @@
                     this.clickShow = true
                     this.longClickShow = false
                 }
+            },
+            copy(){
+                var textareaC = document.createElement('textarea');
+                textareaC.setAttribute('readonly', 'readonly'); //设置只读属性防止手机上弹出软键盘
+                textareaC.value = this.comment.content;
+                document.body.appendChild(textareaC); //将textarea添加为body子元素
+                textareaC.select();
+                var res = document.execCommand('copy');
+                document.body.removeChild(textareaC);//移除DOM元素
+                return res;
             }
         }
 
@@ -124,20 +137,6 @@
         font-size: 13px;
         .nick {
             color: rgb(37, 37, 206);
-        }
-    }
-
-    .del{
-        position: fixed;
-        z-index: 999;
-        button {
-            display: block;
-            border: none;
-            background-color: red;
-            color: #ffffff;
-        }
-        button:hover{
-            background-color: rgba(224, 78, 78, 0.73);
         }
     }
 

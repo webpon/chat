@@ -32,6 +32,11 @@ export default {
   components: {},
   methods: {
     toChat() {
+      this.$store.state.chatList.forEach((item,i)=>{
+        if (item.username === this.userInfo.username) {
+          this.$store.state.chatList[i].msgNumber = 0
+        }
+      })
       this.$router.push({
         path: '/chat/toChat',
         query: { userName: this.userInfo.username },

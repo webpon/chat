@@ -29,10 +29,6 @@
 
 <script>
 import moments from "@/components/moments/moments";
-document.oncontextmenu = function(e){
-    return false
-    //或者 e.preventDefault()
-}
 export default {
     name: "momentsView",
     components: { moments },
@@ -117,8 +113,6 @@ export default {
     .container{
         width: 500px;
         margin: auto;
-        left: 50%;
-        transform: translateX(-50%);
     }
     .moment_back{
         width: 480px;
@@ -139,10 +133,12 @@ export default {
     .top-wrapper {
         width: 100vw;
     }
+    .container {
+        position: fixed;
+    }
 }
 
 .container {
-    position: fixed;
     overflow-y: auto;
     padding-bottom: 20px;
 

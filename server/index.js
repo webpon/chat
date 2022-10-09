@@ -4,9 +4,9 @@ require("dotenv").config()
 const axios = require('axios');
 var http = require('http').Server(app)
 const jwt = require('jsonwebtoken')
-const nodemailer = require('nodemailer');
+const { Email } = require('./models/Email');
 
-const {mail_config, mail_options, tokenKey} = require('./config')
+const {tokenKey} = require('./config')
 var io = require('socket.io')(http, {
     //由于socket.io使用的并不是ws协议，而是经过一些处理的，所以默认不允许跨域，需要以下配置来允许跨域
     cors: {
@@ -34,8 +34,7 @@ var io = require('socket.io')(http, {
 let onlineUser = new Map()
 //socketId_data哈希表
 let userInfos = new Map()
-const transport = nodemailer.createTransport(mail_config)
-let mailOptions = mail_options;
+const email = new Email();
 //连接成功
 io.on('connect', function (socket) {
     const {userInfo = ''} = socket.handshake.query || {}
@@ -89,8 +88,7 @@ io.on('connect', function (socket) {
                     }, 500);
                 })
             } else {
-                mailOptions.text = str.slice(4)
-                transport.sendMail(mailOptions, (error) => {
+                email.sendMsg(str.slice(4), (error) => {
                     if (error) {
                         console.log(error)
                     }

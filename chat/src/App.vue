@@ -11,6 +11,11 @@
 <script>
 import Layout from './views/main/layout'
 import msgHint from "./components/common/chatWindow/msgHint";
+document.oncontextmenu = function(e){
+  return false
+  //或者 e.preventDefault()
+}
+
 export default {
   name: 'App',
   data() {

@@ -1,6 +1,10 @@
 <template>
   <div class="chatForm">
-    <div class="upload">
+      <rightClick :axis="axis" :show="showCopy">
+        <button @click="copy">复制</button>
+        <button @click="paste">粘贴</button>
+      </rightClick>
+      <div class="upload">
       <a-icon type="picture" @click="uploadImg" :style="{ fontSize: '20px', color: '#08c' }" />
       <a-icon type="play-square" @click="uploadVideo"
         :style="{ fontSize: '20px', color: '#08c', 'margin': '0 20px' }" />
@@ -12,7 +16,7 @@
         @change="uploadProgress($event, 'video')" />
     </div>
     <a-textarea class="msg_textarea" :maxLength="200" placeholder="请输入内容" @input="areaInput" :rows="4"
-      v-model.trim="message.content" @pressEnter.prevent="sendmsg" />
+      v-model.trim="message.content" @pressEnter.prevent="sendmsg" @contextmenu.prevent.stop="sCopy"/>
     <span class="length-info">
       {{ message.content.length }} / 200
     </span>
@@ -20,6 +24,8 @@
   </div>
 </template>
 <script>
+import rightClick from "../../rightClick";
+
 export default {
   data() {
     return {
@@ -28,9 +34,15 @@ export default {
         content: ''
       },
       msgRecords: [],
-      progress: 0
+      progress: 0,
+      axis:{
+        x:100,
+        y:100
+      },
+      showCopy: false
     }
   },
+  components:{rightClick},
   methods: {
     //向发送请求的客户端添加聊天记录
     sendmsg() {
@@ -93,6 +105,36 @@ export default {
       e.target.value = ''
       this.progress = 0
     },
+    sCopy({x,y}){
+      this.axis.x = x
+      this.axis.y = y
+      this.showCopy = true
+      const copy = e => {
+        this.showCopy = false
+        document.removeEventListener("click", copy)
+      }
+      document.addEventListener('click',copy)
+
+    },
+    copy(){
+      var textareaC = document.createElement('textarea');
+      textareaC.setAttribute('readonly', 'readonly'); //设置只读属性防止手机上弹出软键盘
+      textareaC.value = this.message.content;
+      document.body.appendChild(textareaC); //将textarea添加为body子元素
+      textareaC.select();
+      var res = document.execCommand('copy');
+      document.body.removeChild(textareaC);//移除DOM元素
+      return res;
+    },
+    paste(){
+      var clipPromise = navigator.clipboard.readText();
+      clipPromise.then((clipText)=>{
+        this.message.content += clipText
+      })
+
+
+    }
+
   },
 }
 </script>
