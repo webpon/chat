@@ -78,7 +78,7 @@ app.post("/result", (req, res) => {
   res.json({ Status: "Ok" });
 });
 
-app.listen(19000, () => {
+app.listen(14400, () => {
   console.log("http://127.0.0.1:14400");
   console.log("App of postObject started.");
 });
