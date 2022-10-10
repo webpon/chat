@@ -14,9 +14,6 @@ export default {
             x:0,
             y:0
         },
-        event:{
-            type:''
-        },
-        showEvent:{}
+        events:[]
     }
 }

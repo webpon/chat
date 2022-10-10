@@ -40,6 +40,7 @@ export default {
 @media sreen and (min-width: 750px) {
   .chatLists {
     background-color: #fff;
+    border-right: none !important;
   }
 }
 
@@ -94,5 +95,6 @@ export default {
 .chatLists {
   position: relative;
   z-index: 100;
+  border-right: 1px #f0f0f0 solid;
 }
 </style>

@@ -42,7 +42,6 @@ export default {
                 }
             })
         } else {
-            chatUser.msgNumber = 1
             state.chatList.push(chatUser)
         }
         localStorage.setItem('chatList', JSON.stringify(state.chatList))
@@ -73,18 +72,17 @@ export default {
             state.msgHint.show = false
         }, 1200)
     },
-    showRightClick(state,b){
+    showRightClick(state, data){
+        const {b} = data
         state.rightClick.show = b
+        if (b) {
+            const {axis: {x, y}} = data
+            state.rightClick.axis.x = x
+            state.rightClick.axis.y = y
+        }
     },
-    updateRightClickAxis(state, {x, y}){
-        state.rightClick.axis.x = x
-        state.rightClick.axis.y = y
-    },
-    updateRightClickEvent(state, events){
-        state.rightClick.event = events
-    },
-    updateRightClickShowEvent(state, show){
-        state.rightClick.showEvent = show
+    addRightClickEvent(state, events) {
+        state.rightClick.events = events
     },
     deleteChatListByUsername(state, username){
         state.chatList.forEach((item, index, array)=>{
@@ -92,5 +90,6 @@ export default {
                 array.splice(index,1)
             }
         })
+        localStorage.setItem('chatList', JSON.stringify(state.chatList))
     }
 }

@@ -2,17 +2,8 @@
     <div class="rc" :style="{top:$store.state.rightClick.axis.y+'px',
         left:$store.state.rightClick.axis.x+'px'}"
          v-show="$store.state.rightClick.show">
-        <template v-if="['msgItem','chatForm', 'comment'].includes(event.type)">
-            <button @click="event['copy']">复制</button>
-        </template>
-        <template v-if="event.type === 'chatForm'">
-            <button @click="event['paste']">粘贴</button>
-        </template>
-        <template v-if="event.type === 'comment'">
-            <button @click="event['del']" v-if="showEvent['del']" class="del">删除</button>
-        </template>
-        <template v-if="event.type === 'listItem'">
-            <button @click="event['del']">删除聊天</button>
+        <template v-for="event in $store.state.rightClick.events">
+            <button @click="event.event" v-if="event.show">{{event.text}}</button>
         </template>
     </div>
 </template>
@@ -20,15 +11,6 @@
 <script>
     export default {
         name: "rightClick",
-        computed:{
-            event(){
-                return this.$store.state.rightClick.event
-            },
-            showEvent(){
-                return this.$store.state.rightClick.showEvent
-            }
-        }
-
     }
 </script>
 

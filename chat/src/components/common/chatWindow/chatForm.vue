@@ -115,13 +115,19 @@ export default {
       })
     },
     sCopy({x,y}){
-      this.$store.commit("showRightClick", true)
-      this.$store.commit("updateRightClickAxis", {x,y})
-      this.$store.commit("updateRightClickEvent", {
-        type: 'chatForm',
-        copy: this.copy,
-        paste: this.paste
-      })
+      this.$store.commit("showRightClick", {b:true, axis:{x, y}})
+      this.$store.commit("addRightClickEvent", [
+          {
+              text: '复制',
+              event: this.copy,
+              show:true
+          },
+          {
+              text: '粘贴',
+              event: this.paste,
+              show:true
+          },
+      ])
       const copy = e => {
           this.$store.commit("showRightClick", false)
           this.showCopy = false

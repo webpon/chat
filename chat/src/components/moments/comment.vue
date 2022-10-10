@@ -55,7 +55,6 @@
             })
             if (this.replyId !== undefined) {
                     id = this.replyId
-                    console.log(id)
                     this.$http.get("/user", {params: {id}}).then(({data: {userInfo}}) => {
                         this.replyUser = userInfo
                     })
@@ -81,20 +80,24 @@
                 })
             },
             del({x,y}){
-                this.$store.commit("showRightClick", true)
-                this.$store.commit("updateRightClickAxis", {x,y})
-                this.$store.commit("updateRightClickShowEvent", {del:(this.comment.my || this.comment.admin)})
-                this.$store.commit("updateRightClickEvent", {
-                    type: 'comment',
-                    copy: this.copy,
-                    del: this.delComment
-                })
+                this.$store.commit("showRightClick", {b:true, axis:{x, y}})
+                this.$store.commit("addRightClickEvent", [
+                    {
+                        text: '复制',
+                        event: this.copy,
+                        show:true
+                    },
+                    {
+                        text: '删除',
+                        event: this.delComment,
+                        show:this.comment.my || this.comment.admin
+                    },
+                ])
                 const del = e => {
                     this.$store.commit("showRightClick", false)
                     document.removeEventListener("click", del)
                 }
                 document.addEventListener('click',del)
-
             },
             handlerTouchstart () {
                 this.loop = setTimeout(() => {

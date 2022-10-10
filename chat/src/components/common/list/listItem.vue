@@ -46,12 +46,14 @@ export default {
       this.$store.commit("deleteChatListByUsername", this.userInfo.username)
     },
     rc ({x,y}){
-      this.$store.commit("showRightClick", true)
-      this.$store.commit("updateRightClickAxis", {x,y})
-      this.$store.commit("updateRightClickEvent", {
-        type: 'listItem',
-        del: this.del
-      })
+      this.$store.commit("showRightClick", {b:true, axis:{x, y}})
+      this.$store.commit("addRightClickEvent", [
+        {
+          text: '删除该聊天',
+          event: this.del,
+          show:true
+        },
+      ])
       const e = () => {
         this.$store.commit("showRightClick", false)
         this.showCopy = false
