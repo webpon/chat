@@ -1,9 +1,5 @@
 <template>
     <div>
-        <rightClick :axis="delAxis" :show="showDel" >
-            <button @click="copy">复制</button>
-            <button @click="delComment" v-if="comment.my || comment.admin">删除</button>
-        </rightClick>
         <div class="comment flex" @click="reply" @contextmenu.prevent.stop="del"
              @touchstart="handlerTouchstart" @touchmove="handlerTouchmove" @touchend="handlerTouchend">
             <p>
@@ -85,11 +81,16 @@
                 })
             },
             del({x,y}){
-                this.delAxis.x = x
-                this.delAxis.y = y
-                this.showDel = true
+                this.$store.commit("showRightClick", true)
+                this.$store.commit("updateRightClickAxis", {x,y})
+                this.$store.commit("updateRightClickShowEvent", {del:(this.comment.my || this.comment.admin)})
+                this.$store.commit("updateRightClickEvent", {
+                    type: 'comment',
+                    copy: this.copy,
+                    del: this.delComment
+                })
                 const del = e => {
-                    this.showDel = false
+                    this.$store.commit("showRightClick", false)
                     document.removeEventListener("click", del)
                 }
                 document.addEventListener('click',del)

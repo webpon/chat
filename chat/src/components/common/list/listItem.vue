@@ -1,5 +1,5 @@
 <template>
-  <div class="listItem" @click="toChat" :class="{ active: isActive == true }">
+  <div class="listItem" @click="toChat" :class="{ active: isActive == true }" @contextmenu.prevent.stop="rc">
     <div class="list_avater_container">
       <img class="_avater" :src="userInfo.imgSrc" />
     </div>
@@ -10,7 +10,7 @@
       <p class="text">{{ userInfo.msg }}</p>
     </div>
     <div class="num" v-if="userInfo.msgNumber !== 0">
-      {{userInfo.msgNumber}}
+      {{userInfo.msgNumber < 100?userInfo.msgNumber:'99+'}}
     </div>
   </div>
 </template>
@@ -42,6 +42,23 @@ export default {
         query: { userName: this.userInfo.username },
       })
     },
+    del(){
+      this.$store.commit("deleteChatListByUsername", this.userInfo.username)
+    },
+    rc ({x,y}){
+      this.$store.commit("showRightClick", true)
+      this.$store.commit("updateRightClickAxis", {x,y})
+      this.$store.commit("updateRightClickEvent", {
+        type: 'listItem',
+        del: this.del
+      })
+      const e = () => {
+        this.$store.commit("showRightClick", false)
+        this.showCopy = false
+        document.removeEventListener("click", e)
+      }
+      document.addEventListener('click',e)
+    }
   }
 }
 </script>
@@ -126,10 +143,10 @@ export default {
   right: 10px;
   top: 50%;
   transform: translateY(-50%);
-  width: 15px;
-  height: 15px;
+  width: 18px;
+  height: 18px;
   color: white;
-  line-height: 15px;
+  line-height: 18px;
   text-align: center;
   border-radius: 50%;
   background-color: red;

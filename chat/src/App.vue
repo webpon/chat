@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <rightClick/>
     <transition name="msgMove">
         <msg-hint v-show="$store.state.msgHint.show"/>
     </transition>
@@ -11,6 +12,7 @@
 <script>
 import Layout from './views/main/layout'
 import msgHint from "./components/common/chatWindow/msgHint";
+import rightClick from "./components/rightClick";
 document.oncontextmenu = function(e){
   return false
   //或者 e.preventDefault()
@@ -24,7 +26,7 @@ export default {
       ,isShow:false
     }
   },
-  components: { Layout, msgHint },
+  components: { Layout, msgHint, rightClick },
   computed: {
     path: function () {
       return this.$route.path

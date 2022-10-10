@@ -1,7 +1,8 @@
 ﻿import axios from 'axios'
 import router from '../router/index'
 import Vue from 'vue'
-const IS_PROD = process.env.NODE_ENV === "production";
+// const IS_PROD = process.env.NODE_ENV === "production";
+const IS_PROD = true;
 const http_baseURL = IS_PROD ? 'http://39.103.233.82:14399/api/admin' : '/api/admin'
 const moment_baseURL = IS_PROD ? 'http://150.158.191.140:5389' : '/moments'
 const oss_baseURL = IS_PROD ? 'http://39.103.233.82:14400/oss' : '/oss'

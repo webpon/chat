@@ -1,9 +1,5 @@
 <template>
   <div class="chatForm">
-      <rightClick :axis="axis" :show="showCopy">
-        <button @click="copy">复制</button>
-        <button @click="paste">粘贴</button>
-      </rightClick>
       <div class="upload">
       <a-icon type="picture" @click="uploadImg" :style="{ fontSize: '20px', color: '#08c' }" />
       <a-icon type="play-square" @click="uploadVideo"
@@ -119,11 +115,16 @@ export default {
       })
     },
     sCopy({x,y}){
-      this.axis.x = x
-      this.axis.y = y
-      this.showCopy = true
+      this.$store.commit("showRightClick", true)
+      this.$store.commit("updateRightClickAxis", {x,y})
+      this.$store.commit("updateRightClickEvent", {
+        type: 'chatForm',
+        copy: this.copy,
+        paste: this.paste
+      })
       const copy = e => {
-        this.showCopy = false
+          this.$store.commit("showRightClick", false)
+          this.showCopy = false
         document.removeEventListener("click", copy)
       }
       document.addEventListener('click',copy)
