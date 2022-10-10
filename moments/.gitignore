@@ -31,3 +31,4 @@ build/
 .vscode/
 
 /src/main/resources/application-dev.yml
+/src/main/java/com/webpom/moments/config/JWTConfig.java

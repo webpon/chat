@@ -66,12 +66,14 @@ export default {
       this.$store.commit('updatePlayingVideo', this.$refs.videoPlayer.player)
     },
     sCopy({x,y}){
-      this.$store.commit("showRightClick", true)
-      this.$store.commit("updateRightClickAxis", {x,y})
-      this.$store.commit("updateRightClickEvent", {
-        type: 'msgItem',
-        copy: this.copy
-      })
+      this.$store.commit("showRightClick", {b:true, axis:{x, y}})
+      this.$store.commit("addRightClickEvent", [
+        {
+          text: '复制',
+          event: this.copy,
+          show:true
+        }
+      ])
       const copy = e => {
         this.$store.commit("showRightClick", false)
         document.removeEventListener("click", copy)

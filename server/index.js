@@ -6,6 +6,8 @@ var http = require('http').Server(app)
 const jwt = require('jsonwebtoken')
 const { Email } = require('./models/Email');
 const { tokenKey } = require('./config')
+const { Bot } = require('./models/Bot')
+const bot = new Bot();
 var io = require('socket.io')(http, {
     //由于socket.io使用的并不是ws协议，而是经过一些处理的，所以默认不允许跨域，需要以下配置来允许跨域
     cors: {
@@ -80,9 +82,7 @@ io.on('connect', function (socket) {
                 from_avater: 'https://webpon-img.oss-cn-guangzhou.aliyuncs.com/avater/avater/1.jpg'
             }
             if (!/^bug[:|：].*/.test(str)) {
-                axios.get(`http://fuyhi.top/api/peiliaox/api.php?msg=${str}`, {
-                    'content-type': 'utf-8'
-                }).then(({ data: { content } }) => {
+                bot.postBot(str).then((content) => {
                     send.msg = content
                     setTimeout(() => {
                         fromSocket.emit('emitEvent', send)

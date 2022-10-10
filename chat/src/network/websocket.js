@@ -6,7 +6,7 @@ const audio = new Audio()
 let socket = null
 const IS_PROD = process.env.NODE_ENV === "production";
 const IS_SVR = process.env.VUE_APP_PROJECT_ENV === 'svr'
-const baseURL = (IS_PROD || IS_SVR) ? 'http://39.103.233.82:14399' : 'http://localhost:14399'
+const baseURL = 'http://localhost:14399'
 export default () => {
     //设置io连接配置，并且连接
     // if(!localStorage.myInfo){

@@ -18,3 +18,4 @@ npm-debug.log*
 **/JWTConfig.java
 **/server/config/*
 **/oss/config/*
+/moments/src/main/java/com/webpom/moments/config/JWTConfig.java

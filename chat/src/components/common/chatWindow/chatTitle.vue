@@ -18,11 +18,16 @@ export default {
   watch:{
     "$store.state.chatList":{
       handler(newArr){
+        let b = true
         newArr.forEach((item,i)=>{
           if (item.username === this.$route.query.userName) {
             this.$store.state.chatList[i].msgNumber = 0
+            b = false
           }
         })
+        if (b){
+          this.$router.push({ path: '/chat'});
+        }
       },
       deep:true
     }
