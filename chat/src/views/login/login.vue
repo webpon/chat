@@ -4,18 +4,17 @@
       <a-form-model ref="ruleForm" class="cardForm" layout="vertical" :model="model" :wrapper-col="{ span: 24 }"
         :rules="rules">
         <a-form-model-item label="用户名" prop="username">
-          <a-input size="large" v-model.trim="model.username" />
+          <a-input size="large" v-model.trim="model.username" @pressEnter="login('ruleForm')"/>
         </a-form-model-item>
         <a-form-model-item label="密码" prop="password">
           <a-input type="password" size="large" v-model.trim="model.password" @pressEnter="login('ruleForm')" />
         </a-form-model-item>
 
-        <a-form-model-item class="formBtn">
-          <a-space :size="80">
-            <a-button size="large" @click="register('ruleForm')">注册</a-button>
-            <a-button type="primary" size="large" @click="login('ruleForm')">登录</a-button>
-          </a-space>
-        </a-form-model-item>
+        <div class="formBtn">
+            <a-button type="default" size="large" @click="register('ruleForm')">注册</a-button>
+            <a-button type="primary" size="large" style="margin: 0 5%;" @click="login('ruleForm')">登录</a-button>
+            <a-button type="info" size="large" @click="visitor('ruleForm')">游客登录</a-button>
+        </div>
       </a-form-model>
     </a-card>
     <div class="avaterSelector" ref="avaterSelector">
@@ -91,6 +90,7 @@ export default {
   },
   methods: {
     async register(formName) {
+      console.log('____________________');
       this.$refs[formName].validate(async (valid) => {
         if (valid) {
           this.$refs.avaterSelector.style.visibility = 'visible'
@@ -127,6 +127,17 @@ export default {
           console.log(error);
         }
       })
+    },
+    async visitor() {
+      //发送post请求
+      const res = await this.$http.post('visitor')
+      localStorage.token = res.data.token
+      this.$message.success('登录成功')
+      // 请求个人信息
+      //把当前登录的用户信息储存到localStorage，以便公用登录用户信息
+      localStorage.setItem('myInfo', JSON.stringify(res.data.userInfo))
+      this.$store.commit('updateMyInfo', res.data.userInfo)
+      this.$router.replace('/chat')
     },
     selectAvater(index) {
       console.log(this.$refs.avater[index])
@@ -301,10 +312,8 @@ export default {
   margin-bottom: 20px;
 }
 
-.formBtn .ant-form-item-control-wrapper {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  text-align: center;
+.formBtn {
+  display: flex;
+  justify-content: space-around;
 }
 </style>

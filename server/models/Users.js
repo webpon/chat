@@ -11,7 +11,10 @@ const schema = new mongoose.Schema({
   },
   imgSrc:{
     type: String, required: true
-  }
+  },
+  type:{
+    type: String, required: false
+  },
 })
 
 module.exports = mongoose.model('Users', schema)

@@ -83,6 +83,11 @@ export default {
             e.target.value = ''
         },
         async sendMsg() {
+            if(this.$store.state.myInfo.type === 'visitor') {
+                this.$message.error('游客不允许发布朋友圈')
+                this.$router.replace('/discover/moments')
+                return 
+            }
             await this.$moments.post('/moments', this.message)
             this.$message.success('发布成功')
             this.$router.replace('/discover/moments')

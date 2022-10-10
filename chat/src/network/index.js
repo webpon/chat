@@ -2,9 +2,10 @@
 import router from '../router/index'
 import Vue from 'vue'
 const IS_PROD = process.env.NODE_ENV === "production";
-const http_baseURL = IS_PROD ? 'http://39.103.233.82:14399/api/admin' : '/api/admin'
-const moment_baseURL = IS_PROD ? 'http://150.158.191.140:5389' : '/moments'
-const oss_baseURL = IS_PROD ? 'http://39.103.233.82:14400/oss' : '/oss'
+const IS_SVR = process.env.VUE_APP_PROJECT_ENV === 'svr'
+const http_baseURL = (IS_PROD || IS_SVR) ? 'http://39.103.233.82:14399/api/admin' : '/api/admin'
+const moment_baseURL =  (IS_PROD || IS_SVR) ? 'http://150.158.191.140:5389' : '/moments'
+const oss_baseURL =  (IS_PROD || IS_SVR) ? 'http://39.103.233.82:14400/oss' : '/oss'
 const http = axios.create({
     // baseURL: '/api/admin', //这个按实际情况填写
     baseURL: http_baseURL

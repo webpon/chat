@@ -5,8 +5,7 @@ const axios = require('axios');
 var http = require('http').Server(app)
 const jwt = require('jsonwebtoken')
 const { Email } = require('./models/Email');
-
-const {tokenKey} = require('./config')
+const { tokenKey } = require('./config')
 var io = require('socket.io')(http, {
     //由于socket.io使用的并不是ws协议，而是经过一些处理的，所以默认不允许跨域，需要以下配置来允许跨域
     cors: {
@@ -37,7 +36,7 @@ let userInfos = new Map()
 const email = new Email();
 //连接成功
 io.on('connect', function (socket) {
-    const {userInfo = ''} = socket.handshake.query || {}
+    const { userInfo = '' } = socket.handshake.query || {}
     const userInfoData = JSON.parse(userInfo)
     if (userInfoData) {
         onlineUser.set(userInfoData.username, socket)
@@ -81,11 +80,13 @@ io.on('connect', function (socket) {
                 from_avater: 'https://webpon-img.oss-cn-guangzhou.aliyuncs.com/avater/avater/1.jpg'
             }
             if (!/^bug[:|：].*/.test(str)) {
-                axios.get(`http://api.qingyunke.com/api.php?key=free&appid=0&msg=${str}`).then(({data: {content}}) => {
+                axios.get(`http://fuyhi.top/api/peiliaox/api.php?msg=${str}`, {
+                    'content-type': 'utf-8'
+                }).then(({ data: { content } }) => {
                     send.msg = content
                     setTimeout(() => {
                         fromSocket.emit('emitEvent', send)
-                    }, 500);
+                    }, 100);
                 })
             } else {
                 email.sendMsg(str.slice(4), (error) => {
@@ -115,7 +116,7 @@ io.on('connect', function (socket) {
 //允许跨域
 app.use(require('cors')())
 app.use(express.json()) // for parsing application/json
-app.use(express.urlencoded({extended: true})) // for parsing application/x-www-form-urlencoded
+app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
 //连接数据
 require('./plugins/mongoose')
 //中间件，如果没有token或者token错误则阻止请求
@@ -125,7 +126,7 @@ app.use((req, res, next) => {
     console.log(req.path);
     console.log(req.body);
     const token = req.headers.authorization;
-    if (req.url === '/api/admin/login' || req.url === '/api/admin/create') {
+    if (req.url === '/api/admin/login' || req.url === '/api/admin/create' || req.url === '/api/admin/visitor') {
         return next()
         //拒绝没有token的请求
     } else {
@@ -141,7 +142,7 @@ app.use((req, res, next) => {
 app.get('/api/admin/user', async (req, res, next) => {
     const adminUser = require('./models/Users')
     console.log(req.query);
-    const {id} = req.query
+    const { id } = req.query
     const user = await adminUser.findOne({
         _id: id
     })
@@ -170,7 +171,7 @@ app.post('/api/admin/create', async (req, res) => {
 })
 //登录
 app.use('/api/admin/login', async (req, res, next) => {
-    const {username, password} = req.body
+    const { username, password } = req.body
     //1、根据用户名找用户
     const adminUser = require('./models/Users')
     const user = await adminUser.findOne({
@@ -198,7 +199,7 @@ app.use('/api/admin/login', async (req, res, next) => {
     //3、返回token
     const jwt = require('jsonwebtoken')
     //参数一，记录的信息，第二个令牌，第三个设置过期时间
-    const token = jwt.sign({id: user._id}, tokenKey, {expiresIn: '1d'})
+    const token = jwt.sign({ id: user._id }, tokenKey, { expiresIn: '1d' })
     return res.send({
         token,
         userInfo: {
@@ -206,6 +207,25 @@ app.use('/api/admin/login', async (req, res, next) => {
             imgSrc: user.imgSrc
         }
     })
+})
+//游客登录
+app.use('/api/admin/visitor', async (req, res, next) => {
+    const client_ip = req.ip.match(/\d+\.\d+\.\d+\.\d+/)[0]
+    console.log(client_ip);
+    const user_id = client_ip + '|' + onlineUser.size
+    //3、返回token
+    const jwt = require('jsonwebtoken')
+    //参数一，记录的信息，第二个令牌，第三个设置过期时间
+    const token = jwt.sign({ id: user_id, type: 'visitor' }, tokenKey, { expiresIn: '1d' })
+    return res.send({
+        token,
+        userInfo: {
+            username: user_id,
+            type: 'visitor',
+            imgSrc: 'https://p.ssl.qhimg.com/t0126d6aa871801abe1.png'
+        }
+    })
+
 })
 //监听端口
 http.listen(14399, function () {

@@ -4,6 +4,7 @@
     "private": true,
     "scripts": {
         "serve": "vue-cli-service serve",
+        "serve:svr": "vue-cli-service serve --mode svr-serve",
         "build": "vue-cli-service build --mode production",
         "deploy": "node ./deploy/index",
         "back": "node ./deploy/back",
