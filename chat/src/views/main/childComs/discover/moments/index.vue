@@ -143,6 +143,7 @@ export default {
 
 .container {
     overflow-y: auto;
+    overflow-x: hidden;
     padding-bottom: 20px;
 
     .background {

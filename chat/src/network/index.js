@@ -1,11 +1,12 @@
 ﻿import axios from 'axios'
 import router from '../router/index'
 import Vue from 'vue'
+import store from '@/store/index'
 const IS_PROD = process.env.NODE_ENV === "production";
 const IS_SVR = process.env.VUE_APP_PROJECT_ENV === 'svr'
 const http_baseURL = (IS_PROD || IS_SVR) ? 'http://39.103.233.82:14399/api/admin' : '/api/admin'
-const moment_baseURL =  (IS_PROD || IS_SVR) ? 'http://150.158.191.140:5389' : '/moments'
-const oss_baseURL =  (IS_PROD || IS_SVR) ? 'http://39.103.233.82:14400/oss' : '/oss'
+const moment_baseURL = (IS_PROD || IS_SVR) ? 'http://150.158.191.140:5389' : '/moments'
+const oss_baseURL = (IS_PROD || IS_SVR) ? 'http://39.103.233.82:14400/oss' : '/oss'
 const http = axios.create({
     // baseURL: '/api/admin', //这个按实际情况填写
     baseURL: http_baseURL
@@ -15,10 +16,10 @@ const moments = axios.create({
     baseURL: moment_baseURL,
 })
 const oss = axios.create({
-  baseURL: oss_baseURL
+    baseURL: oss_baseURL
 })
 const error = err => {
-    switch (err.response.status) {
+    switch (err.response && err.response.status) {
         // 对得到的状态码的处理，具体的设置视自己的情况而定
         case 400:
             Vue.prototype.$message.error('密码错误')
@@ -40,7 +41,7 @@ const error = err => {
         case 424:
             Vue.prototype.$message.error('你已经在别处登录了!')
             break
-            // case ...
+        // case ...
         default:
             console.log('其他错误')
             break
@@ -50,20 +51,30 @@ const error = err => {
 
 //axios请求拦截器
 http.interceptors.request.use(
-        (config) => {
-            //请求头加上token
-            if (localStorage.token) {
-                config.headers.Authorization = localStorage.token
-            }
-            return config
-        },
-        (err) => {
-            return Promise.reject(err)
+    (config) => {
+        const { type } = store.state.myInfo || {}
+        if (type === 'visitor' && config.url === 'visitor') {
+            return Promise.reject(new Error('游客限制朋友圈功能'))
         }
-    )
-    //axios请求拦截器
+        //请求头加上token
+        if (localStorage.token) {
+            config.headers.Authorization = localStorage.token
+        }
+        return config
+    },
+    (err) => {
+        return Promise.reject(err)
+    }
+)
+//axios请求拦截器
 moments.interceptors.request.use(
     (config) => {
+        console.log(config);
+        const { type } = store.state.myInfo || {}
+        if (type === 'visitor' && (config.url === '/comment' || config.url === '/like')) {
+            Vue.prototype.$message.error('游客限制朋友圈功能!')
+            return Promise.reject(new Error('游客限制朋友圈功能'))
+        }
         //请求头加上token
         if (localStorage.token) {
             config.headers.Authorization = localStorage.token
@@ -75,20 +86,20 @@ moments.interceptors.request.use(
     }
 )
 oss.interceptors.request.use(
-  (config) => {
-      //请求头加上token
-      if (localStorage.token) {
-          config.headers.Authorization = localStorage.token
-      }
-      return config
-  },
-  (err) => {
-      return Promise.reject(err)
-  }
+    (config) => {
+        //请求头加上token
+        if (localStorage.token) {
+            config.headers.Authorization = localStorage.token
+        }
+        return config
+    },
+    (err) => {
+        return Promise.reject(err)
+    }
 )
 oss.interceptors.response.use(res => {
-  // 成功响应的拦截
-  return Promise.resolve(res)
+    // 成功响应的拦截
+    return Promise.resolve(res)
 }, error)
 http.interceptors.response.use(res => {
     // 成功响应的拦截
