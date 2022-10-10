@@ -1,8 +1,5 @@
 <template>
   <div>
-    <rightClick :axis="axis" :show="showCopy">
-      <button @click="copy">复制</button>
-    </rightClick>
     <div class="messageWarpper">
       <img class="_avater" :src="imgSrc" alt="" v-viewer />
       <span class="left-wraper">
@@ -31,11 +28,6 @@ export default {
   data() {
     return {
       loadVideo: false,
-      axis:{
-        x:100,
-        y:100
-      },
-      showCopy: false
     }
   },
   components:{rightClick},
@@ -74,11 +66,14 @@ export default {
       this.$store.commit('updatePlayingVideo', this.$refs.videoPlayer.player)
     },
     sCopy({x,y}){
-      this.axis.x = x
-      this.axis.y = y
-      this.showCopy = true
+      this.$store.commit("showRightClick", true)
+      this.$store.commit("updateRightClickAxis", {x,y})
+      this.$store.commit("updateRightClickEvent", {
+        type: 'msgItem',
+        copy: this.copy
+      })
       const copy = e => {
-        this.showCopy = false
+        this.$store.commit("showRightClick", false)
         document.removeEventListener("click", copy)
       }
       document.addEventListener('click',copy)

@@ -35,7 +35,8 @@ export default {
       }
       let c = {
         ...this.contactsInfo,
-        msg: null
+        msg: null,
+        msgNumber:0
       }
       this.$store.commit('updateChatList', c)
       this.$router.push({

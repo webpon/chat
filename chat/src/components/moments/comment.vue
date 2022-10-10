@@ -1,9 +1,5 @@
 <template>
     <div>
-        <rightClick :axis="delAxis" :show="showDel" >
-            <button @click="copy">复制</button>
-            <button @click="delComment" v-if="comment.my || comment.admin">删除</button>
-        </rightClick>
         <div class="comment flex" @click="reply" @contextmenu.prevent.stop="del"
              @touchstart="handlerTouchstart" @touchmove="handlerTouchmove" @touchend="handlerTouchend">
             <p>
@@ -59,7 +55,6 @@
             })
             if (this.replyId !== undefined) {
                     id = this.replyId
-                    console.log(id)
                     this.$http.get("/user", {params: {id}}).then(({data: {userInfo}}) => {
                         this.replyUser = userInfo
                     })
@@ -85,15 +80,24 @@
                 })
             },
             del({x,y}){
-                this.delAxis.x = x
-                this.delAxis.y = y
-                this.showDel = true
+                this.$store.commit("showRightClick", {b:true, axis:{x, y}})
+                this.$store.commit("addRightClickEvent", [
+                    {
+                        text: '复制',
+                        event: this.copy,
+                        show:true
+                    },
+                    {
+                        text: '删除',
+                        event: this.delComment,
+                        show:this.comment.my || this.comment.admin
+                    },
+                ])
                 const del = e => {
-                    this.showDel = false
+                    this.$store.commit("showRightClick", false)
                     document.removeEventListener("click", del)
                 }
                 document.addEventListener('click',del)
-
             },
             handlerTouchstart () {
                 this.loop = setTimeout(() => {

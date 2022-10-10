@@ -64,21 +64,23 @@ export default () => {
             audio.src = "https://webpon-img.oss-cn-guangzhou.aliyuncs.com/msg.mp3"
             audio.play();
             // 群聊不需弹窗提醒
+            const obj = {
+                username: data.from,
+                imgSrc: data.from_avater,
+                msg: data.msg,
+            }
             if (data.to !== '群聊') {
-                const obj = {
-                    username: data.from,
-                    imgSrc: data.from_avater,
-                    msg: data.msg,
-                }
-                store.commit('updateChatList', {
-                    msgNumber: 1,
-                    ...obj
-                })
                 store.commit('updateMsgHint', {
                     show: true,
                     ...obj
                 })
+            }else {
+                obj.username = '群聊'
             }
+            store.commit('updateChatList', {
+                msgNumber: 1,
+                ...obj
+            })
             store.commit('addMsg', data)
         })
 
