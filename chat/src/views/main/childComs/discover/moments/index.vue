@@ -115,10 +115,13 @@ export default {
         margin: auto;
     }
     .moment_back{
-        width: 480px;
+        width: 500px;
     }
     .top-wrapper {
-        width: 400px;
+        width: 500px;
+    }
+    .back {
+        position: absolute !important;
     }
 }
 @media screen and (max-width: 750px) {
