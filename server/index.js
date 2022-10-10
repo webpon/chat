@@ -1,7 +1,6 @@
 var express = require('express')
 var app = express()
 require("dotenv").config()
-const axios = require('axios');
 var http = require('http').Server(app)
 const jwt = require('jsonwebtoken')
 const { Email } = require('./models/Email');
