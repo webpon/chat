@@ -16,3 +16,6 @@ mybatis:
 logging:
   level:
     com.ppl.springboot.dao: debug # 改成你的dao接口文件所在包路径可以打印出sql语句
+com:
+  webpom:
+    adminList: 6330340b40859ace2d37ee4d,63304f26ea3643d7a12f286a,6330340b40859ace2d37ee4d

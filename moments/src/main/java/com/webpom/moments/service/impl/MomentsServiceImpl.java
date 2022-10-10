@@ -29,7 +29,8 @@ public class MomentsServiceImpl implements MomentsService {
     private LikeService likeService;
     @Resource
     private CommentService commentService;
-
+    @Resource
+    private Admin admin;
     @Override
     public R save(Moments moments, String id) {
         moments.setUserId(id);
@@ -57,13 +58,13 @@ public class MomentsServiceImpl implements MomentsService {
         List<Moments> list = momentsDao.query(size);
         if (!list.isEmpty()){
             ArrayList<Collect> collects = new ArrayList<>();
-            boolean admin = Admin.isAdmin(userId);
+            boolean a = admin.isAdmin(userId);
             list.forEach(moments -> {
                 moments.setImages(imageService.queryByMomentsId(moments.getId()));
                 List<Comment> comments = commentService.queryByMomentsId(moments.getId(), userId);
                 List<Like> likes = likeService.queryByMomentsId(moments.getId());
                 moments.setMy(moments.getUserId().equals(userId));
-                moments.setAdmin(admin);
+                moments.setAdmin(a);
                 moments.setTimeDesc(
                         TimeUtils.natureTime(
                                 TimeUtils.strToDate(
@@ -81,7 +82,7 @@ public class MomentsServiceImpl implements MomentsService {
 
     @Override
     public R delete(Integer id, String userId) {
-        if (!Admin.isAdmin(userId)){
+        if (!admin.isAdmin(userId)){
             Moments moments = momentsDao.queryByIdAndUserId(id,userId);
             if (moments == null) {
                 return R.error("这不是你的 或者 没有这条朋友圈");

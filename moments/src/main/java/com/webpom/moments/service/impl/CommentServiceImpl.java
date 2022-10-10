@@ -16,11 +16,13 @@ import java.util.stream.Collectors;
 public class CommentServiceImpl implements CommentService {
     @Resource
     private CommentDao commentDao;
+    @Resource
+    private Admin admin;
 
     @Override
     public List<Comment> queryByMomentsId(Integer momentsId, String userId) {
         List<Comment> comments = commentDao.queryByMomentsId(momentsId);
-        boolean admin = Admin.isAdmin(userId);
+        boolean a = admin.isAdmin(userId);
         return comments.stream().map(comment -> {
             comment.setMy(comment.getUserId().equals(userId));
             // 是不是普通评论
@@ -33,7 +35,7 @@ public class CommentServiceImpl implements CommentService {
                     }
                 });
                 comment.setChildren(list);
-                comment.setAdmin(admin);
+                comment.setAdmin(a);
                 return comment;
             }
             return null;
@@ -60,7 +62,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public R deleteByIdAndUserId(Comment comment, String userId) {
-        if (Admin.isAdmin(userId) ||
+        if (admin.isAdmin(userId) ||
                 commentDao.queryById(comment.getId()) != null
         ){
             return commentDao.deleteById(comment.getId()) ?
