@@ -14,6 +14,7 @@ const defContacts = [
 ]
 export default {
     addMsg(state, data) {
+        console.log(data)
         if (state.msgInfo === null || !Array.isArray(state.msgInfo)) {
             state.msgInfo = [data]
         } else if (state.msgInfo.length > 1000) {

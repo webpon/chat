@@ -20,6 +20,7 @@
           <img v-lazy="sendmsg.msg" class="img" />
         </span>
         <p class="msgCard" v-else  @contextmenu.prevent.stop="sCopy">{{ sendmsg.msg }}</p>
+    <span>{{time}}</span>
       </span>
     </div>
   </div>
@@ -39,6 +40,7 @@ export default {
       type: Object,
       default: {},
     },
+    time:String
   },
   computed: {
     imgSrc() {

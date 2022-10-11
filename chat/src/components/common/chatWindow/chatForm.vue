@@ -53,7 +53,8 @@ export default {
         from_avater: JSON.parse(localStorage.myInfo).imgSrc,
         to: this.$route.query.userName,
         msg: this.message.content,
-        type: this.message.type
+        type: this.message.type,
+        time: new Date().getTime()
       })
       //向要发送的客户端添加
       this.$socket.emit('sendEvent', {
