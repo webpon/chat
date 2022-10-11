@@ -48,6 +48,14 @@ export default {
         }
         localStorage.setItem('chatList', JSON.stringify(state.chatList))
     },
+    stickChatListByUsername(state, username){
+        state.chatList.forEach((item) => {
+            if (item.username === username) {
+                item.stick = !item.stick
+            }
+        })
+        localStorage.setItem('chatList', JSON.stringify(state.chatList))
+    },
     checkDevice(state, isMobile) {
         state.isMobile = isMobile
     },

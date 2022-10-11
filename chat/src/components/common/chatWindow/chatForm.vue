@@ -162,7 +162,7 @@ export default {
           handler(){
               this.$refs.input.focus()
           },
-          immediate:true
+          // immediate:true
       }
   }
 }

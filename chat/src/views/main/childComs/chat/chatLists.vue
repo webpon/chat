@@ -11,8 +11,12 @@
       </div>
     </div>
     <div class="listContainer">
-      <div v-for="(item, index) in chatList" :key="index">
-        <listItem :userInfo="item" />
+      <div v-for="(item, index) in chatList" :key="index" v-if="item.stick">
+        <listItem :userInfo="item"/>
+        <div class="line" v-show="index !== $store.state.chatList.length - 1"></div>
+      </div>
+      <div v-for="(item, index) in chatList" v-if="!item.stick">
+        <listItem :userInfo="item"/>
         <div class="line" v-show="index !== $store.state.chatList.length - 1"></div>
       </div>
     </div>
