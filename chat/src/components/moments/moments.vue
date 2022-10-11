@@ -121,6 +121,17 @@ import { ImagePreview, Dialog } from 'vant';
             },
             toChat(userName){
                 // 私信
+                if (userName === JSON.parse(localStorage.myInfo).username) {
+                    this.alertWheel.div.add(this.alertWheel.button).add(this.alertWheel.p).show()
+                    return
+                }
+                let c = {
+                    ...this.user,
+                    msg: null,
+                    msgNumber:0
+                }
+                this.$store.commit('updateChatList', c)
+
                 this.$router.push({
                     path: '/chat/toChat',
                     query:{userName}
