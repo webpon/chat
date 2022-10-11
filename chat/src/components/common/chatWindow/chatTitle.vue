@@ -2,12 +2,12 @@
   <div class="chatTitle">
     <h3 class="msg_title">
       <a-icon type="left" class="back" @click="back"></a-icon>
-      <span class="nick" :style="{color: isOnline ? 'blue' : 'gray'}" v-if="$route.query.userName !== '群聊'">{{ $route.query.userName }}
+      {{ $route.query.userName }}
+      <span class="nick" :style="{color: isOnline ? 'blue' : 'gray'}" v-if="$route.query.userName !== '群聊'">
         <span style="font-size: 10px;">
           {{isOnline ? '(在线)': '(离线)'}}
         </span>
       </span>
-      <span v-else>{{$route.query.userName}}</span>
     </h3>
   </div>
 </template>

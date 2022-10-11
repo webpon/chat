@@ -3,8 +3,11 @@
     <div class="messageWarpper">
       <img class="_avater" :src="imgSrc" alt="" v-viewer />
       <span class="left-wraper">
-        <span class="nick" :style="{color: isOnline ? 'blue' : 'gray'}">{{sendmsg.from}} {{isOnline ? '(在线)':
-        '(离线)'}}</span>
+        <span>
+          {{sendmsg.from}}
+          <span class="nick" v-if="$route.query.userName === '群聊'" :style="{color: isOnline ? 'blue' : 'gray'}"> {{isOnline ? '(在线)':
+          '(离线)'}}</span>
+        </span>
         <div v-if="sendmsg.type === 'video'" class="video">
           <lazy-component @show="lazyLoadVideo">
             <img v-if="!loadVideo" style="width: 180px; height: 180px;position: absolute;"
