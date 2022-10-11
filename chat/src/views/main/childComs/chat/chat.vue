@@ -95,6 +95,6 @@ export default {
 .chatLists {
   position: relative;
   z-index: 100;
-  border-right: 1px #f0f0f0 solid;
+  border-right: 2px #eeeeee solid;
 }
 </style>

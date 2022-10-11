@@ -12,7 +12,9 @@
         @change="uploadProgress($event, 'video')" />
     </div>
     <a-textarea class="msg_textarea" :maxLength="200" placeholder="请输入内容" @input="areaInput" :rows="4"
-      v-model.trim="message.content" @pressEnter.prevent="sendmsg" @contextmenu.prevent.stop="sCopy"/>
+      v-model.trim="message.content" @pressEnter.prevent="sendmsg" @contextmenu.prevent.stop="sCopy"
+      ref="input"
+    />
     <span class="length-info">
       {{ message.content.length }} / 200
     </span>
@@ -51,7 +53,8 @@ export default {
         from_avater: JSON.parse(localStorage.myInfo).imgSrc,
         to: this.$route.query.userName,
         msg: this.message.content,
-        type: this.message.type
+        type: this.message.type,
+        time: new Date().getTime()
       })
       //向要发送的客户端添加
       this.$socket.emit('sendEvent', {
@@ -65,7 +68,8 @@ export default {
       this.message.type = 'string'
       this.$store.commit("updateMsgItemMsg",{
         username:this.$route.query.userName,
-        msg: this.message.content
+        msg: this.message.content,
+        time: new Date().getTime()
       })
       this.message.content = ''
     },
@@ -151,11 +155,17 @@ export default {
       clipPromise.then((clipText)=>{
         this.message.content += clipText
       })
-
-
     }
 
   },
+  watch: {
+      "$route.query.userName":{
+          handler(){
+              this.$refs.input.focus()
+          },
+          // immediate:true
+      }
+  }
 }
 </script>
 <style scoped lang="scss">

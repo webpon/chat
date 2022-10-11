@@ -1,5 +1,5 @@
 <template>
-  <div class="listItem" @click="toChat" :class="{ active: isActive == true }" @contextmenu.prevent.stop="rc">
+  <div class="listItem" @click="toChat" :class="{ active, stick:userInfo.stick }" @contextmenu.prevent.stop="rc">
     <div class="list_avater_container">
       <img class="_avater" :src="userInfo.imgSrc" />
     </div>
@@ -18,16 +18,11 @@
 <script>
 export default {
   name: '',
-  data() {
-    return {
-      isActive: false,
-    }
-  },
   props: {
     userInfo: {
       type: Object,
       default: [],
-    },
+    }
   },
   components: {},
   methods: {
@@ -45,6 +40,9 @@ export default {
     del(){
       this.$store.commit("deleteChatListByUsername", this.userInfo.username)
     },
+    stick(){
+      this.$store.commit("stickChatListByUsername", this.userInfo.username)
+    },
     rc ({x,y}){
       this.$store.commit("showRightClick", {b:true, axis:{x, y}})
       this.$store.commit("addRightClickEvent", [
@@ -52,6 +50,16 @@ export default {
           text: '删除该聊天',
           event: this.del,
           show:true
+        },
+        {
+          text: '置顶该聊天',
+          event: this.stick,
+          show: !this.userInfo.stick
+        },
+        {
+          text: '取消置顶',
+          event: this.stick,
+          show: this.userInfo.stick
         },
       ])
       const e = () => {
@@ -61,6 +69,11 @@ export default {
       }
       document.addEventListener('click',e)
     }
+  },
+  computed:{
+    active(){
+      return this.$route.query.userName === this.userInfo.username
+    }
   }
 }
 </script>
@@ -68,7 +81,7 @@ export default {
 <style scoped lang="scss">
 @media screen and (min-width: 750px) {
   .listItem {
-    background-color: #eae8e7;
+    background-color: #f5f5f5;
   }
 }
 
@@ -135,9 +148,12 @@ export default {
 
   user-select: none;
 }
+.stick{
+  background-color: #ddd !important;
+}
 
 .active {
-  background-color: red !important;
+  background-color: #ccc !important;
 }
 
 .num {

@@ -11,8 +11,12 @@
       </div>
     </div>
     <div class="listContainer">
-      <div v-for="(item, index) in $store.state.chatList" :key="index">
-        <listItem :userInfo="item" />
+      <div v-for="(item, index) in chatList" :key="index" v-if="item.stick">
+        <listItem :userInfo="item"/>
+        <div class="line" v-show="index !== $store.state.chatList.length - 1"></div>
+      </div>
+      <div v-for="(item, index) in chatList" v-if="!item.stick">
+        <listItem :userInfo="item"/>
         <div class="line" v-show="index !== $store.state.chatList.length - 1"></div>
       </div>
     </div>
@@ -33,6 +37,25 @@ export default {
     console.log('beforeDestroy');
     // this.$socket.off('emitEvent');
   },
+  computed:{
+    chatList(){
+      const list = this.$store.state.chatList;
+      // 根据时间排序
+      for (let i = 0; i < list.length; i++) {
+        for (let j = i+1; j < list.length; j++) {
+          // 如果没有值数组默认值（为了兼容前版本)
+          let it = list[i].time|0
+          let jt = list[j].time|0
+          if (jt > it){
+            let time = list[i]
+            list[i] = list[j]
+            list[j] = time
+          }
+        }
+      }
+      return list
+    }
+  }
 }
 </script>
 

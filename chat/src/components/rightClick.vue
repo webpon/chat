@@ -18,19 +18,20 @@
     .rc {
         position: fixed;
         z-index: 999;
-        border: 1px black solid;
+        max-width: 100px;
 
         button {
             display: block;
             border: none;
-            background-color: #ffffff;
             color: #000000;
-            /*width: 50px;*/
+            width: 100%;
             height: 20px;
+            background-color: #ffffff;
         }
 
         button:hover {
-            background-color: rgba(104, 91, 91, 0.73);
+            background-color: rgb(189, 185, 185);
+            color: #ffffff;
         }
 
         .del{

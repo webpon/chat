@@ -3,6 +3,11 @@
     <h3 class="msg_title">
       <a-icon type="left" class="back" @click="back"></a-icon>
       {{ $route.query.userName }}
+      <span class="nick" :style="{color: isOnline ? 'blue' : 'gray'}" v-if="$route.query.userName !== '群聊'">
+        <span style="font-size: 10px;">
+          {{isOnline ? '(在线)': '(离线)'}}
+        </span>
+      </span>
     </h3>
   </div>
 </template>
@@ -19,9 +24,9 @@ export default {
     "$store.state.chatList":{
       handler(newArr){
         let b = true
-        newArr.forEach((item,i)=>{
+        newArr.forEach((item)=>{
           if (item.username === this.$route.query.userName) {
-            this.$store.state.chatList[i].msgNumber = 0
+            this.$store.commit("updateMsgItemNumber", item)
             b = false
           }
         })
@@ -35,9 +40,21 @@ export default {
   components: {},
   methods: {
     back() {
-      this.$router.push({ path: '/chat'});
+      this.$router.push({path: '/chat'});
     },
   },
+  computed:{
+    isOnline() {
+      let flag = false
+      this.$store.state.contacts.forEach(item => {
+        if (item.username === this.$route.query.userName) {
+          flag = true
+        }
+      });
+      return flag
+    },
+
+  }
 }
 </script>
 
