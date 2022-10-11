@@ -19,9 +19,9 @@ export default {
     "$store.state.chatList":{
       handler(newArr){
         let b = true
-        newArr.forEach((item,i)=>{
+        newArr.forEach((item)=>{
           if (item.username === this.$route.query.userName) {
-            this.$store.state.chatList[i].msgNumber = 0
+            this.$store.commit("updateMsgItemNumber", item)
             b = false
           }
         })

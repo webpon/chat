@@ -1,16 +1,16 @@
 const defContacts = [
     {
+        username: '群聊',
+        msg: '在这里可以收到所有人的信息',
+        imgSrc: 'https://webpon-img.oss-cn-guangzhou.aliyuncs.com/avater/avater/4.jpg',
+        msgNumber: 0
+    },
+    {
         username: '智能客服',
         msg: '欢迎反馈bug',
         imgSrc: 'https://webpon-img.oss-cn-guangzhou.aliyuncs.com/avater/avater/1.jpg',
         msgNumber: 0
     },
-    {
-        username: '群聊',
-        msg: '在这里可以收到所有人的信息',
-        imgSrc: 'https://webpon-img.oss-cn-guangzhou.aliyuncs.com/avater/avater/4.jpg',
-        msgNumber: 0
-    }
 ]
 export default {
     addMsg(state, data) {
@@ -55,6 +55,7 @@ export default {
                 state.chatList[i].msgNumber = 0
             }
         })
+        localStorage.setItem('chatList', JSON.stringify(state.chatList))
     },
     updateMsgItemMsg(state, info) {
         state.chatList.forEach((item, i) => {
@@ -62,6 +63,7 @@ export default {
                 state.chatList[i].msg = info.msg
             }
         })
+        localStorage.setItem('chatList', JSON.stringify(state.chatList))
     },
     updatePlayingVideo(state, videoRef) {
         state.playingVideo = videoRef
