@@ -64,7 +64,7 @@
                     </template>
                     <div class="comment" v-show="showComment">
                         <a-input style="height: 30px;" :maxLength="200" :placeholder="prompt" v-model.trim="commentObj.content"
-                            @pressEnter.prevent="sendMsg" />
+                            @pressEnter.prevent="sendMsg" ref="input"/>
                         <a-button @click="sendMsg" style="height: 28px;">发送</a-button>
                     </div>
                 </div>
@@ -229,6 +229,13 @@ import { ImagePreview, Dialog } from 'vant';
                 .catch(() => {
                     // on cancel
                 });
+            }
+        },
+        watch:{
+            showComment(){
+                setTimeout(()=>{
+                    this.$refs.input.focus()
+                },100)
             }
         }
     }
