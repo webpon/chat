@@ -35,7 +35,21 @@ export default {
   },
   computed:{
     chatList(){
-      return this.$store.state.chatList.sort((a,b)=>b.time-a.time)
+      const list = this.$store.state.chatList;
+      // 根据时间排序
+      for (let i = 0; i < list.length; i++) {
+        for (let j = i+1; j < list.length; j++) {
+          // 如果没有值数组默认值（为了兼容前版本)
+          let it = list[i].time|0
+          let jt = list[j].time|0
+          if (jt > it){
+            let time = list[i]
+            list[i] = list[j]
+            list[j] = time
+          }
+        }
+      }
+      return list
     }
   }
 }

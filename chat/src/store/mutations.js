@@ -35,13 +35,15 @@ export default {
     },
     updateChatList(state, chatUser) {
         if (state.chatList.some(item => item.username === chatUser.username)) {
-            state.chatList.forEach((item, i) => {
+            state.chatList.forEach((item) => {
                 if (item.username === chatUser.username) {
                     item.msg = chatUser.msg
+                    item.time = chatUser.time
                     item.msgNumber++
                 }
             })
         } else {
+            chatUser.time = new Date().getTime()
             state.chatList.push(chatUser)
         }
         localStorage.setItem('chatList', JSON.stringify(state.chatList))
@@ -61,6 +63,7 @@ export default {
         state.chatList.forEach((item, i) => {
             if (item.username === info.username) {
                 state.chatList[i].msg = info.msg
+                state.chatList[i].time = info.time
             }
         })
         localStorage.setItem('chatList', JSON.stringify(state.chatList))
