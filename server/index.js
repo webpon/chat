@@ -3,9 +3,9 @@ var app = express()
 require("dotenv").config()
 var http = require('http').Server(app)
 const jwt = require('jsonwebtoken')
-const { Email } = require('./models/Email');
-const { tokenKey } = require('./config')
-const { Bot } = require('./models/Bot')
+const {Email} = require('./models/Email');
+const {tokenKey} = require('./config')
+const {Bot} = require('./models/Bot')
 const bot = new Bot();
 var io = require('socket.io')(http, {
     //由于socket.io使用的并不是ws协议，而是经过一些处理的，所以默认不允许跨域，需要以下配置来允许跨域
@@ -37,7 +37,7 @@ let userInfos = new Map()
 const email = new Email();
 //连接成功
 io.on('connect', function (socket) {
-    const { userInfo = '' } = socket.handshake.query || {}
+    const {userInfo = ''} = socket.handshake.query || {}
     const userInfoData = JSON.parse(userInfo)
     if (userInfoData) {
         onlineUser.set(userInfoData.username, socket)
@@ -70,21 +70,18 @@ io.on('connect', function (socket) {
         const toSocket = onlineUser.get(data.to)
         const fromSocket = onlineUser.get(data.from)
         if (!userInfos.get(socket.id) || userInfos.get(socket.id).username !== data.from) return
+        data.time = new Date().getTime()
         if (data.to === '智能客服' && fromSocket) {
             console.log('智能客服');
             let str = data.msg
-            const send = {
-                from: '智能客服',
-                to: data.from,
-                msg: str,
-                msgId: data.msgId,
-                from_avater: 'https://webpon-img.oss-cn-guangzhou.aliyuncs.com/avater/avater/1.jpg'
-            }
+            data.to = data.from
+            data.from = '智能客服'
+            data.from_avater = 'https://webpon-img.oss-cn-guangzhou.aliyuncs.com/avater/avater/1.jpg'
             if (!/^bug[:|：].*/.test(str)) {
                 bot.postBot(str).then((content) => {
-                    send.msg = content
+                    data.msg = content
                     setTimeout(() => {
-                        fromSocket.emit('emitEvent', send)
+                        fromSocket.emit('emitEvent', data)
                     }, 100);
                 })
             } else {
@@ -92,9 +89,9 @@ io.on('connect', function (socket) {
                     if (error) {
                         console.log(error)
                     }
-                    send.msg = "感谢你的反馈"
+                    data.msg = "感谢你的反馈"
                     setTimeout(() => {
-                        fromSocket.emit('emitEvent', send)
+                        fromSocket.emit('emitEvent', data)
                     }, 500);
                 })
             }
@@ -115,7 +112,7 @@ io.on('connect', function (socket) {
 //允许跨域
 app.use(require('cors')())
 app.use(express.json()) // for parsing application/json
-app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
+app.use(express.urlencoded({extended: true})) // for parsing application/x-www-form-urlencoded
 //连接数据
 require('./plugins/mongoose')
 //中间件，如果没有token或者token错误则阻止请求
@@ -141,7 +138,7 @@ app.use((req, res, next) => {
 app.get('/api/admin/user', async (req, res, next) => {
     const adminUser = require('./models/Users')
     console.log(req.query);
-    const { id } = req.query
+    const {id} = req.query
     const user = await adminUser.findOne({
         _id: id
     })
@@ -170,7 +167,7 @@ app.post('/api/admin/create', async (req, res) => {
 })
 //登录
 app.use('/api/admin/login', async (req, res, next) => {
-    const { username, password } = req.body
+    const {username, password} = req.body
     //1、根据用户名找用户
     const adminUser = require('./models/Users')
     const user = await adminUser.findOne({
@@ -198,7 +195,7 @@ app.use('/api/admin/login', async (req, res, next) => {
     //3、返回token
     const jwt = require('jsonwebtoken')
     //参数一，记录的信息，第二个令牌，第三个设置过期时间
-    const token = jwt.sign({ id: user._id }, tokenKey, { expiresIn: '1d' })
+    const token = jwt.sign({id: user._id}, tokenKey, {expiresIn: '1d'})
     return res.send({
         token,
         userInfo: {
@@ -215,7 +212,7 @@ app.use('/api/admin/visitor', async (req, res, next) => {
     //3、返回token
     const jwt = require('jsonwebtoken')
     //参数一，记录的信息，第二个令牌，第三个设置过期时间
-    const token = jwt.sign({ id: user_id, type: 'visitor' }, tokenKey, { expiresIn: '1d' })
+    const token = jwt.sign({id: user_id, type: 'visitor'}, tokenKey, {expiresIn: '1d'})
     return res.send({
         token,
         userInfo: {
