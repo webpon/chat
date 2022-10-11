@@ -11,7 +11,7 @@
       </div>
     </div>
     <div class="listContainer">
-      <div v-for="(item, index) in $store.state.chatList" :key="index">
+      <div v-for="(item, index) in chatList" :key="index">
         <listItem :userInfo="item" />
         <div class="line" v-show="index !== $store.state.chatList.length - 1"></div>
       </div>
@@ -33,6 +33,11 @@ export default {
     console.log('beforeDestroy');
     // this.$socket.off('emitEvent');
   },
+  computed:{
+    chatList(){
+      return this.$store.state.chatList.sort((a,b)=>b.time-a.time)
+    }
+  }
 }
 </script>
 

@@ -29,26 +29,21 @@ export default () => {
     try {
         //监听websocket连接成功
         socket.on('connect', () => {
-            console.log('websocket连接成功')
             socket.emit('getOnlineUserInfo')
         })
         socket.io.on("error", () => {
-            console.log('websocket连接失败')
             Vue.prototype.$message.error('登录失效了, 请重新登录')
             router.replace('/login')
         });
         //监听websocket断开
         socket.on('disconnect', () => {
-            console.log('websocket断开连接')
-                // 如果token存在，重新连接websocket
+            // 如果token存在，重新连接websocket
             setTimeout(() => {
                 const isReconnect = localStorage.token && router.currentRoute.path !== '/login'
                 if (isReconnect) {
                     let reconnect = setInterval(() => {
                         socket.open()
-                        console.log('正在尝试重新连接')
                         if (socket.connected) {
-                            console.log('重新连接成功');
                             clearInterval(reconnect)
                         }
                         if (!isReconnect) {
@@ -68,6 +63,7 @@ export default () => {
                 username: data.from,
                 imgSrc: data.from_avater,
                 msg: data.msg,
+                time: data.time
             }
             if (data.to !== '群聊') {
                 store.commit('updateMsgHint', {
@@ -87,14 +83,12 @@ export default () => {
         //获取在线用户列表
         socket.on('sendList', (data) => {
             const { onlineUser = [], changeUser = false } = data || {}
-            console.log(changeUser);
             store.commit('updateContacts', onlineUser)
             if (!changeUser) return
             if (changeUser && changeUser.isOnline) {
                 Vue.prototype.$message.info(`${changeUser.username}登陆了`)
             }
         })
-        console.log('APPmounted');
     } catch (error) {
         console.log(error);
     }

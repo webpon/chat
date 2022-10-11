@@ -65,7 +65,8 @@ export default {
       this.message.type = 'string'
       this.$store.commit("updateMsgItemMsg",{
         username:this.$route.query.userName,
-        msg: this.message.content
+        msg: this.message.content,
+        time: new Date().getTime()
       })
       this.message.content = ''
     },
