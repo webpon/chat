@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="comment flex" @click="reply" @contextmenu.prevent.stop="del"
+        <div class="comment flex default" @click="reply" @contextmenu.prevent.stop="del"
              @touchstart="handlerTouchstart" @touchmove="handlerTouchmove" @touchend="handlerTouchend">
             <p>
                 <span class="nick">{{user.username}}</span>

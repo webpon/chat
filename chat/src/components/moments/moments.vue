@@ -1,9 +1,9 @@
 <template>
     <div class="msg_container">
         <div class="moment_msg flex">
-            <img :src="user.imgSrc" class="_avater" @click="toChat(user.username)">
+            <img :src="user.imgSrc" class="_avater pointer" @click="toChat(user.username)">
             <div class="msg">
-                <span class="nick" @click="toChat(user.username)">{{user.username}}</span>
+                <span class="nick pointer" @click="toChat(user.username)">{{user.username}}</span>
                 <p class="msg_content">{{col.moments.content}}</p>
                 <div v-if="col.moments.images.length === 1">
                     <img v-if="col.moments.images[0].type === 1" v-lazy="col.moments.images[0].url" class="msg_img"
@@ -22,15 +22,15 @@
                 <div class="flex oparate">
                     <div>
                         <p>{{col.moments.timeDesc}}</p>
-                        <span v-if="col.moments.my || col.moments.admin" @click="deleteMoments">删除</span>
+                        <span class="pointer" v-if="col.moments.my || col.moments.admin" @click="deleteMoments">删除</span>
                     </div>
                     <div>
                         <div v-show="showOparate">
-                            <button @click="like" v-if="collect.isMyLike">
+                            <button @click="like" v-if="collect.isMyLike"  class="pointer">
                                 <van-icon name="like" color="red"/>
                                 取消
                             </button>
-                            <button @click="like" v-else>
+                            <button @click="like" v-else  class="pointer">
                                 <van-icon name="like-o" />
                                 点赞
                             </button>
@@ -43,14 +43,14 @@
                                 评论
                             </button>
                         </div>
-                        <p class="bar" @click="showOparate = !showOparate">··</p>
+                        <p class="bar pointer" @click="showOparate = !showOparate">··</p>
                     </div>
                 </div>
                 <div class="comment_container">
                     <div v-if="likeNameList.length >= 1 ">
                         <van-icon name="like" color="red" style="padding-right: 3px;"/>
                         <template v-for="({username},i) in likeNameList">
-                            <span class="nick" :key="i"
+                            <span class="nick pointer" :key="i"
                                   @click="()=>toChat(username)"
                             >{{username}}</span>
                             <span v-if="i !== likeNameList.length -1">, </span>
