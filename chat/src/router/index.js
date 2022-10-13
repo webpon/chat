@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import websocket from '@/network/websocket'
+import store from '@/store/index'
 
 Vue.use(VueRouter)
 
@@ -80,6 +81,7 @@ router.beforeEach((to, from, next) => {
   console.log(to);
   console.log(from);
   if (to.path === '/login') {
+    store.commit('updateMyInfo', {})
     next()
   } else {
     let token = localStorage.token
