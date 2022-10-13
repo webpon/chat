@@ -49,8 +49,8 @@ export default {
       }
       //本地添加
       this.$store.commit('addMsg', {
-        from: JSON.parse(localStorage.myInfo).username,
-        from_avater: JSON.parse(localStorage.myInfo).imgSrc,
+        from: this.$store.state.myInfo.username,
+        from_avater: this.$store.state.myInfo.imgSrc,
         to: this.$route.query.userName,
         msg: this.message.content,
         type: this.message.type,

@@ -61,7 +61,7 @@ export default () => {
             // 群聊不需弹窗提醒
             const obj = {
                 username: data.from,
-                imgSrc: data.from_avater,
+                imgSrc: data.to!=='群聊'?data.from_avater:'https://webpon-img.oss-cn-guangzhou.aliyuncs.com/avater/avater/4.jpg',
                 msg: data.msg,
                 time: data.time
             }

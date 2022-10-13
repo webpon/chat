@@ -1,3 +1,5 @@
+import {http} from "../network";
+
 const defContacts = [
     {
         username: '群聊',
@@ -14,7 +16,6 @@ const defContacts = [
 ]
 export default {
     addMsg(state, data) {
-        console.log(data)
         if (state.msgInfo === null || !Array.isArray(state.msgInfo)) {
             state.msgInfo = [data]
         } else if (state.msgInfo.length > 1000) {
@@ -30,6 +31,16 @@ export default {
     },
     updateMyInfo(state, myInfo) {
         state.myInfo = myInfo
+    },
+    initMyInfo(state){
+        const parse = JSON.parse(localStorage.getItem('myInfo'));
+        if (!parse.type){
+           http.get("/my").then(({data})=>{
+               state.myInfo = data.userInfo
+           })
+        } else if (/\d{3}\.\d{,3}\.\d{,3}\.\d{,3}|\d./.test(parse.username)) {
+            state.myInfo = parse
+        }
     },
     updateContacts(state, contacts) {
         state.contacts = [...defContacts, ...contacts]

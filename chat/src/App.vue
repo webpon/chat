@@ -31,6 +31,9 @@ export default {
       return this.$route.path
     },
   },
+  created() {
+    this.$store.commit("initMyInfo")
+  },
   beforeRouteEnter(to, from, next) {
     console.log(to);
     console.log(from);

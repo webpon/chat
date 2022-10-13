@@ -1,4 +1,5 @@
 var express = require('express')
+const adminUser = require('./models/Users')
 var app = express()
 require("dotenv").config()
 var http = require('http').Server(app)
@@ -137,7 +138,6 @@ app.use((req, res, next) => {
 })
 app.get('/api/admin/user', async (req, res, next) => {
     const adminUser = require('./models/Users')
-    console.log(req.query);
     const {id} = req.query
     const user = await adminUser.findOne({
         _id: id
@@ -153,7 +153,7 @@ app.get('/api/admin/user', async (req, res, next) => {
 // 添加用户
 app.post('/api/admin/create', async (req, res) => {
     //!数据库操作方法会返回一个promise
-    const checkUser = await require('./models/Users').findOne({
+    const checkUser = await adminUser.findOne({
         username: req.body.username,
     })
     if (checkUser) {
@@ -169,7 +169,6 @@ app.post('/api/admin/create', async (req, res) => {
 app.use('/api/admin/login', async (req, res, next) => {
     const {username, password} = req.body
     //1、根据用户名找用户
-    const adminUser = require('./models/Users')
     const user = await adminUser.findOne({
         username,
     })
@@ -201,6 +200,26 @@ app.use('/api/admin/login', async (req, res, next) => {
         userInfo: {
             username: user.username,
             imgSrc: user.imgSrc
+        }
+    })
+})
+//我的信息
+app.use('/api/admin/my', async (req, res, next) => {
+    console.log(req.header);
+    const token = req.headers.authorization;
+    jwt.verify(token, tokenKey, async (err, {id}) => {
+        if (err) {
+            res.status(401).send('token错误')
+        } else {
+            const user = await adminUser.findOne({
+                _id: id
+            })
+            res.send({
+                userInfo: {
+                    username: user.username,
+                    imgSrc: user.imgSrc
+                }
+            })
         }
     })
 })

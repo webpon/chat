@@ -2,7 +2,7 @@ export default {
     //当前用户名
     username: 'webpon',
     msgInfo: JSON.parse(localStorage.msgInfo || 'null') || null,
-    myInfo: JSON.parse(localStorage.getItem('myInfo')),
+    myInfo: {},
     contacts: [],
     chatList: JSON.parse(localStorage.getItem('chatList'))||[
         {

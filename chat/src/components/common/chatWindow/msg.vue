@@ -43,7 +43,6 @@ export default {
       //将字符串转换成时间格式
       let timePublish = new Date(t);
       let timeNow = new Date();
-      console.log(timePublish,timeNow)
       let minute = 1000 * 60;
       let hour = minute * 60;
       let day = hour * 24;
