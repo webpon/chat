@@ -8,7 +8,7 @@
         <div class="edit-container">
             <a-textarea class="cus-area" v-model.trim="message.content" :rows="4" placeholder="这一刻的想法..."></a-textarea>
             <div class="upload flex">
-                <img class="upload_img" :src="item" v-for="(item, index) in imgList" :key="index" />
+                <img class="upload_img _img-scale" :src="item" v-for="(item, index) in imgList" :key="index" />
                 <div @click="uploadImg" class="upload-wrapper flex center" v-show="imgList.length < 9">
                     <a-icon type="plus" style="font-size: 20px;" />
                 </div>

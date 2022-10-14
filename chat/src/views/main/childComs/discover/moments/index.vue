@@ -14,7 +14,7 @@
 
             <img class="moment_back"
                 src="https://picx.zhimg.com/80/v2-35857f0199cc225e186098e765dd173c_720w.webp?source=1940ef5c" />
-            <img :src="$store.state.myInfo.imgSrc" class="b_avater avater">
+            <img :src="$store.state.myInfo.imgSrc" class="b_avater avater _img-scale">
         </div>
         <div class="momentContainer" ref="momentContainer">
             <div v-for="item in momentsList" :key="item.moments.id">

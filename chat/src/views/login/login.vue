@@ -21,7 +21,7 @@
       <h3 class="avaterTitle">请选择你的头像</h3>
       <div class="imgContainer">
         <template v-for="(item, index) in imgArr">
-          <img :key="index" :src="item" alt="" class="imgItem" :class="imgIndex === index?'imgItemBorder':''"
+          <img :key="index" :src="item" alt="" class="imgItem _img-scale" :class="imgIndex === index?'imgItemBorder':''"
             @click="selectAvater(index)" ref="avater" />
         </template>
       </div>

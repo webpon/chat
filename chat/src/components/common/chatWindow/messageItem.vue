@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="messageWarpper">
-      <img class="_avater" :src="imgSrc" alt="" v-viewer />
+      <img class="_avater _img-scale" :src="imgSrc" alt="" v-viewer />
       <span class="left-wraper">
         <span>
           {{sendmsg.from}}
@@ -10,14 +10,14 @@
         </span>
         <div v-if="sendmsg.type === 'video'" class="video">
           <lazy-component @show="lazyLoadVideo">
-            <img v-if="!loadVideo" style="width: 180px; height: 180px;position: absolute;"
+            <img v-if="!loadVideo" class="_img-scale" style="width: 180px; height: 180px;position: absolute;"
               src="https://webpon-img.oss-cn-guangzhou.aliyuncs.com/loading.gif" />
             <video-player @play="onPlayerPlay" ref="videoPlayer" v-else
               :options="{width: 180, height: 180, sources: [{src: sendmsg.msg}]}" style="width: 100%;height: 100%" />
           </lazy-component>
         </div>
         <span v-viewer v-else-if="/http|https/.test(sendmsg.msg) || sendmsg.type === 'picture'">
-          <img v-lazy="sendmsg.msg" class="img" />
+          <img v-lazy="sendmsg.msg" class="img _img-scale" />
         </span>
         <p class="msgCard" v-else  @contextmenu.prevent.stop="sCopy">{{ sendmsg.msg }}</p>
     <span>{{time}}</span>

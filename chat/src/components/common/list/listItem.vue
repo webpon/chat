@@ -1,7 +1,7 @@
 <template>
   <div class="listItem" @click="toChat" :class="{ active, stick:userInfo.stick }" @contextmenu.prevent.stop="rc">
     <div class="list_avater_container">
-      <img class="_avater" :src="userInfo.imgSrc" />
+      <img class="_avater _img-scale" :src="userInfo.imgSrc" />
     </div>
     <div class="msgContainer">
       <p class="Title">
