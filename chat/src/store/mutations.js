@@ -46,12 +46,13 @@ export default {
         state.contacts = [...defContacts, ...contacts]
     },
     updateChatList(state, chatUser) {
+        let msg = chatUser.msgNumber
         if (state.chatList.some(item => item.username === chatUser.username)) {
             state.chatList.forEach((item) => {
                 if (item.username === chatUser.username) {
                     item.msg = chatUser.msg
                     item.time = chatUser.time
-                    item.msgNumber++
+                    item.msgNumber+=msg
                 }
             })
         } else {

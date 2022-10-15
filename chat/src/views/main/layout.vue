@@ -30,11 +30,6 @@ export default {
     }
   },
   mounted() {
-    if (this.$store.state.myInfo.username === undefined){
-      this.$message.error('登录状态已失效，请重新登录')
-      router.replace('/login')
-
-    }
   }
 }
 </script>

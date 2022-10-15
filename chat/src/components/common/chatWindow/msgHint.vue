@@ -26,6 +26,7 @@
 <style scoped lang="scss">
 @media screen and (min-width: 750px) {
     .hint{
+        top: 20px;
         width: 300px;
         right: 10px;
     }
@@ -34,6 +35,7 @@
     .hint{
         width: 90vw;
         left: 50%;
+        top: 10px;
         transform: translateX(-50%);
         overflow-x: hidden;
     }
@@ -43,7 +45,6 @@
     padding: 10px;
     position: fixed;
     z-index: 19999;
-    top: 10px;
     background-color: #fff;
     box-shadow: 0 0 5px #888;
     border-radius: 15px;
