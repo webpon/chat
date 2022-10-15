@@ -10,6 +10,13 @@ export default {
             } else {
                 this.$router.push('/chat')
             }
+        },
+        onClickLeft() {
+            if (window.history.length >= 3) {
+                this.$router.back()
+            } else {
+                this.$router.push('/chat')
+            }
         }
     },
 };

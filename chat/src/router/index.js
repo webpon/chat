@@ -62,6 +62,11 @@ const routes = [
             name: 'moments',
             component: () => import(/* webpackPrefetch: true */ /* webpackChunkName: "editMoment" */ '@/views/main/childComs/discover/moments/editMoment.vue'),
           },
+          {
+            path: 'fastEmail',
+            name: 'fastEmail',
+            component: () => import(/* webpackPrefetch: true */ /* webpackChunkName: "fastEmail" */ '@/views/main/childComs/discover/fastEmail/index.vue'),
+          },
         ]
       }
     ]
@@ -88,12 +93,10 @@ router.beforeEach((to, from, next) => {
     if (!token) {
       next('/login')
     } else if(from.path === '/login'){
-      console.log('+++++++++++++++++');
       websocket()
       Vue.prototype.$socket.open()
       next()
     } else {
-      console.log('_____________');
       if (!Vue.prototype.$socket || Vue.prototype.$socket.disconnected) {
         websocket()
         Vue.prototype.$socket.open()

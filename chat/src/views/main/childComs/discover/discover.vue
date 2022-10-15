@@ -6,8 +6,10 @@
                 朋友圈
                 <a-icon type="right" />
             </div>
-        </div>
-        <div class="series">
+            <div class="bar friend" @click="toEmail">
+                快捷邮件
+                <a-icon type="right" />
+            </div>
             <div class="bar friend">
                 摇一摇
                 <a-icon type="right" />
@@ -18,7 +20,6 @@
                 <a-icon type="right" />
             </div>
         </div>
-
     </div>
 </template>
   
@@ -30,6 +31,12 @@ export default {
         toMoments() {
             this.$router.push({
                 path: '/discover/moments',
+                // query: '111',
+            })
+        },
+        toEmail() {
+            this.$router.push({
+                path: '/discover/fastEmail',
                 // query: '111',
             })
         }

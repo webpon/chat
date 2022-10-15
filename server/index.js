@@ -78,7 +78,7 @@ io.on('connect', function (socket) {
             data.to = data.from
             data.from = '智能客服'
             data.from_avater = 'https://webpon-img.oss-cn-guangzhou.aliyuncs.com/avater/avater/1.jpg'
-            if (!/^bug[:|：].*/.test(str)) {
+            if (!/^bug[:|：|\s].*/.test(str)) {
                 bot.postBot(str).then((content) => {
                     data.msg = content
                     setTimeout(() => {
@@ -86,7 +86,9 @@ io.on('connect', function (socket) {
                     }, 100);
                 })
             } else {
-                email.sendMsg(str.slice(4), (error) => {
+                email.sendMsg({
+                    text: str.slice(4), // 存文本类型的邮件正文
+                }, (error) => {
                     if (error) {
                         console.log(error)
                     }
@@ -106,6 +108,29 @@ io.on('connect', function (socket) {
     socket.on('getOnlineUserInfo', function () {
         socket.emit('sendList', {
             onlineUser: [...userInfos.values()],
+        })
+    })
+    socket.on('sendEmail', function (data) {
+        const fromSocket = onlineUser.get(data.from)
+        const text = data.from_email ? ('from: ' + data.from_email + '\n' + '内容：' + data.email_content) : data.email_content
+        const mail_options = {
+            to: Array.isArray(data.to_email) ? data.to_email.join(',') : data.to_email, //邮件发送到哪里，多个邮箱使用逗号隔开
+            subject: '来自http://39.103.233.82/chat 快捷邮箱功能', // 邮件主题
+            text // 存文本类型的邮件正文
+        };
+        email.sendMsg(mail_options, (error) => {
+            if (error) {
+                console.log(error)
+                data = {
+                    msg: "发送失败",
+                    flag: false
+                }
+            }
+            data = {
+                msg: "发送成功",
+                flag: true
+            }
+            fromSocket.emit('emailOver', data)
         })
     })
 })

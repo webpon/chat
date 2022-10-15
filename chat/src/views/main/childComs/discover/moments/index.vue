@@ -110,10 +110,6 @@ export default {
 
 <style scoped lang="scss">
 @media screen and (min-width: 750px) {
-    .container{
-        width: 500px;
-        margin: auto;
-    }
     .moment_back{
         width: 500px;
     }
@@ -135,9 +131,6 @@ export default {
     }
     .top-wrapper {
         width: 100vw;
-    }
-    .container {
-        position: fixed;
     }
 }
 
