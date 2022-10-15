@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import websocket from '@/network/websocket'
-import store from '@/store/index'
+// import store from '@/store/index'
 
 Vue.use(VueRouter)
 
@@ -83,26 +82,10 @@ const router = new VueRouter({
   routes
 })
 router.beforeEach((to, from, next) => {
-  console.log(to);
-  console.log(from);
-  if (to.path === '/login') {
-    store.commit('updateMyInfo', {})
-    next()
+  if (!localStorage.token && to.path !== '/login' ) {
+    next('/login')
   } else {
-    let token = localStorage.token
-    if (!token) {
-      next('/login')
-    } else if(from.path === '/login'){
-      websocket()
-      Vue.prototype.$socket.open()
-      next()
-    } else {
-      if (!Vue.prototype.$socket || Vue.prototype.$socket.disconnected) {
-        websocket()
-        Vue.prototype.$socket.open()
-      }
-      next()
-    }
+    next()
   }
-}) //这些代码写在router文件夹中的index.js下
+}) 
 export default router

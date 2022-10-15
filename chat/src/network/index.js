@@ -52,10 +52,6 @@ const error = err => {
 //axios请求拦截器
 http.interceptors.request.use(
     (config) => {
-        const { type } = store.state.myInfo || {}
-        if (type === 'visitor' && config.url === 'visitor') {
-            return Promise.reject(new Error('游客限制朋友圈功能'))
-        }
         //请求头加上token
         if (localStorage.token) {
             config.headers.Authorization = localStorage.token

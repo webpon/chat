@@ -8,18 +8,22 @@ const {Email} = require('./models/Email');
 const {tokenKey} = require('./config')
 const {Bot} = require('./models/Bot')
 const bot = new Bot();
+let visitorFlag = 0
 var io = require('socket.io')(http, {
     //由于socket.io使用的并不是ws协议，而是经过一些处理的，所以默认不允许跨域，需要以下配置来允许跨域
     cors: {
         origin: "*",
-        methods: ["GET", "POST", "PUT"]
+        methods: ["GET", "POST", "PUT", "OPTIONS"]
     },
     allowRequest: (req, callback) => {
-        jwt.verify(req._query.token, tokenKey, (err) => {
+        jwt.verify(req._query.token, tokenKey, (err, data) => {
+            console.log(err);
+            console.log(data);
             if (err) {
                 callback(null, false);
             } else if (req._query.userInfo) {
                 const userInfo = JSON.parse(req._query.userInfo)
+                console.log('已经登录了');
                 // 3、防止重复登录
                 if (onlineUser.get(userInfo.username)) {
                     callback(null, false);
@@ -40,6 +44,8 @@ const email = new Email();
 io.on('connect', function (socket) {
     const {userInfo = ''} = socket.handshake.query || {}
     const userInfoData = JSON.parse(userInfo)
+    console.log('_____________________');
+    console.log(userInfoData);
     if (userInfoData) {
         onlineUser.set(userInfoData.username, socket)
         userInfos.set(socket.id, userInfoData)
@@ -119,16 +125,20 @@ io.on('connect', function (socket) {
             text // 存文本类型的邮件正文
         };
         email.sendMsg(mail_options, (error) => {
+            console.log('_____________sendMsg______________');
+            console.log(error);
+            let data = {}
             if (error) {
                 console.log(error)
                 data = {
                     msg: "发送失败",
                     flag: false
                 }
-            }
-            data = {
-                msg: "发送成功",
-                flag: true
+            } else {
+                data = {
+                    msg: "发送成功",
+                    flag: true
+                }
             }
             fromSocket.emit('emailOver', data)
         })
@@ -232,19 +242,24 @@ app.use('/api/admin/login', async (req, res, next) => {
 app.use('/api/admin/my', async (req, res, next) => {
     console.log(req.header);
     const token = req.headers.authorization;
-    jwt.verify(token, tokenKey, async (err, {id}) => {
+    jwt.verify(token, tokenKey, async (err, data) => {
+        const { id, type } = data
         if (err) {
             res.status(401).send('token错误')
         } else {
-            const user = await adminUser.findOne({
-                _id: id
-            })
-            res.send({
-                userInfo: {
-                    username: user.username,
-                    imgSrc: user.imgSrc
+            let userInfo
+            if(type === 'visitor') {
+                userInfo = {
+                    username: id,
+                    ype: 'visitor',
+                    imgSrc: 'https://p.ssl.qhimg.com/t0126d6aa871801abe1.png'
                 }
-            })
+            } else {
+                userInfo = await adminUser.findOne({
+                    _id: id
+                })
+            }
+            res.send({userInfo})
         }
     })
 })
@@ -252,7 +267,8 @@ app.use('/api/admin/my', async (req, res, next) => {
 app.use('/api/admin/visitor', async (req, res, next) => {
     const client_ip = req.ip.match(/\d+\.\d+\.\d+\.\d+/)[0]
     console.log(client_ip);
-    const user_id = client_ip + '|' + onlineUser.size
+    visitorFlag++
+    const user_id = client_ip + '|' + visitorFlag
     //3、返回token
     const jwt = require('jsonwebtoken')
     //参数一，记录的信息，第二个令牌，第三个设置过期时间

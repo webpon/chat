@@ -1,8 +1,8 @@
 <template>
   <div id="app">
-    <rightClick/>
+    <rightClick />
     <transition name="msgMove">
-        <msg-hint v-show="$store.state.msgHint.show"/>
+      <msg-hint v-show="$store.state.msgHint.show" />
     </transition>
     <keep-alive>
       <router-view />
@@ -22,7 +22,7 @@ export default {
   data() {
     return {
       ring: false
-      ,isShow:false
+      , isShow: false
     }
   },
   components: { Layout, msgHint, rightClick },
@@ -31,8 +31,10 @@ export default {
       return this.$route.path
     },
   },
-  created() {
-    this.$store.commit("initMyInfo")
+  async created() {
+    if (this.$route.path !== '/login') {
+      this.checkLogin()
+    }
   },
   beforeRouteEnter(to, from, next) {
     console.log(to);
@@ -55,6 +57,24 @@ export default {
   methods: {
     updateDeviceInfo() {
       this.$store.commit('checkDevice', window.matchMedia("only screen and (max-width: 750px)").matches)
+    },
+    async checkLogin() {
+      if (localStorage.token) {
+        try {
+          const { data = {} } = await this.$http.get("/my")
+          this.$store.commit('updateMyInfo', data.userInfo)
+          this.socketIInit()
+          this.$socket.open()
+        } catch (error) {
+          console.log(error);
+        }
+      } else {
+        localStorage.removeItem('token')
+        this.$store.commit('updateMyInfo', {})
+        this.socketIInit()
+        this.$socket.close()
+        this.$router.replace('/login')
+      }
     }
   }
 }
@@ -82,6 +102,7 @@ export default {
     }
   }
 }
+
 .msgMove-enter-active,
 .msgMove-leave-active {
   transition: all 0.25s ease-out;

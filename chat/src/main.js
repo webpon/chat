@@ -4,7 +4,7 @@ import router from './router'
 import store from './store'
 // import 'animate.css'
 import { http, moments, oss } from 'network/index'
-import './network/websocket.js'
+import socket from './network/websocket.js'
 import alertWheel from './components/common/alertWheel/index'
 import antd from 'ant-design-vue';
 import Vant from 'vant';
@@ -40,6 +40,7 @@ Vue.use(Vant);
 Vue.prototype.bus = new Vue()
 Vue.config.productionTip = false
 Vue.prototype.alertWheel = alertWheel
+Vue.prototype.socketIInit = socket
 new Vue({
   router,
   store,

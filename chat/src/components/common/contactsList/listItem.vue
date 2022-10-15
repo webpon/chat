@@ -29,7 +29,7 @@ export default {
   components: {},
   methods: {
     toChat() {
-      if (this.contactsInfo.username === JSON.parse(localStorage.myInfo).username) {
+      if (this.contactsInfo.username === this.$store.state.myInfo.username) {
         this.alertWheel.div.add(this.alertWheel.button).add(this.alertWheel.p).show()
         return
       }

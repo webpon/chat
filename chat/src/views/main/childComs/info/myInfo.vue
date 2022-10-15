@@ -22,7 +22,6 @@ export default {
         //退出登录
         logout() {
             localStorage.removeItem('token')
-            localStorage.removeItem('myInfo')
             this.$store.commit('updateMyInfo', {})
             this.$socket.close()
             this.$router.replace('/login')
