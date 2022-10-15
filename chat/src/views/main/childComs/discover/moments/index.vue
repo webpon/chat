@@ -1,5 +1,5 @@
 <template>
-    <div class="container" ref="container">
+    <van-pull-refresh class="container" ref="container"  v-model="isLoading" @refresh="onRefresh">
         <div class="background">
             <div v-if="showTop" class="top-wrapper flex">
                 <a-icon type="left" class="_back back" @click="back" />
@@ -24,7 +24,7 @@
         </div>
         <div class="flex center" style="padding: 10px 0 3px 0"><span v-show="loadingMoments"><a-icon type="loading" style="padding-right: 10px" />正在加载...</span></div>
         <div class="no-more" v-if="!toGet">没有更多了 ~</div>
-    </div>
+    </van-pull-refresh>
 </template>
 
 <script>
@@ -38,16 +38,37 @@ export default {
             page: 1,
             toGet: true,
             loadTimer: null,
+            isLoading: false,
             showTop: false,
             timeFlag: true,
             loadingMoments: false
         }
     },
     mounted() {
-        this.$refs.container.style.height = `${window.innerHeight}px`
-        this.$refs.container.addEventListener('scroll', this.checkIsBottom)
+        this.$refs.container.$el.style.height = `${window.innerHeight}px`
+        this.$refs.container.$el.addEventListener('scroll', this.checkIsBottom)
     },
     methods: {
+        onRefresh() {
+            this.$moments.get(`/moments/1`).then(({ data: { code, data } }) => {
+                if (code === 200) {
+                    let arr = []
+                    foo:for (let i = 0; i < data.length - 1; i++) {
+                        const newId = data[i].moments.id
+                        for (let j = 0; j < this.momentsList.length; j++) {
+                            const odlId = this.momentsList[j].moments.id
+                            if (odlId === newId){
+                                continue foo
+                            }
+                        }
+                        arr.push(data[i])
+                    }
+                    console.log(arr)
+                    this.momentsList.unshift(...arr)
+                }
+                this.isLoading = false
+            })
+        },
         getMoments({refresh = false} = {}) {
             if(refresh) {
                 this.page = 1
@@ -77,7 +98,7 @@ export default {
             })
         },
         checkIsBottom() {
-            const container = this.$refs.container
+            const container = this.$refs.container.$el
             if (this.timeFlag) {
                 this.timeFlag = false
                 setTimeout(() => {
