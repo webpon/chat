@@ -1,6 +1,6 @@
 <template>
     <div class="hint flex" @click="toChat">
-        <img :src="$store.state.msgHint.imgSrc" alt="">
+        <img :src="$store.state.msgHint.imgSrc" alt="" class="_img-scale">
         <div class="msg">
             <h4 class="Title">{{$store.state.msgHint.username}}</h4>
             <p class="text">{{$store.state.msgHint.msg}}</p>

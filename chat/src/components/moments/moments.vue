@@ -1,12 +1,12 @@
 <template>
     <div class="msg_container">
         <div class="moment_msg flex">
-            <img :src="user.imgSrc" class="_avater pointer" @click="toChat(user.username)">
+            <img :src="user.imgSrc" class="_avater pointer _img-scale" @click="toChat(user.username)">
             <div class="msg">
                 <span class="nick pointer" @click="toChat(user.username)">{{user.username}}</span>
                 <p class="msg_content">{{col.moments.content}}</p>
                 <div v-if="col.moments.images.length === 1">
-                    <img v-if="col.moments.images[0].type === 1" v-lazy="col.moments.images[0].url" class="msg_img"
+                    <img v-if="col.moments.images[0].type === 1" v-lazy="col.moments.images[0].url" class="msg_img _img-scale"
                         @click="previewImg(0)">
                     <video-player @play="onPlayerPlay" ref="videoPlayer" v-else
                                     :options="{height: 200,
@@ -15,7 +15,7 @@
                 </div>
                 <div v-else>
                     <template v-for="(image, index) in col.moments.images">
-                        <img v-if="image.type === 1" v-lazy="image.url" class="msg_img" alt=""
+                        <img v-if="image.type === 1" v-lazy="image.url" class="msg_img _img-scale" alt=""
                             style="width: 80px; height: 80px;" @click="previewImg(index)">
                     </template>
                 </div>
