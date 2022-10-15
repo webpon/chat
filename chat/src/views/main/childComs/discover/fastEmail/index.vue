@@ -2,7 +2,7 @@
     <div class="container" ref="container">
         <van-nav-bar title="快捷邮箱" left-arrow @click-left="onClickLeft"/>
         <van-form @submit="onSubmit" :disabled="isLoading">
-            <van-field v-model="from_email" label="发送者(可选)" placeholder="发送者邮箱 / 备注" />
+            <van-field v-model="from_email" name="from_email" label="发送者(可选)" placeholder="发送者邮箱 / 备注" />
             <van-field v-model="to_email" name="to_email" label="接收者" placeholder="接收者邮箱"
                 :rules="[{ pattern: to_pattern, required: true, message: '请正确输入' }]" />
             <van-field v-model="email_content" name="email_content" label="内容" placeholder="请输入内容"
