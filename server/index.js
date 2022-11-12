@@ -251,7 +251,7 @@ app.use('/api/admin/my', async (req, res, next) => {
             if(type === 'visitor') {
                 userInfo = {
                     username: id,
-                    ype: 'visitor',
+                    type: 'visitor',
                     imgSrc: 'https://p.ssl.qhimg.com/t0126d6aa871801abe1.png'
                 }
             } else {

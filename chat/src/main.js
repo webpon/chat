@@ -13,6 +13,8 @@ import 'viewerjs/dist/viewer.css'
 import VueLazyload from 'vue-lazyload'
 import VuevideoPlayer from 'vue-video-player';
 import 'video.js/dist/video-js.css';
+// 处理vant组件库PC兼容问题
+import '@vant/touch-emulator';
 
 import commonMixin from '@/mixins/common.js';
 

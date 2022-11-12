@@ -15,6 +15,7 @@
         <listItem :userInfo="item"/>
         <div class="line" v-show="index !== $store.state.chatList.length - 1"></div>
       </div>
+      
       <div v-for="(item, index) in chatList" v-if="!item.stick">
         <listItem :userInfo="item"/>
         <div class="line" v-show="index !== $store.state.chatList.length - 1"></div>
@@ -34,8 +35,6 @@ export default {
     //移除监听事件"aMsg"
     this.bus.$off('chatUser')
     //移除监听事件,避免重复监听
-    console.log('beforeDestroy');
-    // this.$socket.off('emitEvent');
   },
   computed:{
     chatList(){
@@ -70,6 +69,16 @@ export default {
 
   .listContainer {
     background-color: #fff;
+    height: calc(100% - 130px);
+    overflow-y: auto;
+  }
+}
+@media screen and (min-width: 750px) {
+
+  .listContainer {
+    background-color: #fff;
+    height: calc(100% - 70px);
+    overflow-y: auto;
   }
 }
 

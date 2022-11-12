@@ -65,6 +65,9 @@ export default {
           this.$store.commit('updateMyInfo', data.userInfo)
           this.socketIInit()
           this.$socket.open()
+          if(this.$route.path === '/login') {
+            this.$router.replace('/chat')
+          }
         } catch (error) {
           console.log(error);
         }

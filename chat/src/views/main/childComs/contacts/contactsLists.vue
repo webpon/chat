@@ -1,7 +1,7 @@
 <template>
   <div class="contacts">
-    <h3 class="contactstitle">在线用户 ({{$store.state.contacts.length}})</h3>
-    <div class="contacts_container" ref="contacts"> 
+    <h3 class="contactstitle">在线用户 ({{ $store.state.contacts.length }})</h3>
+    <div class="contacts_container" ref="contacts">
       <listItem
         v-for="(item, index) in $store.state.contacts"
         :key="index" :contactsInfo="item" />
@@ -19,9 +19,6 @@ export default {
     }
   },
   components: { listItem },
-  mounted() {
-    this.$refs.contacts.style.height = `calc(${window.innerHeight}px - 110px)`
-  }
 }
 </script>
 
@@ -30,11 +27,16 @@ export default {
   .contacts {
     width: 250px;
   }
+
   .contacts_container {
     height: calc(100vh - 50px);
   }
 }
+
 @media screen and (max-width: 750px) {
+  .contacts_container {
+    height: calc(100vh - 110px);
+  }
 }
 
 .contactstitle {

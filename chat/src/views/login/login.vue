@@ -166,19 +166,13 @@ export default {
               )
               this.$refs.avaterSelector.style.top = '-50%'
               localStorage.token = res.data.token
-              localStorage.setItem(
-                'myInfo',
-                JSON.stringify({
-                  username: this.model.username,
-                  msg: 'Hi',
-                  imgSrc: this.imgUrl,
-                })
-              )
-              this.$store.commit('updateMyInfo', {
+              this.$store.commit('updateMyInfo', { 
                 username: this.model.username,
                 msg: 'Hi',
                 imgSrc: this.imgUrl,
               })
+              this.socketIInit()
+              this.$socket.open()
               setTimeout(() => {
                 this.$message.success('注册成功，并完成自动登录')
                 this.$router.replace('/chat')

@@ -27,9 +27,6 @@ export default {
     msgInfo() {
       return this.$store.state.msgInfo
     },
-    session() {
-      return JSON.parse(localStorage.getItem('myInfo'))
-    },
   },
   mounted() {
     this.initMsgList()
