@@ -27,15 +27,16 @@ export default {
   .contacts {
     width: 250px;
   }
-
   .contacts_container {
     height: calc(100vh - 50px);
+    padding-bottom: 60px;
   }
 }
 
 @media screen and (max-width: 750px) {
   .contacts_container {
     height: calc(100vh - 110px);
+    padding-bottom: 60px;
   }
 }
 
