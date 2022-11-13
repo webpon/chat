@@ -1,12 +1,15 @@
 <template>
     <div class="msg_container">
         <div class="moment_msg flex">
-            <img :src="user.imgSrc" class="_avater" @click="toChat(user.username)">
+            <img :src="user.imgSrc" class="_avater pointer _img-scale" @click="toChat(user.username)">
             <div class="msg">
-                <span class="nick" @click="toChat(user.username)">{{user.username}}</span>
-                <p class="msg_content">{{col.moments.content}}</p>
+                <span class="nick pointer" @click="toChat(user.username)">{{user.username}}</span>
+                <p v-if="contentLink = getUrl(col.moments.content)">
+                    <a style="text-decoration: underline;" :href="contentLink">{{col.moments.content}}</a>
+                </p>
+                <p v-else class="msg_content">{{col.moments.content}}</p>
                 <div v-if="col.moments.images.length === 1">
-                    <img v-if="col.moments.images[0].type === 1" v-lazy="col.moments.images[0].url" class="msg_img"
+                    <img v-if="col.moments.images[0].type === 1" v-lazy="col.moments.images[0].url" class="msg_img _img-scale"
                         @click="previewImg(0)">
                     <video-player @play="onPlayerPlay" ref="videoPlayer" v-else
                                     :options="{height: 200,
@@ -14,23 +17,23 @@
                                     style="width: 100%;height: 100%" />
                 </div>
                 <div v-else>
-                    <template v-for="(image, index) in col.moments.images"> 
-                        <img v-if="image.type === 1" v-lazy="image.url" class="msg_img" alt=""
+                    <template v-for="(image, index) in col.moments.images">
+                        <img v-if="image.type === 1" v-lazy="image.url" class="msg_img _img-scale" alt=""
                             style="width: 80px; height: 80px;" @click="previewImg(index)">
                     </template>
                 </div>
                 <div class="flex oparate">
                     <div>
-                        <p>{{time}}</p>
-                        <span v-if="col.moments.my || col.moments.admin" @click="deleteMoments">删除</span>
+                        <p>{{col.moments.timeDesc}}</p>
+                        <span class="pointer" v-if="col.moments.my || col.moments.admin" @click="deleteMoments">删除</span>
                     </div>
                     <div>
                         <div v-show="showOparate">
-                            <button @click="like" v-if="collect.isMyLike">
+                            <button @click="like" v-if="collect.isMyLike"  class="pointer">
                                 <van-icon name="like" color="red"/>
                                 取消
                             </button>
-                            <button @click="like" v-else>
+                            <button @click="like" v-else  class="pointer">
                                 <van-icon name="like-o" />
                                 点赞
                             </button>
@@ -43,14 +46,14 @@
                                 评论
                             </button>
                         </div>
-                        <p class="bar" @click="showOparate = !showOparate">··</p>
+                        <p class="bar pointer" @click="showOparate = !showOparate">··</p>
                     </div>
                 </div>
                 <div class="comment_container">
                     <div v-if="likeNameList.length >= 1 ">
                         <van-icon name="like" color="red" style="padding-right: 3px;"/>
                         <template v-for="({username},i) in likeNameList">
-                            <span class="nick" :key="i"
+                            <span class="nick pointer" :key="i"
                                   @click="()=>toChat(username)"
                             >{{username}}</span>
                             <span v-if="i !== likeNameList.length -1">, </span>
@@ -64,7 +67,7 @@
                     </template>
                     <div class="comment" v-show="showComment">
                         <a-input style="height: 30px;" :maxLength="200" :placeholder="prompt" v-model.trim="commentObj.content"
-                            @pressEnter.prevent="sendMsg" />
+                            @pressEnter.prevent="sendMsg" ref="input"/>
                         <a-button @click="sendMsg" style="height: 28px;">发送</a-button>
                     </div>
                 </div>
@@ -94,7 +97,8 @@ import { ImagePreview, Dialog } from 'vant';
                 },
                 prompt:"评论",
                 likeNameList:[],
-                show: false
+                show: false,
+                contentLink: ''
             }
         },
         components: {comment},
@@ -108,13 +112,38 @@ import { ImagePreview, Dialog } from 'vant';
             this.$http.get("/user", {params:{id}}).then(({data:{userInfo}})=>{
                 this.user = userInfo
             })
+            this.col.likes.map(i=>{
+                let id = i.userId
+                this.$http.get("/user", {params:{id}}).then(({data:{userInfo}})=>{
+                    this.likeNameList.push({...userInfo, id})
+                })
+            })
         },
         methods: {
+            getUrl(str) {
+                const reg = /(https?|http|ftp|file):\/\/[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]/g;
+                const strValue = str.match(reg);
+                if (strValue && strValue.length > 0) {
+                return strValue[0];
+                }
+                return null;
+            },
             delComment(id){
                 this.col.comments = this.col.comments.filter(item => item.id !== id)
             },
             toChat(userName){
                 // 私信
+                if (userName === JSON.parse(localStorage.myInfo).username) {
+                    this.alertWheel.div.add(this.alertWheel.button).add(this.alertWheel.p).show()
+                    return
+                }
+                let c = {
+                    ...this.user,
+                    msg: null,
+                    msgNumber:0
+                }
+                this.$store.commit('updateChatList', c)
+
                 this.$router.push({
                     path: '/chat/toChat',
                     query:{userName}
@@ -175,12 +204,19 @@ import { ImagePreview, Dialog } from 'vant';
                             if (msg === "点赞成功") {
                                 this.col.likes.push(data)
                                 this.col.isMyLike = true
+                                let id = data.userId
+                                this.$http.get("/user", {params:{id}}).then(({data:{userInfo}})=>{
+                                    this.likeNameList.push({...userInfo, id})
+                                })
                             }else {
                                 let list = []
                                 this.col.likes.forEach((item)=>{
                                        if (item.id !== data.id){
                                            list.push(item)
                                        }
+                                })
+                                this.likeNameList = this.likeNameList.filter((item)=>{
+                                    return item.id = data.userId
                                 })
                                 this.col.likes = list
                                 this.col.isMyLike = false
@@ -207,70 +243,11 @@ import { ImagePreview, Dialog } from 'vant';
                 });
             }
         },
-        computed: {
-            time() {
-                console.log('++++++++++++++++++');
-                console.log(this.collect);
-                
-                
-                // 把 yyyy-mm-dd hh:mm:ss 转换成 yyyy/mm/dd hh:mm:ss
-                const startData = this.collect.moments.time.replace(new RegExp("-", "gm"), "/");
-                const dateTimeStamp = new Date(startData).getTime();
-                let minute = 1000 * 60;      //把分，时，天，周，半个月，一个月用毫秒表示
-                let hour = minute * 60;
-                let day = hour * 24;
-                let week = day * 7;
-                // let halfamonth = day * 15;
-                let month = day * 30;
-                let now = new Date().getTime();   //获取当前时间毫秒
-                console.log(now)
-                let diffValue = now - dateTimeStamp;//时间差
-                
-                if (diffValue < 0) {
-                    return;
-                }
-                let minC = diffValue / minute;  //计算时间差的分，时，天，周，月
-                let hourC = diffValue / hour;
-                let dayC = diffValue / day;
-                let weekC = diffValue / week;
-                let monthC = diffValue / month;
-                let result;
-                if (monthC >= 1 && monthC < 4) {
-                    result = " " + parseInt(monthC) + "月前"
-                } else if (weekC >= 1 && weekC < 4) {
-                    result = " " + parseInt(weekC) + "周前"
-                } else if (dayC >= 1 && dayC < 7) {
-                    result = " " + parseInt(dayC) + "天前"
-                } else if (hourC >= 1 && hourC < 24) {
-                    result = " " + parseInt(hourC) + "小时前"
-                } else if (minC >= 1 && minC < 60) {
-                    result = " " + parseInt(minC) + "分钟前"
-                } else if (diffValue >= 0 && diffValue <= minute) {
-                    result = "刚刚"
-                } else {
-                    let datetime = new Date();
-                    datetime.setTime(dateTimeStamp);
-                    let Nyear = datetime.getFullYear();
-                    let Nmonth = datetime.getMonth() + 1 < 10 ? "0" + (datetime.getMonth() + 1) : datetime.getMonth() + 1;
-                    let Ndate = datetime.getDate() < 10 ? "0" + datetime.getDate() : datetime.getDate();
-                    result = Nyear + "-" + Nmonth + "-" + Ndate
-                }
-                return result;
-            }
-        },
         watch:{
-            "col.likes":{
-                handler(){
-                    this.likeNameList = []
-                    this.col.likes.map(i=>{
-                        let id = i.userId
-                        this.$http.get("/user", {params:{id}}).then(({data:{userInfo}})=>{
-                            this.likeNameList.push(userInfo)
-                        })
-
-                    })
-                },
-                immediate:true
+            showComment(){
+                setTimeout(()=>{
+                    this.$refs.input.focus()
+                },100)
             }
         }
     }

@@ -9,7 +9,8 @@ const moment_baseURL = (IS_PROD || IS_SVR) ? 'http://150.158.191.140:5389' : '/m
 const oss_baseURL = (IS_PROD || IS_SVR) ? 'http://39.103.233.82:14400/oss' : '/oss'
 const http = axios.create({
     // baseURL: '/api/admin', //这个按实际情况填写
-    baseURL: http_baseURL
+    baseURL: http_baseURL,
+    headers: { 'Cache-Control': 'no-cache' } 
 })
 const moments = axios.create({
     // baseURL: '/moments', //这个按实际情况填写
