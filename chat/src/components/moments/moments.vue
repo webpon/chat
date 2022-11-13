@@ -52,19 +52,19 @@
                 <div class="comment_container">
                     <div v-if="likeNameList.length >= 1 ">
                         <van-icon name="like" color="red" style="padding-right: 3px;"/>
-                        <template v-for="({username},i) in likeNameList">
-                            <span class="nick pointer" :key="i"
+                        <span v-for="({username},i) in likeNameList" :key="i">
+                            <span class="nick pointer" 
                                   @click="()=>toChat(username)"
                             >{{username}}</span>
                             <span v-if="i !== likeNameList.length -1">, </span>
-                        </template>
+                        </span>
                     </div>
 
-                    <template v-for="item in col.comments">
-                        <comment :comment="item" :key="item.id" @send="update" @del="delComment"/>
+                    <div v-for="item in col.comments" :key="item.id">
+                        <comment :comment="item" @send="update" @del="delComment"/>
                         <comment v-if="item.children.length > 0" v-for="c in item.children" :comment="c" :key="c.id"
                             :reply-id="item.userId" @del="delComment"/>
-                    </template>
+                    </div>
                     <div class="comment" v-show="showComment">
                         <a-input style="height: 30px;" :maxLength="200" :placeholder="prompt" v-model.trim="commentObj.content"
                             @pressEnter.prevent="sendMsg" ref="input"/>
@@ -198,6 +198,8 @@ import { ImagePreview, Dialog } from 'vant';
                 this.prompt = `回复 ${username}`
             },
             like() {
+                console.log('-=-=-=-=-');
+                
                 this.$moments.post("/like", {momentsId: this.col.moments.id})
                     .then(({data: {code, data, msg}}) => {
                         if (code === 200) {
@@ -215,8 +217,11 @@ import { ImagePreview, Dialog } from 'vant';
                                            list.push(item)
                                        }
                                 })
+                                console.log(data.userId);
+                                console.log(this.likeNameList);
+                                
                                 this.likeNameList = this.likeNameList.filter((item)=>{
-                                    return item.id = data.userId
+                                    return item.id !== data.userId
                                 })
                                 this.col.likes = list
                                 this.col.isMyLike = false
