@@ -4,23 +4,28 @@
       <img class="_avater _img-scale" :src="imgSrc" alt="" v-viewer />
       <span class="left-wraper">
         <span>
-          {{sendmsg.from}}
-          <span class="nick" v-if="$route.query.userName === '群聊'" :style="{color: isOnline ? 'blue' : 'gray'}"> {{isOnline ? '(在线)':
-          '(离线)'}}</span>
+          {{ sendmsg.from }}
+          <span class="nick" v-if="$route.query.userName === '群聊'" :style="{ color: isOnline ? 'blue' : 'gray' }">
+            {{ isOnline ? '(在线)' :
+                '(离线)'
+            }}</span>
         </span>
         <div v-if="sendmsg.type === 'video'" class="video">
           <lazy-component @show="lazyLoadVideo">
             <img v-if="!loadVideo" class="_img-scale" style="width: 180px; height: 180px;position: absolute;"
               src="https://webpon-img.oss-cn-guangzhou.aliyuncs.com/loading.gif" />
             <video-player @play="onPlayerPlay" ref="videoPlayer" v-else
-              :options="{width: 180, height: 180, sources: [{src: sendmsg.msg}]}" style="width: 100%;height: 100%" />
+              :options="{ width: 180, height: 180, sources: [{ src: sendmsg.msg }] }" style="width: 100%;height: 100%" />
           </lazy-component>
         </div>
-        <span v-viewer v-else-if="/http|https/.test(sendmsg.msg) || sendmsg.type === 'picture'">
+        <span v-viewer v-else-if="sendmsg.type === 'picture'">
           <img v-lazy="sendmsg.msg" class="img _img-scale" />
         </span>
-        <p class="msgCard" v-else  @contextmenu.prevent.stop="sCopy">{{ sendmsg.msg }}</p>
-    <span>{{time}}</span>
+        <p v-else-if="/http|https/.test(sendmsg.msg)" class="msgCard">
+          <a :href="sendmsg.msg">{{ sendmsg.msg }}</a>
+        </p>
+        <p class="msgCard" v-else @contextmenu.prevent.stop="sCopy">{{ sendmsg.msg }}</p>
+        <span>{{ time }}</span>
       </span>
     </div>
   </div>
@@ -34,13 +39,13 @@ export default {
       loadVideo: false,
     }
   },
-  components:{rightClick},
+  components: { rightClick },
   props: {
     sendmsg: {
       type: Object,
       default: {},
     },
-    time:String
+    time: String
   },
   computed: {
     imgSrc() {
@@ -70,23 +75,23 @@ export default {
       }
       this.$store.commit('updatePlayingVideo', this.$refs.videoPlayer.player)
     },
-    sCopy({x,y}){
-      this.$store.commit("showRightClick", {b:true, axis:{x, y}})
+    sCopy({ x, y }) {
+      this.$store.commit("showRightClick", { b: true, axis: { x, y } })
       this.$store.commit("addRightClickEvent", [
         {
           text: '复制',
           event: this.copy,
-          show:true
+          show: true
         }
       ])
       const copy = e => {
         this.$store.commit("showRightClick", false)
         document.removeEventListener("click", copy)
       }
-      document.addEventListener('click',copy)
+      document.addEventListener('click', copy)
 
     },
-    copy(){
+    copy() {
       var textareaC = document.createElement('textarea');
       textareaC.setAttribute('readonly', 'readonly'); //设置只读属性防止手机上弹出软键盘
       textareaC.value = this.sendmsg.msg;
@@ -105,11 +110,19 @@ export default {
   .messageWarpper {
     padding: 0 25px;
   }
+
+  .msgCard {
+    max-width: 280px;
+  }
 }
 
 @media screen and (max-width: 750px) {
   .messageWarpper {
     padding: 0 5px;
+  }
+
+  .msgCard {
+    max-width: 180px;
   }
 }
 
@@ -161,13 +174,14 @@ export default {
   font-size: 16px;
   background-color: #fff;
   word-break: break-all;
-  max-width: 180px;
   border-radius: 5px;
 }
-.cp{
+
+.cp {
   position: fixed;
   z-index: 999;
   border: 1px black solid;
+
   button {
     display: block;
     border: none;
@@ -176,10 +190,9 @@ export default {
     width: 50px;
     height: 20px;
   }
-  button:hover{
+
+  button:hover {
     background-color: rgba(104, 91, 91, 0.73);
   }
 }
-
-
 </style>

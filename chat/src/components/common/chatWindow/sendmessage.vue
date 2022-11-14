@@ -16,9 +16,12 @@
                 :options="{width: 180, height: 180, sources: [{src: sendmsg.msg}]}" style="width: 100%;height: 100%" />
             </lazy-component>
           </div>
-          <span v-viewer v-else-if="/http|https/.test(sendmsg.msg) || sendmsg.type === 'picture'" style="display: block">
+          <span v-viewer v-else-if="sendmsg.type === 'picture'" style="display: block">
             <img v-lazy="sendmsg.msg" class="img _img-scale" />
           </span>
+          <p v-else-if="/http|https/.test(sendmsg.msg)" class="msgCard">
+            <a :href="sendmsg.msg">{{sendmsg.msg}}</a>
+          </p>
           <p class="msgCard" v-else-if="sendmsg.type === 'string'" @contextmenu.prevent.stop="sCopy">{{ sendmsg.msg }}</p>
           <span class="time">{{time}}</span>
         </div>
@@ -106,6 +109,9 @@ export default {
     position: absolute;
     right: 80px;
   }
+  .msgCard {
+    max-width: 280px;
+  }
 }
 
 @media screen and (max-width: 750px) {
@@ -115,6 +121,9 @@ export default {
   .time{
     position: absolute;
     right: 60px;
+  }
+  .msgCard {
+    max-width: 180px;
   }
 }
 .time{
@@ -156,7 +165,6 @@ export default {
 .msgCard {
   /*display: inline-block;*/
   position: relative;
-  max-width: 180px;
   right: 10px;
   padding: 10px 15px;
   font-size: 16px;
