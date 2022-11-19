@@ -2,7 +2,7 @@
 import { io } from 'socket.io-client'
 import router from '@/router/index'
 import store from '@/store/index'
-// const audio = new Audio()
+const audio = new Audio()
 let socket = null
 const IS_PROD = process.env.NODE_ENV === "production";
 const IS_SVR = process.env.VUE_APP_PROJECT_ENV === 'svr'
@@ -52,24 +52,27 @@ export default () => {
 
     //监听消息
     socket.on('emitEvent', (data) => {
-      // audio.src = "https://webpon-img.oss-cn-guangzhou.aliyuncs.com/msg.mp3"
-      // audio.play();
       function msgToAudio(data) {
-        let msg = new SpeechSynthesisUtterance();
-        switch (data.type) {
-          case "picture":
-            msg.text = data.to + '发来一张图片'
-            break;
-          case "video":
+        if (window.SpeechSynthesisUtterance) {
+          let msg = new SpeechSynthesisUtterance();
+          switch (data.type) {
+            case "picture":
+              msg.text = data.to + '发来一张图片'
+              break;
+            case "video":
               msg.text = data.to + '发来一个视频'
               break;
-          default:
-            msg.text = data.to + '发来,' + data.msg; // 待合成文字
-            break;
+            default:
+              msg.text = data.to + '发来,' + data.msg; // 待合成文字
+              break;
+          }
+          msg.rate = 1;  // 播放倍速
+          msg.volume = 1; // 音量
+          speechSynthesis.speak(msg);
+        } else {
+          audio.src = "https://webpon-img.oss-cn-guangzhou.aliyuncs.com/msg.mp3"
+          audio.play();
         }
-        msg.rate = 1;  // 播放倍速
-        msg.volume = 1; // 音量
-        speechSynthesis.speak(msg);
       }
       msgToAudio(data)
       // 群聊不需弹窗提醒

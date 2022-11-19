@@ -133,7 +133,7 @@ import { ImagePreview, Dialog } from 'vant';
             },
             toChat(userName){
                 // 私信
-                if (userName === JSON.parse(localStorage.myInfo).username) {
+                if (userName === this.$store.state.myInfo.username) {
                     this.alertWheel.div.add(this.alertWheel.button).add(this.alertWheel.p).show()
                     return
                 }

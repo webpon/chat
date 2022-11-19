@@ -1,9 +1,17 @@
 <template>
   <div class="chatForm">
-      <div class="upload">
+    <div class="upload">
       <a-icon type="picture" @click="uploadImg" :style="{ fontSize: '20px', color: '#08c' }" />
       <a-icon type="play-square" @click="uploadVideo"
         :style="{ fontSize: '20px', color: '#08c', 'margin': '0 20px' }" />
+      <twemoji-picker :style="{
+        display: 'inline-block', cursor: 'pointer', 'margin-right': '10px'
+      }" @emojiUnicodeAdded="emojiUnicodeAdded" :emojiData="emojiDataAll" :emojiGroups="emojiGroups"
+        :skinsSelection="false" searchEmojiPlaceholder="Search here." isLoadingLabel="Loading...">
+        <template v-slot:twemoji-picker-button>
+          <span style="font-size: 18px;">😃</span>
+        </template>
+      </twemoji-picker>
       <progress :value="progress" max="100" style="width: 150px"></progress>
       {{ progress }} %
       <input v-show="false" accept="image/*" ref="fileInputPicture" type="file" :multiple="false"
@@ -12,9 +20,7 @@
         @change="uploadProgress($event, 'video')" />
     </div>
     <a-textarea class="msg_textarea" :maxLength="200" placeholder="请输入内容" @input="areaInput" :rows="4"
-      v-model.trim="message.content" @pressEnter.prevent="sendmsg" @contextmenu.prevent.stop="sCopy"
-      ref="input"
-    />
+      v-model.trim="message.content" @pressEnter.prevent="sendmsg" @contextmenu.prevent.stop="sCopy" ref="input" />
     <span class="length-info">
       {{ message.content.length }} / 200
     </span>
@@ -23,6 +29,11 @@
 </template>
 <script>
 import rightClick from "../../rightClick";
+import {
+  TwemojiPicker
+} from '@kevinfaguiar/vue-twemoji-picker';
+import EmojiAllData from '@kevinfaguiar/vue-twemoji-picker/emoji-data/zh/emoji-all-groups.json';
+import EmojiGroups from '@kevinfaguiar/vue-twemoji-picker/emoji-data/emoji-groups.json';
 
 export default {
   data() {
@@ -33,15 +44,27 @@ export default {
       },
       msgRecords: [],
       progress: 0,
-      axis:{
-        x:100,
-        y:100
+      axis: {
+        x: 100,
+        y: 100
       },
       showCopy: false
     }
   },
-  components:{rightClick},
+  computed: {
+    emojiDataAll() {
+      return EmojiAllData;
+    },
+    emojiGroups() {
+      return EmojiGroups;
+    }
+  },
+  components: { rightClick, 'twemoji-picker': TwemojiPicker },
   methods: {
+    emojiUnicodeAdded(e) {
+      this.message.type = "string"
+      this.message.content += e
+    },
     //向发送请求的客户端添加聊天记录
     sendmsg() {
       if (this.message.content === '') {
@@ -66,8 +89,8 @@ export default {
         msgId: Math.random().toString() + new Date().valueOf()
       })
       this.message.type = 'string'
-      this.$store.commit("updateMsgItemMsg",{
-        username:this.$route.query.userName,
+      this.$store.commit("updateMsgItemMsg", {
+        username: this.$route.query.userName,
         msg: this.message.content,
         time: new Date().getTime()
       })
@@ -98,49 +121,49 @@ export default {
         },
       }
       // 请求签前面
-      this.$oss.get("/").then(async ({data}) => {
-          const key = data.dir + ('xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'
-              .replace(/[xy]/g, c => {
-                      return (c === 'x' ? (Math.random() * 16 | 0) : ('r&0x3' | '0x8')).toString(16)
-              })) + `_${file.name}`
-          form.append("policy", data.policy)
-          form.append("signature", data.signature)
-          form.append("OSSAccessKeyId",data.accessid)
-          form.append("key", key);
-          form.append("dir",data.dir)
-          form.append("host",data.host)
-          form.append("file", file); // 文件对象
-          await this.$http.post(data.host, form, config)
-          this.message.type = type
-          this.message.content = data.host + "/" + key
-          this.sendmsg()
-          e.target.value = ''
-          this.progress = 0
+      this.$oss.get("/").then(async ({ data }) => {
+        const key = data.dir + ('xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'
+          .replace(/[xy]/g, c => {
+            return (c === 'x' ? (Math.random() * 16 | 0) : ('r&0x3' | '0x8')).toString(16)
+          })) + `_${file.name}`
+        form.append("policy", data.policy)
+        form.append("signature", data.signature)
+        form.append("OSSAccessKeyId", data.accessid)
+        form.append("key", key);
+        form.append("dir", data.dir)
+        form.append("host", data.host)
+        form.append("file", file); // 文件对象
+        await this.$http.post(data.host, form, config)
+        this.message.type = type
+        this.message.content = data.host + "/" + key
+        this.sendmsg()
+        e.target.value = ''
+        this.progress = 0
       })
     },
-    sCopy({x,y}){
-      this.$store.commit("showRightClick", {b:true, axis:{x, y}})
+    sCopy({ x, y }) {
+      this.$store.commit("showRightClick", { b: true, axis: { x, y } })
       this.$store.commit("addRightClickEvent", [
-          {
-              text: '复制',
-              event: this.copy,
-              show:true
-          },
-          {
-              text: '粘贴',
-              event: this.paste,
-              show:true
-          },
+        {
+          text: '复制',
+          event: this.copy,
+          show: true
+        },
+        {
+          text: '粘贴',
+          event: this.paste,
+          show: true
+        },
       ])
       const copy = e => {
-          this.$store.commit("showRightClick", false)
-          this.showCopy = false
+        this.$store.commit("showRightClick", false)
+        this.showCopy = false
         document.removeEventListener("click", copy)
       }
-      document.addEventListener('click',copy)
+      document.addEventListener('click', copy)
 
     },
-    copy(){
+    copy() {
       var textareaC = document.createElement('textarea');
       textareaC.setAttribute('readonly', 'readonly'); //设置只读属性防止手机上弹出软键盘
       textareaC.value = this.message.content;
@@ -150,21 +173,21 @@ export default {
       document.body.removeChild(textareaC);//移除DOM元素
       return res;
     },
-    paste(){
+    paste() {
       var clipPromise = navigator.clipboard.readText();
-      clipPromise.then((clipText)=>{
+      clipPromise.then((clipText) => {
         this.message.content += clipText
       })
     }
 
   },
   watch: {
-      "$route.query.userName":{
-          handler(){
-              this.$refs.input.focus()
-          },
-          // immediate:true
-      }
+    "$route.query.userName": {
+      handler() {
+        this.$refs.input.focus()
+      },
+      // immediate:true
+    }
   }
 }
 </script>
@@ -206,6 +229,7 @@ export default {
 
   .msg_textarea {
     resize: none;
+    font-size: 18px;
   }
 
   .length-info {
@@ -219,10 +243,12 @@ export default {
   .ant-input {
     border: none;
   }
+
   .ant-input:focus {
     box-shadow: none !important;
   }
 }
+
 .sendBtn {
   position: fixed;
 }

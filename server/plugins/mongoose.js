@@ -2,7 +2,7 @@
 const mongoose = require('mongoose')
 //连接数据库
 mongoose
-  .connect('mongodb://localhost/realTimeChat', {
+  .connect('mongodb://admin:webponlwj@39.103.233.82:27017/realTimeChat?authSource=admin', {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })

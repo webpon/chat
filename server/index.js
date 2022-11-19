@@ -4,10 +4,9 @@ var app = express()
 require("dotenv").config()
 var http = require('http').Server(app)
 const jwt = require('jsonwebtoken')
-const {Email} = require('./models/Email');
-const {tokenKey} = require('./config')
-const {Bot} = require('./models/Bot')
-const bot = new Bot();
+const { Email } = require('./models/Email');
+const { tokenKey } = require('./config')
+const axios = require('axios')
 let visitorFlag = 0
 var io = require('socket.io')(http, {
     //由于socket.io使用的并不是ws协议，而是经过一些处理的，所以默认不允许跨域，需要以下配置来允许跨域
@@ -42,10 +41,8 @@ let userInfos = new Map()
 const email = new Email();
 //连接成功
 io.on('connect', function (socket) {
-    const {userInfo = ''} = socket.handshake.query || {}
+    const { userInfo = '' } = socket.handshake.query || {}
     const userInfoData = JSON.parse(userInfo)
-    console.log('_____________________');
-    console.log(userInfoData);
     if (userInfoData) {
         onlineUser.set(userInfoData.username, socket)
         userInfos.set(socket.id, userInfoData)
@@ -74,6 +71,7 @@ io.on('connect', function (socket) {
         userInfos.delete(socket.id)
     });
     socket.on('sendEvent', function (data) {
+        console.log(data);
         const toSocket = onlineUser.get(data.to)
         const fromSocket = onlineUser.get(data.from)
         if (!userInfos.get(socket.id) || userInfos.get(socket.id).username !== data.from) return
@@ -85,12 +83,12 @@ io.on('connect', function (socket) {
             data.from = '智能客服'
             data.from_avater = 'https://webpon-img.oss-cn-guangzhou.aliyuncs.com/avater/avater/1.jpg'
             if (!/^bug[:|：|\s].*/.test(str)) {
-                bot.postBot(str).then((content) => {
-                    data.msg = content
-                    setTimeout(() => {
-                        fromSocket.emit('emitEvent', data)
-                    }, 100);
-                })
+                axios.get(`http://api.qingyunke.com/api.php?key=free&appid=0&msg=${encodeURI(str)}`).then(res => {
+                    const aiData = res.data || {}
+                    console.log(aiData);
+                    data.msg = aiData.content
+                    fromSocket.emit('emitEvent', data)
+                }).catch(err => console.log(err))
             } else {
                 email.sendMsg({
                     text: str.slice(4), // 存文本类型的邮件正文
@@ -148,7 +146,7 @@ io.on('connect', function (socket) {
 //允许跨域
 app.use(require('cors')())
 app.use(express.json()) // for parsing application/json
-app.use(express.urlencoded({extended: true})) // for parsing application/x-www-form-urlencoded
+app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
 //连接数据
 require('./plugins/mongoose')
 //中间件，如果没有token或者token错误则阻止请求
@@ -173,7 +171,7 @@ app.use((req, res, next) => {
 })
 app.get('/api/admin/user', async (req, res, next) => {
     const adminUser = require('./models/Users')
-    const {id} = req.query
+    const { id } = req.query
     const user = await adminUser.findOne({
         _id: id
     })
@@ -202,7 +200,7 @@ app.post('/api/admin/create', async (req, res) => {
 })
 //登录
 app.use('/api/admin/login', async (req, res, next) => {
-    const {username, password} = req.body
+    const { username, password } = req.body
     //1、根据用户名找用户
     const user = await adminUser.findOne({
         username,
@@ -229,7 +227,7 @@ app.use('/api/admin/login', async (req, res, next) => {
     //3、返回token
     const jwt = require('jsonwebtoken')
     //参数一，记录的信息，第二个令牌，第三个设置过期时间
-    const token = jwt.sign({id: user._id}, tokenKey, {expiresIn: '1d'})
+    const token = jwt.sign({ id: user._id }, tokenKey, { expiresIn: '1d' })
     return res.send({
         token,
         userInfo: {
@@ -248,7 +246,7 @@ app.use('/api/admin/my', async (req, res, next) => {
             res.status(401).send('token错误')
         } else {
             let userInfo
-            if(type === 'visitor') {
+            if (type === 'visitor') {
                 userInfo = {
                     username: id,
                     type: 'visitor',
@@ -259,7 +257,7 @@ app.use('/api/admin/my', async (req, res, next) => {
                     _id: id
                 })
             }
-            res.send({userInfo})
+            res.send({ userInfo })
         }
     })
 })
@@ -272,7 +270,7 @@ app.use('/api/admin/visitor', async (req, res, next) => {
     //3、返回token
     const jwt = require('jsonwebtoken')
     //参数一，记录的信息，第二个令牌，第三个设置过期时间
-    const token = jwt.sign({id: user_id, type: 'visitor'}, tokenKey, {expiresIn: '1d'})
+    const token = jwt.sign({ id: user_id, type: 'visitor' }, tokenKey, { expiresIn: '1d' })
     return res.send({
         token,
         userInfo: {
