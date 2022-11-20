@@ -12,7 +12,7 @@
           <span style="font-size: 18px;">😃</span>
         </template>
       </twemoji-picker>
-      <progress :value="progress" max="100" style="width: 150px"></progress>
+      <progress :value="progress" max="100" style="width: 120px"></progress>
       {{ progress }} %
       <input v-show="false" accept="image/*" ref="fileInputPicture" type="file" :multiple="false"
         @change="uploadProgress($event, 'picture')" />
