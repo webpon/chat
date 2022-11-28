@@ -36,7 +36,7 @@ export default {
     if (this.$route.path !== '/login') {
       this.checkLogin()
     }
-    Push.Permission.request();
+    // Push.Permission.request();
   },
   beforeRouteEnter(to, from, next) {
     console.log(to);
