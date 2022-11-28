@@ -38,7 +38,7 @@ module.exports = {
                 test: new RegExp('\\.(js|css)$'), // 匹配规则
                 threshold: 1024, // 字节数 只处理比这个大的资源
                 minRatio: 0.8, // 压缩率 只有比这个小的才会处理
-                deleteOriginalAssets: true // 删除原文件
+                deleteOriginalAssets: false // 删除原文件
             }),
         ] : [],
         // 看这里：把chunk-vendors.js进行分包，提升资源加载速度，很有必要

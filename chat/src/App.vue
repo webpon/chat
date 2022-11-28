@@ -13,6 +13,7 @@
 import Layout from './views/main/layout'
 import msgHint from "./components/common/chatWindow/msgHint";
 import rightClick from "./components/rightClick";
+import Push from 'push.js'
 // document.oncontextmenu = function(e){
 //   return false
 //   //或者 e.preventDefault()
@@ -35,6 +36,7 @@ export default {
     if (this.$route.path !== '/login') {
       this.checkLogin()
     }
+    Push.Permission.request();
   },
   beforeRouteEnter(to, from, next) {
     console.log(to);
@@ -53,8 +55,21 @@ export default {
         this.updateDeviceInfo()
       }, 300)
     });
+    setInterval(() => {
+      this.pushMessage('消息通知的内容');
+    }, 1000)
   },
   methods: {
+    pushMessage(message) {
+      // alert('1')
+      console.log(1111);
+      Push.create("询配来消息了哦", {
+        body: '收到信消息了哦',
+        requireInteraction: false,
+        //icon: '/icon.png',
+        timeout: 3000,
+      });
+    },
     updateDeviceInfo() {
       this.$store.commit('checkDevice', window.matchMedia("only screen and (max-width: 750px)").matches)
     },
@@ -65,7 +80,7 @@ export default {
           this.$store.commit('updateMyInfo', data.userInfo)
           this.socketIInit()
           this.$socket.open()
-          if(this.$route.path === '/login') {
+          if (this.$route.path === '/login') {
             this.$router.replace('/chat')
           }
         } catch (error) {
