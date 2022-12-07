@@ -15,12 +15,15 @@
             <img v-if="!loadVideo" class="_img-scale" style="width: 180px; height: 180px;position: absolute;"
               src="https://webpon-img.oss-cn-guangzhou.aliyuncs.com/loading.gif" />
             <video-player @play="onPlayerPlay" ref="videoPlayer" v-else
-              :options="{ width: 180, height: 180, sources: [{ src: sendmsg.msg }] }" style="width: 100%;height: 100%" />
+              :options="{ width: 180, height: 180, sources: [{ src: sendmsg.msg }] }"
+              style="width: 100%;height: 100%" />
           </lazy-component>
         </div>
         <span v-viewer v-else-if="sendmsg.type === 'picture'">
           <img v-lazy="sendmsg.msg" class="img _img-scale" />
         </span>
+        <pre class="pre msgCard" v-else-if="sendmsg.from === '智能客服'"
+          @contextmenu.prevent.stop="sCopy">{{ sendmsg.msg }}</pre>
         <p class="msgCard" v-else @contextmenu.prevent.stop="sCopy">{{ sendmsg.msg }}</p>
         <span>{{ time }}</span>
       </span>
@@ -172,6 +175,14 @@ export default {
   background-color: #fff;
   word-break: break-all;
   border-radius: 5px;
+}
+
+.pre {
+  font-size: 1rem;
+  padding: 0.6rem;
+  background-color: rgba(128, 100, 169, 0.1);
+  border-radius: 0.4rem;
+  box-shadow: 0.15rem 0.15rem 0.5rem rgb(150 150 150);
 }
 
 .cp {
