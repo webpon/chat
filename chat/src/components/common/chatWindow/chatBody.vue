@@ -29,7 +29,12 @@ export default {
     },
   },
   mounted() {
-    this.initMsgList()
+    this.bus.$on('initMsgList', () => {
+      this.initMsgList()
+    });
+    if(this.$store.state.myInfo.username) {
+      this.initMsgList()
+    }
     this.$refs.chatBody.style.height = `calc(${this.windowInnerHeight}px - 205px)`
     this.$nextTick(() => {
       this.$refs.chatBody.scrollTo(0, this.$refs.chatBody.scrollHeight)
@@ -149,6 +154,7 @@ export default {
   },
   beforeDestroy() {
     this.$refs.chatBody.removeEventListener('scroll', this.checkIsTop)
+    this.bus.$off('initMsgList')
   }
 }
 </script>

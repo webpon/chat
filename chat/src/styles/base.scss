@@ -11,6 +11,10 @@ img {
     font-size: 20px;
 }
 
+.chatBody .van-overlay {
+    position: absolute;
+}
+
 ::-webkit-scrollbar {
     width: 8px;
     background: transparent;

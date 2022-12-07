@@ -4,13 +4,13 @@ var app = express()
 require("dotenv").config()
 var http = require('http').Server(app)
 const jwt = require('jsonwebtoken')
-const {Email} = require('./models/Email');
-const {tokenKey} = require('./config')
+const { Email } = require('./models/Email');
+const { tokenKey, chatGptApiKey } = require('./config')
 // const axios = require('axios')
 // const {Bot} = require('./models/Bot')
 const { Configuration, OpenAIApi } = require("openai");
 const configuration = new Configuration({
-  apiKey: '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'
+    apiKey: chatGptApiKey
 });
 const openai = new OpenAIApi(configuration);
 // const bot = new Bot();

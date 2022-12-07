@@ -19,10 +19,10 @@
       <input v-show="false" accept="video/*" ref="fileInputVideo" type="file" :multiple="false"
         @change="uploadProgress($event, 'video')" />
     </div>
-    <a-textarea class="msg_textarea" :maxLength="200" placeholder="请输入内容" @input="areaInput" :rows="4"
-      v-model.trim="message.content" @pressEnter.prevent="sendmsg" @contextmenu.prevent.stop="sCopy" ref="input" />
+    <a-textarea class="msg_textarea" :maxLength="1024" placeholder="请输入内容" @input="areaInput" :rows="4"
+      v-model.trim="message.content" @pressEnter.prevent="sendmsg" ref="input" />
     <span class="length-info">
-      {{ message.content.length }} / 200
+      {{ message.content.length }} / 1024
     </span>
     <a-button @click="sendmsg" class="sendBtn">发送</a-button>
   </div>
@@ -141,45 +141,6 @@ export default {
         this.progress = 0
       })
     },
-    sCopy({ x, y }) {
-      this.$store.commit("showRightClick", { b: true, axis: { x, y } })
-      this.$store.commit("addRightClickEvent", [
-        {
-          text: '复制',
-          event: this.copy,
-          show: true
-        },
-        {
-          text: '粘贴',
-          event: this.paste,
-          show: true
-        },
-      ])
-      const copy = e => {
-        this.$store.commit("showRightClick", false)
-        this.showCopy = false
-        document.removeEventListener("click", copy)
-      }
-      document.addEventListener('click', copy)
-
-    },
-    copy() {
-      var textareaC = document.createElement('textarea');
-      textareaC.setAttribute('readonly', 'readonly'); //设置只读属性防止手机上弹出软键盘
-      textareaC.value = this.message.content;
-      document.body.appendChild(textareaC); //将textarea添加为body子元素
-      textareaC.select();
-      var res = document.execCommand('copy');
-      document.body.removeChild(textareaC);//移除DOM元素
-      return res;
-    },
-    paste() {
-      var clipPromise = navigator.clipboard.readText();
-      clipPromise.then((clipText) => {
-        this.message.content += clipText
-      })
-    }
-
   },
   watch: {
     "$route.query.userName": {
@@ -229,7 +190,7 @@ export default {
 
   .msg_textarea {
     resize: none;
-    font-size: 18px;
+    font-size: 14px;
   }
 
   .length-info {

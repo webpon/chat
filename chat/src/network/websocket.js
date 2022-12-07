@@ -63,7 +63,7 @@ export default () => {
               msg.text = data.to + '发来一个视频'
               break;
             default:
-              msg.text = (data.to === '群聊' ? '群聊' : data.from) + '发来,' + data.msg; // 待合成文字
+              msg.text = (data.to === '群聊' ? '群聊' : data.from) + '发来一条信息'; // 待合成文字
               break;
           }
           msg.rate = 1;  // 播放倍速

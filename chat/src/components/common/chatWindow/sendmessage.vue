@@ -9,27 +9,27 @@
               <img v-if="!loadVideo" style="width: 180px; height: 180px;position: absolute;"
                 src="https://webpon-img.oss-cn-guangzhou.aliyuncs.com/loading.gif" class="_img-scale" />
               <video-player @play="onPlayerPlay" ref="videoPlayer" v-else
-                :options="{ width: 180, height: 180, sources: [{ src: sendmsg.msg }] }" style="width: 100%;height: 100%" />
+                :options="{ width: 180, height: 180, sources: [{ src: sendmsg.msg }] }"
+                style="width: 100%;height: 100%" />
             </lazy-component>
           </div>
           <span v-viewer v-else-if="sendmsg.type === 'picture'" style="display: block">
             <img v-lazy="sendmsg.msg" class="img _img-scale" />
           </span>
-          <van-popover v-model:show="showPopover" :actions="actions" @select="onSelect" placement="left"
-            :offset="popoverPosition" v-else>
-            <template #reference>
-              <p v-if="/http:\/\/|https:\/\//.test(sendmsg.msg)" class="msgCard">
-                <a :href="sendmsg.msg">{{ sendmsg.msg }}</a>
-              </p> 
-              <p class="msgCard" v-else-if="sendmsg.type === 'string'" @contextmenu.prevent.stop="showPopoverFun">{{ sendmsg.msg }}
-              </p>
-              <span class="time">{{ time }}</span>
-            </template>
-          </van-popover>
+          <p v-else-if="/http:\/\/|https:\/\//.test(sendmsg.msg)" class="msgCard">
+            <a :href="sendmsg.msg">{{ sendmsg.msg }}</a>
+          </p>
+          <p class="msgCard" v-else="sendmsg.type === 'string'" @contextmenu.prevent.stop="showPopoverFun">{{
+              sendmsg.msg
+          }}
+          </p>
+          <span class="time">{{ time }}</span>
         </div>
       </div>
       <img class="_avater _img-scale" :src="myInfo.imgSrc" alt="" v-viewer />
     </div>
+    <van-action-sheet v-model:show="showPopover" style="position: absolute;" :actions="[{ name: '复制', type: 'copy' }]"
+      get-container=".chatBody" cancel-text="取消" close-on-click-action @select="onSelect" />
   </div>
 </template>
 
@@ -82,11 +82,11 @@ export default {
     showPopoverFun({ x, y }) {
       this.showPopover = !this.showPopover
     },
-    onSelect({type}) {
-      if(type === 'copy') {
+    onSelect({ type }) {
+      if (type === 'copy') {
         this.copy()
         Toast('复制成功')
-      } else if(type === 'toast'){
+      } else if (type === 'toast') {
         Toast('toast')
       }
     },
@@ -172,7 +172,6 @@ export default {
 }
 
 .msgCard {
-  /*display: inline-block;*/
   position: relative;
   right: 10px;
   padding: 10px 15px;

@@ -22,17 +22,15 @@
         <span v-viewer v-else-if="sendmsg.type === 'picture'">
           <img v-lazy="sendmsg.msg" class="img _img-scale" />
         </span>
-        <van-popover v-model:show="showPopover" :actions="actions" @select="onSelect" placement="right"
-          :offset="popoverPosition" v-else>
-          <template #reference>
-            <pre class="pre msgCard" v-if="sendmsg.from === '智能客服'"
-              @contextmenu.prevent.stop="showPopoverFun">{{ sendmsg.msg }}</pre>
-            <p class="msgCard" v-else @contextmenu.prevent.stop="showPopoverFun">{{ sendmsg.msg }}</p>
-            <span>{{ time }}</span>
-          </template>
-        </van-popover>
+        <pre class="pre msgCard" v-else-if="sendmsg.from === '智能客服'"
+          @contextmenu.prevent.stop="showPopoverFun">{{ sendmsg.msg }}</pre>
+        <p class="msgCard" v-else @contextmenu.prevent.stop="showPopoverFun">{{ sendmsg.msg }}</p>
+        <p>{{ time }}</p>
       </span>
     </div>
+    <van-action-sheet v-model:show="showPopover" style="position: absolute;" :actions="[{ name: '复制', type: 'copy' }]"
+      get-container=".chatBody" cancel-text="取消" close-on-click-action
+      @select="onSelect" />
   </div>
 </template>
 
@@ -90,11 +88,11 @@ export default {
     showPopoverFun({ x, y }) {
       this.showPopover = !this.showPopover
     },
-    onSelect({type}) {
-      if(type === 'copy') {
+    onSelect({ type }) {
+      if (type === 'copy') {
         this.copy()
         Toast('复制成功')
-      } else if(type === 'toast'){
+      } else if (type === 'toast') {
         Toast('toast')
       }
     },
@@ -192,6 +190,7 @@ export default {
   box-shadow: 0.15rem 0.15rem 0.5rem rgb(150 150 150);
   white-space: pre-wrap;
   word-wrap: break-word;
+  max-height: 500px;
 }
 
 .cp {

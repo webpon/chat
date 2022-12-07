@@ -1,3 +1,4 @@
+import Vue from 'vue'
 const defContacts = [
     {
         username: '群聊',
@@ -29,6 +30,7 @@ export default {
     },
     updateMyInfo(state, myInfo) {
         state.myInfo = myInfo
+        Vue.prototype.bus.$emit('initMsgList')
     },
     updateContacts(state, contacts) {
         state.contacts = [...defContacts, ...contacts]
