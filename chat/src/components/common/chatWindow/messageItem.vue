@@ -23,7 +23,7 @@
           <img v-lazy="sendmsg.msg" class="img _img-scale" />
         </span>
         <van-popover v-model:show="showPopover" :actions="actions" @select="onSelect" placement="right"
-          :offset="popoverPosition">
+          :offset="popoverPosition" v-else>
           <template #reference>
             <pre class="pre msgCard" v-if="sendmsg.from === '智能客服'"
               @contextmenu.prevent.stop="showPopoverFun">{{ sendmsg.msg }}</pre>
