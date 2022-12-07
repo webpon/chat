@@ -5,10 +5,11 @@
     "scripts": {
         "serve": "vue-cli-service serve",
         "serve:svr": "vue-cli-service serve --mode svr-serve",
-        "build": "vue-cli-service build --mode production",
+        "build": "vue-cli-service build --mode production --modern",
         "deploy": "node ./deploy/index",
         "back": "node ./deploy/back",
-        "config": "vue-cli-service inspect --mode=production > webpackConfig.js"
+        "config": "vue-cli-service inspect --mode=production > webpackConfig.js",
+        "lint": "vue-cli-service lint"
     },
     "dependencies": {
         "ant-design-vue": "^1.7.8",
