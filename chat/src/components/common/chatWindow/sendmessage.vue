@@ -1,9 +1,5 @@
 <template>
   <div>
-    <rightClick :axis="axis" :show="showCopy">
-      <button @click="copy">复制</button>
-    </rightClick>
-
     <div class="messageWarpper" v-if="sendmsg !== null">
       <div>
 
@@ -11,19 +7,25 @@
           <div v-if="sendmsg.type === 'video'" class="video">
             <lazy-component @show="lazyLoadVideo">
               <img v-if="!loadVideo" style="width: 180px; height: 180px;position: absolute;"
-                src="https://webpon-img.oss-cn-guangzhou.aliyuncs.com/loading.gif" class="_img-scale"/>
+                src="https://webpon-img.oss-cn-guangzhou.aliyuncs.com/loading.gif" class="_img-scale" />
               <video-player @play="onPlayerPlay" ref="videoPlayer" v-else
-                :options="{width: 180, height: 180, sources: [{src: sendmsg.msg}]}" style="width: 100%;height: 100%" />
+                :options="{ width: 180, height: 180, sources: [{ src: sendmsg.msg }] }" style="width: 100%;height: 100%" />
             </lazy-component>
           </div>
           <span v-viewer v-else-if="sendmsg.type === 'picture'" style="display: block">
             <img v-lazy="sendmsg.msg" class="img _img-scale" />
           </span>
           <p v-else-if="/http|https/.test(sendmsg.msg)" class="msgCard">
-            <a :href="sendmsg.msg">{{sendmsg.msg}}</a>
+            <a :href="sendmsg.msg">{{ sendmsg.msg }}</a>
           </p>
-          <p class="msgCard" v-else-if="sendmsg.type === 'string'" @contextmenu.prevent.stop="sCopy">{{ sendmsg.msg }}</p>
-          <span class="time">{{time}}</span>
+          <van-popover v-model:show="showPopover" :actions="actions" @select="onSelect" placement="left"
+            :offset="popoverPosition" >
+            <template #reference>
+              <p class="msgCard" v-if="sendmsg.type === 'string'" @contextmenu.prevent.stop="showPopoverFun">{{ sendmsg.msg }}
+              </p>
+              <span class="time">{{ time }}</span>
+            </template>
+          </van-popover>
         </div>
       </div>
       <img class="_avater _img-scale" :src="myInfo.imgSrc" alt="" v-viewer />
@@ -33,6 +35,7 @@
 
 <script>
 import rightClick from "../../rightClick";
+import { Toast } from 'vant';
 
 export default {
   name: '',
@@ -40,20 +43,21 @@ export default {
     return {
       myInfo: this.$store.state.myInfo,
       loadVideo: false,
-      axis:{
-        x:100,
-        y:100
-      },
-      showCopy: false
+      showPopover: false,
+      actions: [
+        { text: '复制', type: 'copy' },
+        { text: 'Toast', type: 'toast' },
+      ],
+      popoverPosition: [0, 0]
     }
   },
-  components:{rightClick},
+  components: { rightClick },
   props: {
     sendmsg: {
       type: Object,
       default: {},
     },
-    time:String
+    time: String
   },
   computed: {
     root() {
@@ -75,18 +79,18 @@ export default {
       }
       this.$store.commit('updatePlayingVideo', this.$refs.videoPlayer.player)
     },
-    sCopy({x,y}){
-      this.axis.x = x
-      this.axis.y = y
-      this.showCopy = true
-      const copy = e => {
-        this.showCopy = false
-        document.removeEventListener("click", copy)
-      }
-      document.addEventListener('click',copy)
-
+    showPopoverFun({ x, y }) {
+      this.showPopover = !this.showPopover
     },
-    copy(){
+    onSelect({type}) {
+      if(type === 'copy') {
+        this.copy()
+        Toast('复制成功')
+      } else if(type === 'toast'){
+        Toast('toast')
+      }
+    },
+    copy() {
       var textareaC = document.createElement('textarea');
       textareaC.setAttribute('readonly', 'readonly'); //设置只读属性防止手机上弹出软键盘
       textareaC.value = this.sendmsg.msg;
@@ -105,10 +109,12 @@ export default {
   .messageWarpper {
     padding: 0 25px;
   }
-  .time{
+
+  .time {
     position: absolute;
     right: 80px;
   }
+
   .msgCard {
     max-width: calc(100vw - 470px);
   }
@@ -118,15 +124,18 @@ export default {
   .messageWarpper {
     padding: 0 5px;
   }
-  .time{
+
+  .time {
     position: absolute;
     right: 60px;
   }
+
   .msgCard {
     max-width: calc(100vw - 120px);
   }
 }
-.time{
+
+.time {
   white-space: nowrap;
 }
 

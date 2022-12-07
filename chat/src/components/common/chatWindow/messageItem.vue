@@ -22,10 +22,15 @@
         <span v-viewer v-else-if="sendmsg.type === 'picture'">
           <img v-lazy="sendmsg.msg" class="img _img-scale" />
         </span>
-        <pre class="pre msgCard" v-else-if="sendmsg.from === '智能客服'"
-          @contextmenu.prevent.stop="sCopy">{{ sendmsg.msg }}</pre>
-        <p class="msgCard" v-else @contextmenu.prevent.stop="sCopy">{{ sendmsg.msg }}</p>
-        <span>{{ time }}</span>
+        <van-popover v-model:show="showPopover" :actions="actions" @select="onSelect" placement="right"
+          :offset="popoverPosition">
+          <template #reference>
+            <pre class="pre msgCard" v-if="sendmsg.from === '智能客服'"
+              @contextmenu.prevent.stop="showPopoverFun">{{ sendmsg.msg }}</pre>
+            <p class="msgCard" v-else @contextmenu.prevent.stop="showPopoverFun">{{ sendmsg.msg }}</p>
+            <span>{{ time }}</span>
+          </template>
+        </van-popover>
       </span>
     </div>
   </div>
@@ -33,10 +38,17 @@
 
 <script>
 import rightClick from "../../rightClick";
+import { Toast } from 'vant';
 export default {
   data() {
     return {
       loadVideo: false,
+      showPopover: false,
+      actions: [
+        { text: '复制', type: 'copy' },
+        { text: 'Toast', type: 'toast' },
+      ],
+      popoverPosition: [0, -130]
     }
   },
   components: { rightClick },
@@ -75,21 +87,16 @@ export default {
       }
       this.$store.commit('updatePlayingVideo', this.$refs.videoPlayer.player)
     },
-    sCopy({ x, y }) {
-      this.$store.commit("showRightClick", { b: true, axis: { x, y } })
-      this.$store.commit("addRightClickEvent", [
-        {
-          text: '复制',
-          event: this.copy,
-          show: true
-        }
-      ])
-      const copy = e => {
-        this.$store.commit("showRightClick", false)
-        document.removeEventListener("click", copy)
+    showPopoverFun({ x, y }) {
+      this.showPopover = !this.showPopover
+    },
+    onSelect({type}) {
+      if(type === 'copy') {
+        this.copy()
+        Toast('复制成功')
+      } else if(type === 'toast'){
+        Toast('toast')
       }
-      document.addEventListener('click', copy)
-
     },
     copy() {
       var textareaC = document.createElement('textarea');
@@ -178,7 +185,7 @@ export default {
 }
 
 .pre {
-  font-size: 1rem;
+  display: block;
   padding: 0.6rem;
   background-color: rgba(128, 100, 169, 0.1);
   border-radius: 0.4rem;
