@@ -15,13 +15,13 @@
           <span v-viewer v-else-if="sendmsg.type === 'picture'" style="display: block">
             <img v-lazy="sendmsg.msg" class="img _img-scale" />
           </span>
-          <p v-else-if="/http|https/.test(sendmsg.msg)" class="msgCard">
-            <a :href="sendmsg.msg">{{ sendmsg.msg }}</a>
-          </p>
           <van-popover v-model:show="showPopover" :actions="actions" @select="onSelect" placement="left"
             :offset="popoverPosition" >
             <template #reference>
-              <p class="msgCard" v-if="sendmsg.type === 'string'" @contextmenu.prevent.stop="showPopoverFun">{{ sendmsg.msg }}
+              <p v-if="/http:\/\/|https:\/\//.test(sendmsg.msg)" class="msgCard">
+                <a :href="sendmsg.msg">{{ sendmsg.msg }}</a>
+              </p>
+              <p class="msgCard" v-else-if="sendmsg.type === 'string'" @contextmenu.prevent.stop="showPopoverFun">{{ sendmsg.msg }}
               </p>
               <span class="time">{{ time }}</span>
             </template>
