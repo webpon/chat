@@ -183,6 +183,8 @@ export default {
   background-color: rgba(128, 100, 169, 0.1);
   border-radius: 0.4rem;
   box-shadow: 0.15rem 0.15rem 0.5rem rgb(150 150 150);
+  white-space: pre-wrap;
+  word-wrap: break-word;
 }
 
 .cp {
