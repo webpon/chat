@@ -16,11 +16,11 @@
             <img v-lazy="sendmsg.msg" class="img _img-scale" />
           </span>
           <van-popover v-model:show="showPopover" :actions="actions" @select="onSelect" placement="left"
-            :offset="popoverPosition" >
+            :offset="popoverPosition" v-else>
             <template #reference>
               <p v-if="/http:\/\/|https:\/\//.test(sendmsg.msg)" class="msgCard">
                 <a :href="sendmsg.msg">{{ sendmsg.msg }}</a>
-              </p>
+              </p> 
               <p class="msgCard" v-else-if="sendmsg.type === 'string'" @contextmenu.prevent.stop="showPopoverFun">{{ sendmsg.msg }}
               </p>
               <span class="time">{{ time }}</span>
