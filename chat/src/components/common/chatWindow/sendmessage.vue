@@ -110,7 +110,7 @@ export default {
     right: 80px;
   }
   .msgCard {
-    max-width: 280px;
+    max-width: calc(100vw - 470px);
   }
 }
 
@@ -123,7 +123,7 @@ export default {
     right: 60px;
   }
   .msgCard {
-    max-width: 180px;
+    max-width: calc(100vw - 120px);
   }
 }
 .time{
