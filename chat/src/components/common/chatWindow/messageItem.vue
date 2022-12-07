@@ -139,7 +139,7 @@ export default {
 
   .img {
     width: 150px;
-    height: 150px;
+    max-height: 500px;
   }
 
   .video {
@@ -168,10 +168,6 @@ export default {
   line-height: 20px;
 }
 
-.messageWarpper img {
-  width: 45px;
-  height: 45px;
-}
 
 .msgCard {
   display: inline-block;

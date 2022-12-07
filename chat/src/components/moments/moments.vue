@@ -267,7 +267,7 @@ import { ImagePreview, Dialog } from 'vant';
     }
 
     .msg_img {
-        height: 200px;
+        max-height: 400px;
         width: 200px;
         padding: 0 5px 5px 0;
     }

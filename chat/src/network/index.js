@@ -8,7 +8,7 @@ const http_baseURL = (IS_PROD || IS_SVR) ? 'http://39.103.233.82:14399/api/admin
 const moment_baseURL = (IS_PROD || IS_SVR) ? 'http://39.103.233.82:9090' : '/moments'
 const oss_baseURL = (IS_PROD || IS_SVR) ? 'http://39.103.233.82:14400/oss' : '/oss'
 
-const TIMEOUT = 5000;
+const TIMEOUT = 60000;
 
 const http = axios.create({
     // baseURL: '/api/admin', //这个按实际情况填写

@@ -147,7 +147,7 @@ export default {
 
   .img {
     width: 150px;
-    height: 150px;
+    max-height: 500px;
     vertical-align: top;
     margin-right: 10px;
   }
@@ -166,10 +166,6 @@ export default {
   }
 }
 
-.messageWarpper img {
-  width: 45px;
-  height: 45px;
-}
 
 .msgCard {
   position: relative;
