@@ -6,14 +6,14 @@ var http = require('http').Server(app)
 const jwt = require('jsonwebtoken')
 const {Email} = require('./models/Email');
 const {tokenKey} = require('./config')
-const axios = require('axios')
-const {Bot} = require('./models/Bot')
+// const axios = require('axios')
+// const {Bot} = require('./models/Bot')
 const { Configuration, OpenAIApi } = require("openai");
 const configuration = new Configuration({
-  apiKey: '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'
+  apiKey: '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'
 });
 const openai = new OpenAIApi(configuration);
-const bot = new Bot();
+// const bot = new Bot();
 
 let visitorFlag = 0
 var io = require('socket.io')(http, {
