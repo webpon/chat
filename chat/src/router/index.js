@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import websocket from '@/network/websocket'
-import store from '@/store/index'
+// import store from '@/store/index'
 
 Vue.use(VueRouter)
 
@@ -62,6 +61,11 @@ const routes = [
             name: 'moments',
             component: () => import(/* webpackPrefetch: true */ /* webpackChunkName: "editMoment" */ '@/views/main/childComs/discover/moments/editMoment.vue'),
           },
+          {
+            path: 'fastEmail',
+            name: 'fastEmail',
+            component: () => import(/* webpackPrefetch: true */ /* webpackChunkName: "fastEmail" */ '@/views/main/childComs/discover/fastEmail/index.vue'),
+          },
         ]
       }
     ]
@@ -78,28 +82,10 @@ const router = new VueRouter({
   routes
 })
 router.beforeEach((to, from, next) => {
-  console.log(to);
-  console.log(from);
-  if (to.path === '/login') {
-    store.commit('updateMyInfo', {})
-    next()
+  if (!localStorage.token && to.path !== '/login' ) {
+    next('/login')
   } else {
-    let token = localStorage.token
-    if (!token) {
-      next('/login')
-    } else if(from.path === '/login'){
-      console.log('+++++++++++++++++');
-      websocket()
-      Vue.prototype.$socket.open()
-      next()
-    } else {
-      console.log('_____________');
-      if (!Vue.prototype.$socket || Vue.prototype.$socket.disconnected) {
-        websocket()
-        Vue.prototype.$socket.open()
-      }
-      next()
-    }
+    next()
   }
-}) //这些代码写在router文件夹中的index.js下
+}) 
 export default router

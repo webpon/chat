@@ -5,11 +5,16 @@ import store from '@/store/index'
 const IS_PROD = process.env.NODE_ENV === "production";
 const IS_SVR = process.env.VUE_APP_PROJECT_ENV === 'svr'
 const http_baseURL = (IS_PROD || IS_SVR) ? 'http://39.103.233.82:14399/api/admin' : '/api/admin'
-const moment_baseURL = (IS_PROD || IS_SVR) ? 'http://150.158.191.140:5389' : '/moments'
+const moment_baseURL = (IS_PROD || IS_SVR) ? 'http://39.103.233.82:9090' : '/moments'
 const oss_baseURL = (IS_PROD || IS_SVR) ? 'http://39.103.233.82:14400/oss' : '/oss'
+
+const TIMEOUT = 5000;
+
 const http = axios.create({
     // baseURL: '/api/admin', //这个按实际情况填写
-    baseURL: http_baseURL
+    baseURL: http_baseURL,
+    headers: { 'Cache-Control': 'no-cache' },
+    timeout: TIMEOUT, 
 })
 const moments = axios.create({
     // baseURL: '/moments', //这个按实际情况填写
@@ -52,10 +57,6 @@ const error = err => {
 //axios请求拦截器
 http.interceptors.request.use(
     (config) => {
-        const { type } = store.state.myInfo || {}
-        if (type === 'visitor' && config.url === 'visitor') {
-            return Promise.reject(new Error('游客限制朋友圈功能'))
-        }
         //请求头加上token
         if (localStorage.token) {
             config.headers.Authorization = localStorage.token

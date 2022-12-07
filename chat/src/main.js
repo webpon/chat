@@ -4,7 +4,7 @@ import router from './router'
 import store from './store'
 // import 'animate.css'
 import { http, moments, oss } from 'network/index'
-import './network/websocket.js'
+import socket from './network/websocket.js'
 import alertWheel from './components/common/alertWheel/index'
 import antd from 'ant-design-vue';
 import Vant from 'vant';
@@ -13,6 +13,8 @@ import 'viewerjs/dist/viewer.css'
 import VueLazyload from 'vue-lazyload'
 import VuevideoPlayer from 'vue-video-player';
 import 'video.js/dist/video-js.css';
+// 处理vant组件库PC兼容问题
+import '@vant/touch-emulator';
 
 import commonMixin from '@/mixins/common.js';
 
@@ -40,6 +42,7 @@ Vue.use(Vant);
 Vue.prototype.bus = new Vue()
 Vue.config.productionTip = false
 Vue.prototype.alertWheel = alertWheel
+Vue.prototype.socketIInit = socket
 new Vue({
   router,
   store,

@@ -1,8 +1,8 @@
 <template>
   <div id="app">
-    <rightClick/>
+    <rightClick />
     <transition name="msgMove">
-        <msg-hint v-show="$store.state.msgHint.show"/>
+      <msg-hint v-show="$store.state.msgHint.show" />
     </transition>
     <keep-alive>
       <router-view />
@@ -13,16 +13,17 @@
 import Layout from './views/main/layout'
 import msgHint from "./components/common/chatWindow/msgHint";
 import rightClick from "./components/rightClick";
-document.oncontextmenu = function(e){
-  return false
-  //或者 e.preventDefault()
-}
+// import Push from 'push.js'
+// document.oncontextmenu = function(e){
+//   return false
+//   //或者 e.preventDefault()
+// }
 export default {
   name: 'App',
   data() {
     return {
       ring: false
-      ,isShow:false
+      , isShow: false
     }
   },
   components: { Layout, msgHint, rightClick },
@@ -31,8 +32,11 @@ export default {
       return this.$route.path
     },
   },
-  created() {
-    this.$store.commit("initMyInfo")
+  async created() {
+    if (this.$route.path !== '/login') {
+      this.checkLogin()
+    }
+    // Push.Permission.request();
   },
   beforeRouteEnter(to, from, next) {
     console.log(to);
@@ -51,10 +55,44 @@ export default {
         this.updateDeviceInfo()
       }, 300)
     });
+    // setInterval(() => {
+    //   this.pushMessage('消息通知的内容');
+    // }, 1000)
   },
   methods: {
+    // pushMessage(message) {
+    //   // alert('1')
+    //   console.log(1111);
+    //   Push.create("询配来消息了哦", {
+    //     body: '收到信消息了哦',
+    //     requireInteraction: false,
+    //     //icon: '/icon.png',
+    //     timeout: 3000,
+    //   });
+    // },
     updateDeviceInfo() {
       this.$store.commit('checkDevice', window.matchMedia("only screen and (max-width: 750px)").matches)
+    },
+    async checkLogin() {
+      if (localStorage.token) {
+        try {
+          const { data = {} } = await this.$http.get("/my")
+          this.$store.commit('updateMyInfo', data.userInfo)
+          this.socketIInit()
+          this.$socket.open()
+          if (this.$route.path === '/login') {
+            this.$router.replace('/chat')
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      } else {
+        localStorage.removeItem('token')
+        this.$store.commit('updateMyInfo', {})
+        this.socketIInit()
+        this.$socket.close()
+        this.$router.replace('/login')
+      }
     }
   }
 }
@@ -82,6 +120,7 @@ export default {
     }
   }
 }
+
 .msgMove-enter-active,
 .msgMove-leave-active {
   transition: all 0.25s ease-out;

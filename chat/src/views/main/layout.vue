@@ -17,7 +17,6 @@
 
 <script>
 import asiderNav from './childComs/nav/navBar.vue'
-import router from "../../router";
 export default {
   name: 'layout',
   data() {
@@ -29,13 +28,6 @@ export default {
       return this.$route.path === '/chat' || this.$route.path === '/contacts' || this.$route.path === '/discover' || this.$route.path === '/info'
     }
   },
-  mounted() {
-    if (this.$store.state.myInfo.username === undefined){
-      this.$message.error('登录状态已失效，请重新登录')
-      router.replace('/login')
-
-    }
-  }
 }
 </script>
 

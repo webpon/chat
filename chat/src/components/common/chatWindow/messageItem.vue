@@ -18,7 +18,7 @@
               :options="{ width: 180, height: 180, sources: [{ src: sendmsg.msg }] }" style="width: 100%;height: 100%" />
           </lazy-component>
         </div>
-        <span v-viewer v-else-if="/http|https/.test(sendmsg.msg) || sendmsg.type === 'picture'">
+        <span v-viewer v-else-if="sendmsg.type === 'picture'">
           <img v-lazy="sendmsg.msg" class="img _img-scale" />
         </span>
         <p class="msgCard" v-else @contextmenu.prevent.stop="sCopy">{{ sendmsg.msg }}</p>

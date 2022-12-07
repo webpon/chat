@@ -22,7 +22,7 @@ export default {
   name: '',
   data() {
     return {
-      myInfo : JSON.parse(localStorage.myInfo)
+      myInfo : this.$store.state.myInfo
     }
   },
   props: {

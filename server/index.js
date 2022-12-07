@@ -6,6 +6,7 @@ var http = require('http').Server(app)
 const jwt = require('jsonwebtoken')
 const {Email} = require('./models/Email');
 const {tokenKey} = require('./config')
+const axios = require('axios')
 const {Bot} = require('./models/Bot')
 const { Configuration, OpenAIApi } = require("openai");
 const configuration = new Configuration({
@@ -13,18 +14,23 @@ const configuration = new Configuration({
 });
 const openai = new OpenAIApi(configuration);
 const bot = new Bot();
+
+let visitorFlag = 0
 var io = require('socket.io')(http, {
     //由于socket.io使用的并不是ws协议，而是经过一些处理的，所以默认不允许跨域，需要以下配置来允许跨域
     cors: {
         origin: "*",
-        methods: ["GET", "POST", "PUT"]
+        methods: ["GET", "POST", "PUT", "OPTIONS"]
     },
     allowRequest: (req, callback) => {
-        jwt.verify(req._query.token, tokenKey, (err) => {
+        jwt.verify(req._query.token, tokenKey, (err, data) => {
+            console.log(err);
+            console.log(data);
             if (err) {
                 callback(null, false);
             } else if (req._query.userInfo) {
                 const userInfo = JSON.parse(req._query.userInfo)
+                console.log('已经登录了');
                 // 3、防止重复登录
                 if (onlineUser.get(userInfo.username)) {
                     callback(null, false);
@@ -43,7 +49,7 @@ let userInfos = new Map()
 const email = new Email();
 //连接成功
 io.on('connect', function (socket) {
-    const {userInfo = ''} = socket.handshake.query || {}
+    const { userInfo = '' } = socket.handshake.query || {}
     const userInfoData = JSON.parse(userInfo)
     if (userInfoData) {
         onlineUser.set(userInfoData.username, socket)
@@ -73,6 +79,7 @@ io.on('connect', function (socket) {
         userInfos.delete(socket.id)
     });
     socket.on('sendEvent', function (data) {
+        console.log(data);
         const toSocket = onlineUser.get(data.to)
         const fromSocket = onlineUser.get(data.from)
         if (!userInfos.get(socket.id) || userInfos.get(socket.id).username !== data.from) return
@@ -90,6 +97,12 @@ io.on('connect', function (socket) {
                 //         fromSocket.emit('emitEvent', data)
                 //     }, 100);
                 // })
+                // axios.get(`http://api.qingyunke.com/api.php?key=free&appid=0&msg=${encodeURI(str)}`).then(res => {
+                //     const aiData = res.data || {}
+                //     console.log(aiData);
+                //     data.msg = aiData.content
+                //     fromSocket.emit('emitEvent', data)
+                // }).catch(err => console.log(err))
                 openai.createCompletion({
                     model: "text-davinci-003",
                     prompt: str,
@@ -103,7 +116,9 @@ io.on('connect', function (socket) {
                     fromSocket.emit('emitEvent', data)
                 })
             } else {
-                email.sendMsg(str.slice(4), (error) => {
+                email.sendMsg({
+                    text: str.slice(4), // 存文本类型的邮件正文
+                }, (error) => {
                     if (error) {
                         console.log(error)
                     }
@@ -125,12 +140,39 @@ io.on('connect', function (socket) {
             onlineUser: [...userInfos.values()],
         })
     })
+    socket.on('sendEmail', function (data) {
+        const fromSocket = onlineUser.get(data.from)
+        const text = data.from_email ? ('from: ' + data.from_email + '\n' + '内容：' + data.email_content) : data.email_content
+        const mail_options = {
+            to: Array.isArray(data.to_email) ? data.to_email.join(',') : data.to_email, //邮件发送到哪里，多个邮箱使用逗号隔开
+            subject: '来自http://39.103.233.82/chat 快捷邮箱功能', // 邮件主题
+            text // 存文本类型的邮件正文
+        };
+        email.sendMsg(mail_options, (error) => {
+            console.log('_____________sendMsg______________');
+            console.log(error);
+            let data = {}
+            if (error) {
+                console.log(error)
+                data = {
+                    msg: "发送失败",
+                    flag: false
+                }
+            } else {
+                data = {
+                    msg: "发送成功",
+                    flag: true
+                }
+            }
+            fromSocket.emit('emailOver', data)
+        })
+    })
 })
 
 //允许跨域
 app.use(require('cors')())
 app.use(express.json()) // for parsing application/json
-app.use(express.urlencoded({extended: true})) // for parsing application/x-www-form-urlencoded
+app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
 //连接数据
 require('./plugins/mongoose')
 //中间件，如果没有token或者token错误则阻止请求
@@ -155,7 +197,7 @@ app.use((req, res, next) => {
 })
 app.get('/api/admin/user', async (req, res, next) => {
     const adminUser = require('./models/Users')
-    const {id} = req.query
+    const { id } = req.query
     const user = await adminUser.findOne({
         _id: id
     })
@@ -184,7 +226,7 @@ app.post('/api/admin/create', async (req, res) => {
 })
 //登录
 app.use('/api/admin/login', async (req, res, next) => {
-    const {username, password} = req.body
+    const { username, password } = req.body
     //1、根据用户名找用户
     const user = await adminUser.findOne({
         username,
@@ -211,7 +253,7 @@ app.use('/api/admin/login', async (req, res, next) => {
     //3、返回token
     const jwt = require('jsonwebtoken')
     //参数一，记录的信息，第二个令牌，第三个设置过期时间
-    const token = jwt.sign({id: user._id}, tokenKey, {expiresIn: '1d'})
+    const token = jwt.sign({ id: user._id }, tokenKey, { expiresIn: '1d' })
     return res.send({
         token,
         userInfo: {
@@ -224,19 +266,24 @@ app.use('/api/admin/login', async (req, res, next) => {
 app.use('/api/admin/my', async (req, res, next) => {
     console.log(req.header);
     const token = req.headers.authorization;
-    jwt.verify(token, tokenKey, async (err, {id}) => {
+    jwt.verify(token, tokenKey, async (err, data) => {
+        const { id, type } = data
         if (err) {
             res.status(401).send('token错误')
         } else {
-            const user = await adminUser.findOne({
-                _id: id
-            })
-            res.send({
-                userInfo: {
-                    username: user.username,
-                    imgSrc: user.imgSrc
+            let userInfo
+            if (type === 'visitor') {
+                userInfo = {
+                    username: id,
+                    type: 'visitor',
+                    imgSrc: 'https://p.ssl.qhimg.com/t0126d6aa871801abe1.png'
                 }
-            })
+            } else {
+                userInfo = await adminUser.findOne({
+                    _id: id
+                })
+            }
+            res.send({ userInfo })
         }
     })
 })
@@ -244,11 +291,12 @@ app.use('/api/admin/my', async (req, res, next) => {
 app.use('/api/admin/visitor', async (req, res, next) => {
     const client_ip = req.ip.match(/\d+\.\d+\.\d+\.\d+/)[0]
     console.log(client_ip);
-    const user_id = client_ip + '|' + onlineUser.size
+    visitorFlag++
+    const user_id = client_ip + '|' + visitorFlag
     //3、返回token
     const jwt = require('jsonwebtoken')
     //参数一，记录的信息，第二个令牌，第三个设置过期时间
-    const token = jwt.sign({id: user_id, type: 'visitor'}, tokenKey, {expiresIn: '1d'})
+    const token = jwt.sign({ id: user_id, type: 'visitor' }, tokenKey, { expiresIn: '1d' })
     return res.send({
         token,
         userInfo: {

@@ -27,9 +27,6 @@ export default {
     msgInfo() {
       return this.$store.state.msgInfo
     },
-    session() {
-      return JSON.parse(localStorage.getItem('myInfo'))
-    },
   },
   mounted() {
     this.initMsgList()
@@ -45,10 +42,10 @@ export default {
         if (newMsg.to === '群聊' && newMsg.to === this.$route.query.userName) {
           this.currentMsgInfo.push(newMsg)
         } else if (
-          newMsg.from === JSON.parse(localStorage.myInfo).username &&
+          newMsg.from === this.$store.state.myInfo.username &&
           newMsg.to === this.$route.query.userName
           || newMsg.from === this.$route.query.userName
-          && newMsg.to === JSON.parse(localStorage.myInfo).username
+          && newMsg.to === this.$store.state.myInfo.username
         ) {
           this.currentMsgInfo.push(newMsg)
         }
@@ -81,10 +78,10 @@ export default {
             }
             arr.unshift(item)
           } else if (
-            item.from === JSON.parse(localStorage.myInfo).username &&
+            item.from === this.$store.state.myInfo.username &&
             item.to === this.$route.query.userName
             || item.from === this.$route.query.userName
-            && item.to === JSON.parse(localStorage.myInfo).username
+            && item.to === this.$store.state.myInfo.username
           ) {
             if (!item.msgId) {
               item.msgId = Math.random().toString() + new Date().valueOf()
@@ -125,10 +122,10 @@ export default {
           }
           arr.unshift(item)
         } else if (
-          item.from === JSON.parse(localStorage.myInfo).username &&
+          item.from === this.$store.state.myInfo.username &&
           item.to === this.$route.query.userName
           || item.from === this.$route.query.userName
-          && item.to === JSON.parse(localStorage.myInfo).username
+          && item.to === this.$store.state.myInfo.username
         ) {
           if (!item.msgId) {
             item.msgId = Math.random().toString() + new Date().valueOf()

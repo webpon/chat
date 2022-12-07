@@ -25,7 +25,7 @@ export default {
     //控制左右滑动
     watch: {
         '$route'(to, from) {
-            const arr = ['/discover', '/discover/moments', '/discover/editMoment']
+            const arr = ['/discover', '/discover/moments', '/discover/editMoment', '/discover/fastEmail']
             this.transitionName = arr.indexOf(to.path) > arr.indexOf(from.path) ? 'transitionLeft' : 'transitionRight'
         }
     }
@@ -33,6 +33,12 @@ export default {
 </script>
   
 <style scoped lang="scss">
+@media screen and (min-width: 750px) {
+    .background {
+        width: 500px;
+        margin: auto;
+    } 
+}
 .transitionBody {
     transition: all 0.3s ease-out; //设置动画
 }

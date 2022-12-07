@@ -1,6 +1,24 @@
 p {
     margin-bottom: 0;
 }
+
 img {
     box-sizing: content-box;
+}
+
+.van-nav-bar .van-nav-bar__arrow {
+    color: #333;
+    font-size: 20px;
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 6px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+    background-color: #ccc;
 }

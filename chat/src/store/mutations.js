@@ -1,5 +1,3 @@
-import {http} from "../network";
-
 const defContacts = [
     {
         username: '群聊',
@@ -32,26 +30,17 @@ export default {
     updateMyInfo(state, myInfo) {
         state.myInfo = myInfo
     },
-    initMyInfo(state){
-        const parse = JSON.parse(localStorage.getItem('myInfo'));
-        if (!parse.type){
-           http.get("/my").then(({data})=>{
-               state.myInfo = data.userInfo
-           })
-        } else if (/\d{3}\.\d{,3}\.\d{,3}\.\d{,3}|\d./.test(parse.username)) {
-            state.myInfo = parse
-        }
-    },
     updateContacts(state, contacts) {
         state.contacts = [...defContacts, ...contacts]
     },
     updateChatList(state, chatUser) {
+        let msg = chatUser.msgNumber
         if (state.chatList.some(item => item.username === chatUser.username)) {
             state.chatList.forEach((item) => {
                 if (item.username === chatUser.username) {
                     item.msg = chatUser.msg
                     item.time = chatUser.time
-                    item.msgNumber++
+                    item.msgNumber+=msg
                 }
             })
         } else {

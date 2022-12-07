@@ -93,6 +93,7 @@ export default {
             this.$router.replace('/discover/moments')
             this.message.content = ""
             this.message.images = []
+            this.imgList = []
         }
     },
 };

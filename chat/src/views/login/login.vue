@@ -4,16 +4,16 @@
       <a-form-model ref="ruleForm" class="cardForm" layout="vertical" :model="model" :wrapper-col="{ span: 24 }"
         :rules="rules">
         <a-form-model-item label="用户名" prop="username">
-          <a-input size="large" v-model.trim="model.username" @pressEnter="login('ruleForm')"/>
+          <a-input size="large" v-model.trim="model.username" @pressEnter="login('ruleForm')" />
         </a-form-model-item>
         <a-form-model-item label="密码" prop="password">
           <a-input type="password" size="large" v-model.trim="model.password" @pressEnter="login('ruleForm')" />
         </a-form-model-item>
 
         <div class="formBtn">
-            <a-button type="default" size="large" @click="register('ruleForm')">注册</a-button>
-            <a-button type="primary" size="large" style="margin: 0 5%;" @click="login('ruleForm')">登录</a-button>
-            <a-button type="info" size="large" @click="visitor('ruleForm')">游客登录</a-button>
+          <a-button type="default" size="large" @click="register('ruleForm')">注册</a-button>
+          <a-button type="primary" size="large" style="margin: 0 5%;" @click="login('ruleForm')">登录</a-button>
+          <a-button type="info" size="large" @click="visitor('ruleForm')">游客登录</a-button>
         </div>
       </a-form-model>
     </a-card>
@@ -90,7 +90,6 @@ export default {
   },
   methods: {
     async register(formName) {
-      console.log('____________________');
       this.$refs[formName].validate(async (valid) => {
         if (valid) {
           this.$refs.avaterSelector.style.visibility = 'visible'
@@ -114,10 +113,10 @@ export default {
             )
             localStorage.token = res.data.token
             this.$message.success('登录成功')
-            // 请求个人信息
-            //把当前登录的用户信息储存到localStorage，以便公用登录用户信息
-            localStorage.setItem('myInfo', JSON.stringify(res.data.userInfo))
+            // set个人信息
             this.$store.commit('updateMyInfo', res.data.userInfo)
+            this.socketIInit()
+            this.$socket.open()
             this.$router.replace('/chat')
           } else {
             this.$message.error('请正确输入')
@@ -133,10 +132,10 @@ export default {
       const res = await this.$http.post('visitor')
       localStorage.token = res.data.token
       this.$message.success('登录成功')
-      // 请求个人信息
-      //把当前登录的用户信息储存到localStorage，以便公用登录用户信息
-      localStorage.setItem('myInfo', JSON.stringify(res.data.userInfo))
+      // set个人信息
       this.$store.commit('updateMyInfo', res.data.userInfo)
+      this.socketIInit()
+      this.$socket.open()
       this.$router.replace('/chat')
     },
     selectAvater(index) {
@@ -167,19 +166,13 @@ export default {
               )
               this.$refs.avaterSelector.style.top = '-50%'
               localStorage.token = res.data.token
-              localStorage.setItem(
-                'myInfo',
-                JSON.stringify({
-                  username: this.model.username,
-                  msg: 'Hi',
-                  imgSrc: this.imgUrl,
-                })
-              )
-              this.$store.commit('updateMyInfo', {
+              this.$store.commit('updateMyInfo', { 
                 username: this.model.username,
                 msg: 'Hi',
                 imgSrc: this.imgUrl,
               })
+              this.socketIInit()
+              this.$socket.open()
               setTimeout(() => {
                 this.$message.success('注册成功，并完成自动登录')
                 this.$router.replace('/chat')
@@ -316,4 +309,4 @@ export default {
   display: flex;
   justify-content: space-around;
 }
-</style>
+</style> 

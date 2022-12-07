@@ -2,19 +2,58 @@
 <html lang="">
 
 <head>
+    <style>
+        .load-wrapper {
+            height: 90vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .loading {
+            width: 30px;
+            height: 30px;
+            display: inline-block;
+            border: 3px solid #eee;
+            border-radius: 50%;
+            border-top: 3px solid gray;
+            /* 将上边框改成蓝色 */
+        }
+
+        /* 定义动画 */
+        @keyframes loadingAnimation {
+
+            /* 动画开始旋转0度 */
+            0% {
+                transform: rotate(0deg);
+            }
+
+            /* 动画结束旋转360度 */
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* 添加动画 */
+        .loading {
+            animation: loadingAnimation .5s infinite linear;
+        }
+    </style>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <% if(process.env.NODE_ENV==="production") { %>
-        <script src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.13/vue.min.js"></script>
-        <script src="https://cdn.bootcdn.net/ajax/libs/ant-design-vue/1.7.8/antd.min.js"></script>
-        <script src="https://cdn.bootcss.com/vuex/3.6.0/vuex.min.js"></script>
-        <script src="https://cdn.bootcss.com/axios/0.21.1/axios.min.js"></script>
-        <script src="https://cdn.bootcss.com/vue-router/3.2.0/vue-router.min.js"></script>
-        <script src="https://unpkg.com/vant@2.12.50/lib/vant.min.js"></script>
+    <% if(process.env.NODE_ENV==="production" ) { %>
+        <script defer src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.13/vue.min.js"></script>
+        <script defer src="https://cdn.bootcdn.net/ajax/libs/ant-design-vue/1.7.8/antd.min.js"></script>
+        <script defer src="https://cdn.bootcss.com/vuex/3.6.0/vuex.min.js"></script>
+        <script defer src="https://cdn.bootcss.com/axios/0.21.1/axios.min.js"></script>
+        <script defer src="https://cdn.bootcss.com/vue-router/3.2.0/vue-router.min.js"></script>
+        <script defer src="https://unpkg.com/vant@2.12.50/lib/vant.min.js"></script>
         <% } %>
-            <link href="https://cdn.bootcdn.net/ajax/libs/ant-design-vue/1.7.8/antd.min.css" rel="stylesheet">
-            <link rel="stylesheet" href="https://unpkg.com/vant@2.12.50/lib/index.css" />
+            <link rel="preload" as="style" href="https://cdn.bootcdn.net/ajax/libs/ant-design-vue/1.7.8/antd.min.css"
+                onload="this.rel='stylesheet'">
+            <link rel="preload" as="style" href="https://unpkg.com/vant@2.12.50/lib/index.css"
+                onload="this.rel='stylesheet'" />
             <link rel="icon" href="<%= BASE_URL %>favicon.ico">
             <title>
                 <%= htmlWebpackPlugin.options.title %>
@@ -23,10 +62,14 @@
 
 <body>
     <noscript>
-    <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled.
-        Please enable it to continue.</strong>
-  </noscript>
-    <div id="app"></div>
+        <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled.
+                Please enable it to continue.</strong>
+    </noscript>
+    <div id="app">
+        <div class="load-wrapper">
+            <div class="loading"></div>
+        </div>
+    </div>
     <!-- built files will be auto injected -->
 </body>
 

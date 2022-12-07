@@ -13,11 +13,16 @@
     <div class="listContainer">
       <div v-for="(item, index) in chatList" :key="index" v-if="item.stick">
         <listItem :userInfo="item"/>
-        <div class="line" v-show="index !== $store.state.chatList.length - 1"></div>
+        <div style="background-color: #fff;" v-show="index !== $store.state.chatList.length - 1">
+            <div class="line"></div>
+        </div>
       </div>
+      
       <div v-for="(item, index) in chatList" v-if="!item.stick">
         <listItem :userInfo="item"/>
-        <div class="line" v-show="index !== $store.state.chatList.length - 1"></div>
+        <div style="background-color: #fff;" v-show="index !== $store.state.chatList.length - 1">
+            <div class="line"></div>
+        </div>
       </div>
     </div>
   </div>
@@ -34,8 +39,6 @@ export default {
     //移除监听事件"aMsg"
     this.bus.$off('chatUser')
     //移除监听事件,避免重复监听
-    console.log('beforeDestroy');
-    // this.$socket.off('emitEvent');
   },
   computed:{
     chatList(){
@@ -69,7 +72,18 @@ export default {
   }
 
   .listContainer {
-    background-color: #fff;
+    background-color: rgba(235,235,235, 0.5);
+    height: calc(100% - 130px);
+    padding-bottom: 60px;
+    overflow-y: auto;
+  }
+}
+@media screen and (min-width: 750px) {
+
+  .listContainer {
+    background-color: rgba(235,235,235, 0.5);
+    height: calc(100% - 70px);
+    overflow-y: auto;
   }
 }
 
