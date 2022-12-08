@@ -8,11 +8,20 @@ const { Email } = require('./models/Email');
 const { tokenKey, chatGptApiKey } = require('./config')
 // const axios = require('axios')
 // const {Bot} = require('./models/Bot')
-const { Configuration, OpenAIApi } = require("openai");
-const configuration = new Configuration({
-    apiKey: chatGptApiKey
-});
-const openai = new OpenAIApi(configuration);
+// const { Configuration, OpenAIApi } = require("openai");
+// const configuration = new Configuration({
+//     apiKey: chatGptApiKey
+// });
+// const openai = new OpenAIApi(configuration);
+let ChatGPTAPI = null
+let ChatGPT = null
+import('chatgpt').then(res => {
+    ChatGPTAPI = res.ChatGPTAPI
+    ChatGPT = new ChatGPTAPI({
+        sessionToken: chatGptApiKey
+    })
+    ChatGPT.ensureAuth()
+})
 // const bot = new Bot();
 
 let visitorFlag = 0
@@ -103,16 +112,24 @@ io.on('connect', function (socket) {
                 //     data.msg = aiData.content
                 //     fromSocket.emit('emitEvent', data)
                 // }).catch(err => console.log(err))
-                openai.createCompletion({
-                    model: "text-davinci-003",
-                    prompt: str,
-                    "max_tokens": 4000,
-                    "temperature": 0
-                }).then((res) => {
-                    data.msg = res.data.choices[0].text
+                // openai.createCompletion({
+                //     model: "text-davinci-003",
+                //     prompt: str,
+                //     "max_tokens": 4000,
+                //     "temperature": 0
+                // }).then((res) => {
+                //     data.msg = res.data.choices[0].text
+                //     fromSocket.emit('emitEvent', data)
+                // }).catch((err) => {
+                //     data.msg = err
+                //     fromSocket.emit('emitEvent', data)
+                // })
+                console.log(ChatGPT);
+                ChatGPT.sendMessage(str).then(res => {
+                    data.msg = res
                     fromSocket.emit('emitEvent', data)
-                }).catch((err) => {
-                    data.msg = err
+                }).catch(err => {
+                    data.msg = err.message
                     fromSocket.emit('emitEvent', data)
                 })
             } else {
