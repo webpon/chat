@@ -131,7 +131,7 @@ export default {
   }
 
   .msgCard {
-    max-width: calc(100vw - 120px);
+    max-width: calc(100vw - 115px);
   }
 }
 

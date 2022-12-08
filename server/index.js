@@ -128,7 +128,7 @@ io.on('connect', function (socket) {
                 ChatGPT.sendMessage(str).then(res => {
                     data.msg = res
                     fromSocket.emit('emitEvent', data)
-                }).catch(err => {
+                }).catch((err) => {
                     data.msg = err.message
                     fromSocket.emit('emitEvent', data)
                 })

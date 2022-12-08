@@ -22,14 +22,11 @@
         <span v-viewer v-else-if="sendmsg.type === 'picture'">
           <img v-lazy="sendmsg.msg" class="img _img-scale" />
         </span>
-        <div class="pre msgCard" v-else-if="sendmsg.from === '智能客服'"
-          @contextmenu.prevent.stop="showPopoverFun" v-html="markdown2html(sendmsg.msg)"></div>
-        <p class="msgCard" v-else @contextmenu.prevent.stop="showPopoverFun">{{ sendmsg.msg }}</p>
+        <div class="pre msgCard" v-else-if="sendmsg.from === '智能客服'" v-html="markdown2html(sendmsg.msg)"></div>
+        <p class="msgCard" v-else >{{ sendmsg.msg }}</p>
         <p>{{ time }}</p>
       </span>
     </div>
-    <van-action-sheet v-model:show="showPopover" style="position: absolute;" :actions="[{ name: '复制', type: 'copy' }]"
-      get-container=".chatBody" cancel-text="取消" close-on-click-action @select="onSelect" />
   </div>
 </template>
 
@@ -43,12 +40,6 @@ export default {
   data() {
     return {
       loadVideo: false,
-      showPopover: false,
-      actions: [
-        { text: '复制', type: 'copy' },
-        { text: 'Toast', type: 'toast' },
-      ],
-      popoverPosition: [0, -130]
     }
   },
   components: { rightClick },
@@ -102,27 +93,6 @@ export default {
       }
       this.$store.commit('updatePlayingVideo', this.$refs.videoPlayer.player)
     },
-    showPopoverFun({ x, y }) {
-      this.showPopover = !this.showPopover
-    },
-    onSelect({ type }) {
-      if (type === 'copy') {
-        this.copy()
-        Toast('复制成功')
-      } else if (type === 'toast') {
-        Toast('toast')
-      }
-    },
-    copy() {
-      var textareaC = document.createElement('textarea');
-      textareaC.setAttribute('readonly', 'readonly'); //设置只读属性防止手机上弹出软键盘
-      textareaC.value = this.sendmsg.msg;
-      document.body.appendChild(textareaC); //将textarea添加为body子元素
-      textareaC.select();
-      var res = document.execCommand('copy');
-      document.body.removeChild(textareaC);//移除DOM元素
-      return res;
-    }
   }
 }
 </script>
@@ -144,7 +114,7 @@ export default {
   }
 
   .msgCard {
-    max-width: calc(100vw - 120px);
+    max-width: calc(100vw - 115px);
   }
 }
 
@@ -204,6 +174,7 @@ export default {
   white-space: pre-wrap;
   word-wrap: break-word;
   max-height: 500px;
+  overflow: auto;
 }
 
 .cp {
