@@ -13,6 +13,7 @@ import 'viewerjs/dist/viewer.css'
 import VueLazyload from 'vue-lazyload'
 import VuevideoPlayer from 'vue-video-player';
 import 'video.js/dist/video-js.css';
+import './assets/markdown.css'
 // 处理vant组件库PC兼容问题
 import '@vant/touch-emulator';
 

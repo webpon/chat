@@ -22,21 +22,23 @@
         <span v-viewer v-else-if="sendmsg.type === 'picture'">
           <img v-lazy="sendmsg.msg" class="img _img-scale" />
         </span>
-        <pre class="pre msgCard" v-else-if="sendmsg.from === '智能客服'"
-          @contextmenu.prevent.stop="showPopoverFun">{{ sendmsg.msg }}</pre>
+        <div class="pre msgCard" v-else-if="sendmsg.from === '智能客服'"
+          @contextmenu.prevent.stop="showPopoverFun" v-html="markdown2html(sendmsg.msg)"></div>
         <p class="msgCard" v-else @contextmenu.prevent.stop="showPopoverFun">{{ sendmsg.msg }}</p>
         <p>{{ time }}</p>
       </span>
     </div>
     <van-action-sheet v-model:show="showPopover" style="position: absolute;" :actions="[{ name: '复制', type: 'copy' }]"
-      get-container=".chatBody" cancel-text="取消" close-on-click-action
-      @select="onSelect" />
+      get-container=".chatBody" cancel-text="取消" close-on-click-action @select="onSelect" />
   </div>
 </template>
 
 <script>
 import rightClick from "../../rightClick";
 import { Toast } from 'vant';
+import { marked } from "marked";
+import hljs from "highlight.js";
+import "highlight.js/styles/foundation.css";
 export default {
   data() {
     return {
@@ -69,9 +71,24 @@ export default {
         }
       });
       return flag
-    }
+    },
   },
   methods: {
+    markdown2html(markdownText) {
+      console.log(markdownText);
+      const render = new marked.Renderer();
+      marked.setOptions({
+        renderer: render, // 这是必填项
+        gfm: true, // 启动类似于Github样式的Markdown语法
+        pedantic: false, // 只解析符合Markdwon定义的，不修正Markdown的错误
+        sanitize: false, // 原始输出，忽略HTML标签（关闭后，可直接渲染HTML标签）
+        // 高亮的语法规范
+        highlight: (code) => hljs.highlightAuto(code).value,
+        heading: (text, level) => text + level,
+      });
+      console.log(marked(markdownText));
+      return  marked(markdownText);
+    },
     lazyLoadVideo() {
       setTimeout(() => {
         this.loadVideo = true
