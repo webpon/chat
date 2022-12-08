@@ -112,7 +112,7 @@ io.on('connect', function (socket) {
                     data.msg = res.data.choices[0].text
                     fromSocket.emit('emitEvent', data)
                 }).catch((err) => {
-                    data.msg = err
+                    data.msg = err.message
                     fromSocket.emit('emitEvent', data)
                 })
             } else {
