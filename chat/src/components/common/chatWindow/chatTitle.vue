@@ -70,6 +70,16 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@media screen and (min-width: 750px) {
+  .model-select {
+    right: 350px;
+  }
+}
+@media screen and (max-width: 750px) {
+  .model-select {
+    right: 10px;
+  }
+}
 .chatTitle {
   position: fixed;
   z-index: 10;
@@ -97,7 +107,6 @@ export default {
   width: 120px; 
   position: absolute;
   top: 50%;
-  right: 10px;
   transform: translate(0, -50%);
 }
 </style>
