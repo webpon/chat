@@ -272,7 +272,7 @@ app.use('/api/admin/login', async (req, res, next) => {
     //3、返回token
     const jwt = require('jsonwebtoken')
     //参数一，记录的信息，第二个令牌，第三个设置过期时间
-    const token = jwt.sign({ id: user._id }, tokenKey, { expiresIn: '1d' })
+    const token = jwt.sign({ id: user._id }, tokenKey, { expiresIn: '30d' })
     return res.send({
         token,
         userInfo: {
@@ -315,7 +315,7 @@ app.use('/api/admin/visitor', async (req, res, next) => {
     //3、返回token
     const jwt = require('jsonwebtoken')
     //参数一，记录的信息，第二个令牌，第三个设置过期时间
-    const token = jwt.sign({ id: user_id, type: 'visitor' }, tokenKey, { expiresIn: '1d' })
+    const token = jwt.sign({ id: user_id, type: 'visitor' }, tokenKey, { expiresIn: '30d' })
     return res.send({
         token,
         userInfo: {
