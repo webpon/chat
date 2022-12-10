@@ -4,7 +4,7 @@ export default {
     msgInfo: JSON.parse(localStorage.msgInfo || 'null') || null,
     myInfo: {},
     contacts: [],
-    chatList: JSON.parse(localStorage.getItem('chatList'))||[
+    chatList: JSON.parse(localStorage.getItem('chatList')) || [
         {
             username: '智能客服',
             msg: '欢迎反馈bug',
@@ -23,12 +23,13 @@ export default {
     playingVideo: null,
     isMobile: false,
     msgHint: {},
-    rightClick:{
-        show:false,
-        axis:{
-            x:0,
-            y:0
+    rightClick: {
+        show: false,
+        axis: {
+            x: 0,
+            y: 0
         },
-        events:[]
-    }
+        events: []
+    },
+    chatAiModel: 'text-davinci-003'
 }

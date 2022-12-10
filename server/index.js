@@ -5,14 +5,14 @@ require("dotenv").config()
 var http = require('http').Server(app)
 const jwt = require('jsonwebtoken')
 const { Email } = require('./models/Email');
-const { tokenKey, chatGptApiKey } = require('./config')
+const { tokenKey, chatGptApiKey, openApiKey } = require('./config')
 // const axios = require('axios')
 // const {Bot} = require('./models/Bot')
-// const { Configuration, OpenAIApi } = require("openai");
-// const configuration = new Configuration({
-//     apiKey: chatGptApiKey
-// });
-// const openai = new OpenAIApi(configuration);
+const { Configuration, OpenAIApi } = require("openai");
+const configuration = new Configuration({
+    apiKey: openApiKey
+});
+const openai = new OpenAIApi(configuration);
 let ChatGPTAPI = null
 let ChatGPT = null
 import('chatgpt').then(res => {
@@ -100,38 +100,40 @@ io.on('connect', function (socket) {
             data.from = '智能客服'
             data.from_avater = 'https://webpon-img.oss-cn-guangzhou.aliyuncs.com/avater/avater/1.jpg'
             if (!/^bug[:|：].*/.test(str)) {
-                // bot.postBot(str).then((content) => {
-                //     data.msg = content
-                //     setTimeout(() => {
-                //         fromSocket.emit('emitEvent', data)
-                //     }, 100);
-                // })
-                // axios.get(`http://api.qingyunke.com/api.php?key=free&appid=0&msg=${encodeURI(str)}`).then(res => {
-                //     const aiData = res.data || {}
-                //     console.log(aiData);
-                //     data.msg = aiData.content
-                //     fromSocket.emit('emitEvent', data)
-                // }).catch(err => console.log(err))
-                // openai.createCompletion({
-                //     model: "text-davinci-003",
-                //     prompt: str,
-                //     "max_tokens": 4000,
-                //     "temperature": 0
-                // }).then((res) => {
-                //     data.msg = res.data.choices[0].text
-                //     fromSocket.emit('emitEvent', data)
-                // }).catch((err) => {
-                //     data.msg = err
-                //     fromSocket.emit('emitEvent', data)
-                // })
-                console.log(ChatGPT);
-                ChatGPT.sendMessage(str).then(res => {
-                    data.msg = res
-                    fromSocket.emit('emitEvent', data)
-                }).catch((err) => {
-                    data.msg = err.message
-                    fromSocket.emit('emitEvent', data)
-                })
+                if (data.model === 'chatgpt') {
+                    ChatGPT.sendMessage(str).then(res => {
+                        data.msg = res
+                        fromSocket.emit('emitEvent', data)
+                    }).catch((err) => {
+                        data.msg = err.message
+                        fromSocket.emit('emitEvent', data)
+                    })
+                } else if (data.model === 'picture-model') {
+                    openai.createImage({
+                        prompt: str,
+                        n: 1,
+                        size: "512x512",
+                    }).then(res => {
+                        data.msg = res.data.data
+                        fromSocket.emit('emitEvent', data)
+                    }).catch(err => {
+                        data.msg = err.message
+                        fromSocket.emit('emitEvent', data)
+                    })
+                } else {
+                    openai.createCompletion({
+                        model: "text-davinci-003",
+                        prompt: str,
+                        "max_tokens": 4000,
+                        "temperature": 0
+                    }).then((res) => {
+                        data.msg = res.data.choices[0].text
+                        fromSocket.emit('emitEvent', data)
+                    }).catch((err) => {
+                        data.msg = err
+                        fromSocket.emit('emitEvent', data)
+                    })
+                }
             } else {
                 email.sendMsg({
                     text: str.slice(4), // 存文本类型的邮件正文

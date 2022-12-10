@@ -70,6 +70,9 @@ export default {
       if (this.message.content === '') {
         return
       }
+      const msgInfo = {
+        
+      }
       //本地添加
       this.$store.commit('addMsg', {
         from: this.$store.state.myInfo.username,
@@ -79,15 +82,19 @@ export default {
         type: this.message.type,
         time: new Date().getTime()
       })
-      //向要发送的客户端添加
-      this.$socket.emit('sendEvent', {
+      const sendMsgInfo = {
         from: this.$store.state.myInfo.username,
         from_avater: this.$store.state.myInfo.imgSrc,
         to: this.$route.query.userName,
         msg: this.message.content,
         type: this.message.type,
         msgId: Math.random().toString() + new Date().valueOf()
-      })
+      }
+      if(this.$route.query.userName && this.$store.state.chatAiModel) {
+        sendMsgInfo.model = this.$store.state.chatAiModel
+      }
+      //向要发送的客户端添加
+      this.$socket.emit('sendEvent', sendMsgInfo)
       this.message.type = 'string'
       this.$store.commit("updateMsgItemMsg", {
         username: this.$route.query.userName,

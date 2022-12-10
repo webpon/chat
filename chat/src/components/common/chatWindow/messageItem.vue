@@ -22,8 +22,16 @@
         <span v-viewer v-else-if="sendmsg.type === 'picture'">
           <img v-lazy="sendmsg.msg" class="img _img-scale" />
         </span>
-        <div class="pre msgCard" v-else-if="sendmsg.from === '智能客服'" v-html="markdown2html(sendmsg.msg)"></div>
-        <p class="msgCard" v-else >{{ sendmsg.msg }}</p>
+        <template v-else-if="sendmsg.from === '智能客服'">
+          <div class="pre msgCard" v-html="markdown2html(sendmsg.msg)"
+            v-if="sendmsg.model === 'text-davinci-003' || sendmsg.model === 'chatgpt'"></div>
+          <div class="msgCard" v-if="sendmsg.model === 'picture-model'">
+            <span v-viewer>
+              <img v-lazy="item.url" class="img _img-scale" v-for="item in sendmsg.msg" :key="item.url" />
+            </span>
+          </div>
+        </template>
+        <p class="msgCard" v-else>{{ sendmsg.msg }}</p>
         <p>{{ time }}</p>
       </span>
     </div>
@@ -32,7 +40,6 @@
 
 <script>
 import rightClick from "../../rightClick";
-import { Toast } from 'vant';
 import { marked } from "marked";
 import hljs from "highlight.js";
 import "highlight.js/styles/foundation.css";
@@ -78,7 +85,7 @@ export default {
         heading: (text, level) => text + level,
       });
       console.log(marked(markdownText));
-      return  marked(markdownText);
+      return marked(markdownText);
     },
     lazyLoadVideo() {
       setTimeout(() => {

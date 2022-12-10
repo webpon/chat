@@ -32,6 +32,9 @@ export default {
         state.myInfo = myInfo
         Vue.prototype.bus.$emit('initMsgList')
     },
+    setChatAiModel(state, model) {
+        state.chatAiModel = model
+    },
     updateContacts(state, contacts) {
         state.contacts = [...defContacts, ...contacts]
     },
