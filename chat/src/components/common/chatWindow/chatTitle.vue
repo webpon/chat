@@ -22,9 +22,9 @@ export default {
   data() {
     return {
       modelOptions: [
-        { label: 'gpt3通用AI', value: 'text-davinci-003' },
+        // { label: 'gpt3通用AI', value: 'text-davinci-003' },
         { label: 'chatGPT', value: 'chatgpt' },
-        { label: '图片生成Ai', value: 'picture-model' },
+        // { label: '图片生成Ai', value: 'picture-model' },
       ]
     }
   },

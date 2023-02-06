@@ -14,13 +14,10 @@ const configuration = new Configuration({
 });
 const openai = new OpenAIApi(configuration);
 let ChatGPTAPI = null
-let ChatGPT = null
-import('chatgpt').then(res => {
-    ChatGPTAPI = res.ChatGPTAPI
-    ChatGPT = new ChatGPTAPI({
-        sessionToken: chatGptApiKey
+import('chatgpt').then(async (res) => {
+    ChatGPTAPI = new res.ChatGPTAPI({
+        apiKey: openApiKey
     })
-    ChatGPT.ensureAuth()
 })
 // const bot = new Bot();
 
@@ -101,8 +98,8 @@ io.on('connect', function (socket) {
             data.from_avater = 'https://webpon-img.oss-cn-guangzhou.aliyuncs.com/avater/avater/1.jpg'
             if (!/^bug[:|：].*/.test(str)) {
                 if (data.model === 'chatgpt') {
-                    ChatGPT.sendMessage(str).then(res => {
-                        data.msg = res
+                    ChatGPTAPI.sendMessage(str).then(res => {
+                        data.msg = res.text
                         fromSocket.emit('emitEvent', data)
                     }).catch((err) => {
                         data.msg = err.message

@@ -4,9 +4,9 @@ import Vue from 'vue'
 import store from '@/store/index'
 const IS_PROD = process.env.NODE_ENV === "production";
 const IS_SVR = process.env.VUE_APP_PROJECT_ENV === 'svr'
-const http_baseURL = (IS_PROD || IS_SVR) ? 'http://39.103.233.82:14399/api/admin' : '/api/admin'
-const moment_baseURL = (IS_PROD || IS_SVR) ? 'http://39.103.233.82:9090' : '/moments'
-const oss_baseURL = (IS_PROD || IS_SVR) ? 'http://39.103.233.82:14400/oss' : '/oss'
+const http_baseURL = (IS_PROD || IS_SVR) ? 'https://chat.x-code.fun/api/admin' : '/api/admin'
+const moment_baseURL = (IS_PROD || IS_SVR) ? 'https://chat.x-code.fun/moments' : '/moments'
+const oss_baseURL = (IS_PROD || IS_SVR) ? 'https://chat.x-code.fun/oss' : '/oss'
 
 const TIMEOUT = 60000;
 
