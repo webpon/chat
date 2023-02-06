@@ -1,4 +1,4 @@
-## 线上案例：http://39.103.233.82/chat/
+## 线上案例：[http://gitopenchina.gitee.io/chat/](http://gitopenchina.gitee.io/chat/)
 
 ### 开发
 
