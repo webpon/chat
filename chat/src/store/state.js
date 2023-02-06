@@ -31,5 +31,5 @@ export default {
         },
         events: []
     },
-    chatAiModel: 'text-davinci-003'
+    chatAiModel: 'chatgpt'
 }
