@@ -100,6 +100,7 @@ io.on('connect', function (socket) {
                 if (data.model === 'chatgpt') {
                     ChatGPTAPI.sendMessage(str).then(res => {
                         data.msg = res.text
+                        console.log(res)
                         fromSocket.emit('emitEvent', data)
                     }).catch((err) => {
                         data.msg = err.message
