@@ -16,11 +16,16 @@
           <span v-viewer v-else-if="sendmsg.type === 'picture'" style="display: block">
             <img v-lazy="sendmsg.msg" class="img _img-scale" />
           </span>
+          <div v-if="sendmsg.type === 'file'" class="msgCard">
+            文件：
+            <p>{{ sendmsg.name }}</p>
+            <a :href="sendmsg.msg">{{ sendmsg.msg }}</a>
+          </div>
           <p v-else-if="/http:\/\/|https:\/\//.test(sendmsg.msg)" class="msgCard">
             <a :href="sendmsg.msg">{{ sendmsg.msg }}</a>
           </p>
           <p class="msgCard" v-else="sendmsg.type === 'string'" @contextmenu.prevent.stop="showPopoverFun">{{
-              sendmsg.msg
+            sendmsg.msg
           }}
           </p>
           <span class="time">{{ time }}</span>

@@ -4,6 +4,8 @@
       <a-icon type="picture" @click="uploadImg" :style="{ fontSize: '20px', color: '#08c' }" />
       <a-icon type="play-square" @click="uploadVideo"
         :style="{ fontSize: '20px', color: '#08c', 'margin': '0 20px' }" />
+      <a-icon type="file" @click="uploadFile"
+        :style="{ fontSize: '20px', color: '#08c', 'margin-right': '20px' }" />
       <twemoji-picker :style="{
         display: 'inline-block', cursor: 'pointer', 'margin-right': '10px'
       }" @emojiUnicodeAdded="emojiUnicodeAdded" :emojiData="emojiDataAll" :emojiGroups="emojiGroups"
@@ -18,6 +20,8 @@
         @change="uploadProgress($event, 'picture')" />
       <input v-show="false" accept="video/*" ref="fileInputVideo" type="file" :multiple="false"
         @change="uploadProgress($event, 'video')" />
+      <input v-show="false" accept="*" ref="fileInput" type="file" :multiple="false"
+        @change="uploadProgress($event, 'file')" />
     </div>
     <a-textarea class="msg_textarea" :maxLength="1024" placeholder="请输入内容" @input="areaInput" :rows="4"
       v-model.trim="message.content" @pressEnter.prevent="sendmsg" ref="input" />
@@ -80,7 +84,8 @@ export default {
         to: this.$route.query.userName,
         msg: this.message.content,
         type: this.message.type,
-        time: new Date().getTime()
+        time: new Date().getTime(),
+        name: this.message.filename
       })
       const sendMsgInfo = {
         from: this.$store.state.myInfo.username,
@@ -88,13 +93,14 @@ export default {
         to: this.$route.query.userName,
         msg: this.message.content,
         type: this.message.type,
-        msgId: Math.random().toString() + new Date().valueOf()
+        msgId: Math.random().toString() + new Date().valueOf(),
+        name: this.message.filename
       }
       if(this.$route.query.userName && this.$store.state.chatAiModel) {
         sendMsgInfo.model = this.$store.state.chatAiModel
       }
       //向要发送的客户端添加
-      this.$socket.emit('sendEvent', sendMsgInfo)
+      this.$socket && this.$socket.emit('sendEvent', sendMsgInfo)
       this.message.type = 'string'
       this.$store.commit("updateMsgItemMsg", {
         username: this.$route.query.userName,
@@ -112,8 +118,12 @@ export default {
     uploadVideo() {
       this.$refs.fileInputVideo.click()
     },
+    uploadFile() {
+      this.$refs.fileInput.click()
+    },
     async uploadProgress(e, type) {
       var file = e.target.files[0]; // js 获取文件对象
+      this.message.filename = file.name
       if (!file) return
       const fileMaxSize = 1024 * 1024 * 1000
       if (file.size > fileMaxSize) {
