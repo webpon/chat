@@ -19,7 +19,7 @@
           <div v-if="sendmsg.type === 'file'" class="msgCard">
             文件：
             <p>{{ sendmsg.name }}</p>
-            <a :href="sendmsg.msg">{{ sendmsg.msg }}</a>
+            <a :href="sendmsg.msg" target="_blank">{{ sendmsg.msg }}</a>
           </div>
           <p v-else-if="/http:\/\/|https:\/\//.test(sendmsg.msg)" class="msgCard">
             <a :href="sendmsg.msg">{{ sendmsg.msg }}</a>

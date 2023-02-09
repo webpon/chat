@@ -22,7 +22,7 @@
         <div v-if="sendmsg.type === 'file'" class="msgCard">
             文件：
             <p>{{ sendmsg.name }}</p>
-            <a :href="sendmsg.msg">{{ sendmsg.msg }}</a>
+            <a :href="sendmsg.msg" target="_blank">{{ sendmsg.msg }}</a>
         </div>
         <span v-viewer v-else-if="sendmsg.type === 'picture'">
           <img v-lazy="sendmsg.msg" class="img _img-scale" />
