@@ -74,9 +74,7 @@ export default {
       if (this.message.content === '') {
         return
       }
-      const msgInfo = {
-        
-      }
+      console.log(this.message.type)
       //本地添加
       this.$store.commit('addMsg', {
         from: this.$store.state.myInfo.username,

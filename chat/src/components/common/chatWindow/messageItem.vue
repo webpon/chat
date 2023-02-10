@@ -19,7 +19,7 @@
               style="width: 100%;height: 100%" />
           </lazy-component>
         </div>
-        <div v-if="sendmsg.type === 'file'" class="msgCard">
+        <div v-else-if="sendmsg.type === 'file'" class="msgCard">
             文件：
             <p>{{ sendmsg.name }}</p>
             <a :href="sendmsg.msg" target="_blank">{{ sendmsg.msg }}</a>

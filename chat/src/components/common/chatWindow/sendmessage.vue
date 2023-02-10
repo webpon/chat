@@ -2,7 +2,6 @@
   <div>
     <div class="messageWarpper" v-if="sendmsg !== null">
       <div>
-
         <div>
           <div v-if="sendmsg.type === 'video'" class="video">
             <lazy-component @show="lazyLoadVideo">
@@ -16,7 +15,7 @@
           <span v-viewer v-else-if="sendmsg.type === 'picture'" style="display: block">
             <img v-lazy="sendmsg.msg" class="img _img-scale" />
           </span>
-          <div v-if="sendmsg.type === 'file'" class="msgCard">
+          <div v-else-if="sendmsg.type === 'file'" class="msgCard">
             文件：
             <p>{{ sendmsg.name }}</p>
             <a :href="sendmsg.msg" target="_blank">{{ sendmsg.msg }}</a>
